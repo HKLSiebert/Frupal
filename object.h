@@ -54,6 +54,9 @@ class grovnic: public object
 {
     public:
         grovnic();
+        grovnic(grovnic &toCopy);
+        grovnik(string name, color bgColor, int cost, color displayColor, char displayChar);
+        grovnic(string name, color bgColor, int cost);
         ~grovnic();
         virtual char get_display_char()const;
         virtual color get_char_color()const;
@@ -62,8 +65,11 @@ class grovnic: public object
         
         virtual bool import_object(/*unknown args*/);
         virtual bool interact(const object & check_interaction);
+        
     protected:
         int energy_cost;
+        object* inventory; //only one object can occupy a grovnik
+
 
     private:
 
@@ -76,6 +82,8 @@ virtual class item: public object
 {
     public:
         item();
+        item(item &toCopy);
+        item(string name, color itemColor, char displayChar);
         ~item();
         virtual char get_display_char()const;
         virtual color get_char_color()const;
@@ -94,6 +102,7 @@ class tool: public item
 {
     public:
         tool();
+        tool(tool &toCopy);
         ~tool();
         virtual char get_display_char()const;
         virtual color get_char_color()const;
@@ -103,6 +112,8 @@ class tool: public item
         virtual bool import_object(/*unknown args*/);
         virtual bool interact(const object & check_interaction);
     protected:        
+      string effectiveAgainst;
+      int multiplier; 
 
 }
 
@@ -110,6 +121,8 @@ class food: public item
 {
     public:
         food();
+        food(good &toCopy);
+        food(string name, color itemColor, char displayChar, int wCost, int eRest);
         ~food();
         virtual char get_display_char()const;
         virtual color get_char_color()const;
@@ -122,5 +135,3 @@ class food: public item
         int wiffle_cost;
         int energy_restoration;
 }
-
-        
