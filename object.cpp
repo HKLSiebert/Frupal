@@ -113,7 +113,6 @@ virtual color grovnic::get_char_color()const
 
 virtual color grovnic::get_background_color()const
 {
-  return bg;
 }
 
 virtual bool grovnic::copy_object(const object & source)
