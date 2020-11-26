@@ -68,6 +68,7 @@ class grovnic: public object
         
     protected:
         int energy_cost;
+        color bg;
         object* inventory; //only one object can occupy a grovnik
 
 

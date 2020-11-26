@@ -99,32 +99,38 @@ grovnic::~grovnic()
 
 virtual char grovnic::get_display_char()const
 {
-
+  if(inventory)
+    return inventory.get_display_char();
+  return NULL;
 }
 
 virtual color grovnic::get_char_color()const
 {
-
+  if(inventory)
+    return inventory.get_char_color();
+  return NULL;
 }
 
 virtual color grovnic::get_background_color()const
 {
-
+  return bg;
 }
 
 virtual bool grovnic::copy_object(const object & source)
 {
+  if (source)
+    return (*this).copy_object
 
 }
 
-virtual bool grovnic::import_object(/*unknown args*/)
+//Takes an object and adds it to the grovnic's inventory
+virtual bool grovnic::import_object(/**/)
 {
-
 }
 
-virtual bool grocnic::interact(const object & check_interaction)
+virtual bool grovnic::interact(const object & check_interaction)
 {
-
+  //Needs to potentially remove the grocnik item as well as lower hero stats
 }
 
 
@@ -141,19 +147,13 @@ item::~item()
 {}
 
 virtual char item::get_display_char()const
-{
-
-}
+{}
 
 virtual color item::get_char_color()const
-{
-
-}
+{}
 
 virtual color item::get_background_color()const
-{
-
-}
+{}
 
 virtual bool item::copy_object(const object & source)
 {
@@ -162,11 +162,14 @@ virtual bool item::copy_object(const object & source)
 
 virtual bool item::import_object(/*unknown args*/)
 {
-
+  return true;
 }
 
+//The only thing interacting with items should be the hero, which will pick it up
 virtual bool item::interact(const object & check_interaction)
 {
+
+  return check_interaction.import_object(*this);
 
 }
 
@@ -182,9 +185,10 @@ tool::~tool()
   effectiveAgainst = NULL;
 }
 
+//All toolds will be a lowercase t 
 virtual char tool::get_display_char()const
 {
-
+  return t;
 }
 
 virtual color tool::get_char_color()const
@@ -204,12 +208,13 @@ virtual bool tool::copy_object(const object & source)
 
 virtual bool tool::import_object(/*unknown args*/)
 {
-
+  return true;
 }
 
+//The only thing interacting with the hero should be the HEro, which will pick it up. 
 virtual bool tool::interact(const object & check_interaction)
 {
-
+  return check_interaction.import_object(*this);
 }
 
 food::food():whiffle_cost(0), energy_restoration(0)
@@ -226,9 +231,10 @@ food::food(string name, color itemColor, char displayChar, int wCost, int eRest)
 food::~food()
 {}
 
+//All food has the same cymbol for now
 virtual char food::get_display_char()const
 {
-
+  return F;
 }
 
 virtual color food::get_char_color()const
@@ -251,8 +257,9 @@ virtual bool food::import_object(/*unknown args*/)
 
 }
 
+//The only thing ineracting with foos should be the hero, which will pick it up. 
 virtual bool food::interact(const object & check_interaction)
 {
-
+  return check_interaction.import_object(*this);
 }
 
