@@ -10,15 +10,9 @@ object::object()
 
 object::object(string name_i, string description_i, char display_char_i, color char_color_i, color background_color_i):name = name_i:description=description_i:display_char=display_char_i
 {
-    
-
+    char_color.copy(char_color_i);
+    background_color.copy(background_color_i);
 }
-        string name;
-        string description;
-        char display_char;
-        color char_color;
-        color background_color;
-
 
 object::object(const object & source) 
 {
