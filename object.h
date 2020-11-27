@@ -2,11 +2,27 @@
 #include <string.h>
 using namespace std;
 
+struct color{
+    int r = 0;
+    int g = 0;
+    int b = 0;
+
+    bool copy(const color&source)
+    {
+        this.r = source.r;
+        this.g = source.g;
+        this.b = source.b;
+        
+        return this.r==source.r && this.g==source.g&&this.b == source.b;
+
+    }
+};
 
 virtual class object
 {
     public:
         object();
+        object(const object& source);
         ~object();
         virtual char get_display_char()const;
         virtual color get_char_color()const;
@@ -32,7 +48,8 @@ virtual class object
 class hero: public object
 {
     public:
-        hero();//constructor
+        hero();
+        hero(const hero& source);
         ~hero();
         virtual char get_display_char()const;
         virtual color get_char_color()const;
@@ -54,6 +71,7 @@ class grovnic: public object
 {
     public:
         grovnic();
+        grovnic(const grovnic & source);
         ~grovnic();
         virtual char get_display_char()const;
         virtual color get_char_color()const;
