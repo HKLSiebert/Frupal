@@ -11,37 +11,37 @@ $ make
 
 Run with default map:
 ```
-$ frupal
+$ ./frupal
 ```
 
 Run with alternate map:
 ```
-$ frupal AlternateMap
+$ ./frupal *AlternateMap*
 ```
 
 ---
 
 ## Game Play
-* User Controls - Arrow keys to look around. 1-4 keys to move around.
-* Vocabulary    - Grovnick, "a square section of the Frupal map"; Whiffle, "currency"; Energy, "health".
+* User Controls - Arrow keys, to look around. Keys 1, 2, 3, 4, to move around.
+* Terminology	- Grovnick, "a square section of the Frupal map"; Whiffle, "currency"; Energy, "health".
 * Story         - Explore uncharted territory. Discover the royal diamonds in order to win.
-* Obstacles     - Some actions can deplete Energy. 
+* Challenges	- Some actions can deplete Energy. 
 * Inventory     - Items can be obtained to perform special actions.
 
 ---
 
 ## Code Structure
-* Draw class
-* Object class
-* Hero class
-* Grovnic class
-* Item class
-* Tool class
-* Food class 
+* displayClass
+* object class
+* hero class
+* grovnic class
+* item class
+* tool class
+* food class 
 
 ---
 
 ## Credits
 
-\[Contributors\]
+\[Contributors\]  
 \[Cited References\]
