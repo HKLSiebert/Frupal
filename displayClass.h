@@ -18,6 +18,7 @@
 class Display{
 	public:
 		Display();
+		Display(int y, int x); //with hero coordinates
 		~Display();
 		void updateMap(/*grovnick array*/);
 		void updateMenu();
@@ -28,7 +29,7 @@ class Display{
 		void updateTreasure();
 		void updateTools();
 		void updateClues();
-		void updatePlayerPosition(/*pass hero object or coordinates*/);	
+		void updatePlayerPosition(int y, int x);	
 	private:
 		void maxY, maxX, mapY, mapX, mapBeginningY, mapBeginningX menuSize;
 		WINDOW *map;
