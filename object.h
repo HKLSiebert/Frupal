@@ -35,12 +35,12 @@ class hero: public object
     public:
         hero();//constructor
         ~hero();
-        virtual char get_display_char()const;
-        virtual color get_char_color()const;
-        virtual color get_background_color()const; 
-        virtual bool import_object(/*unknown args*/);
-        virtual bool copy_object(const object & source);
-        virtual bool interact(const object & check_interaction);
+        char get_display_char()const;
+        color get_char_color()const;
+        color get_background_color()const; 
+        bool import_object(/*unknown args*/);
+        bool copy_object(const object & source);
+        bool interact(const object & check_interaction);
         string[] get_inventory_list()const;
         object* get_inventory_items();
     protected:
@@ -59,13 +59,13 @@ class grovnic: public object
         grovnik(string name, color bgColor, int cost, color displayColor, char displayChar);
         grovnic(string name, color bgColor, int cost);
         ~grovnic();
-        virtual char get_display_char()const;
-        virtual color get_char_color()const;
-        virtual color get_background_color()const;
-        virtual bool copy_object(const object & source);
+        char get_display_char()const;
+        color get_char_color()const;
+        /*color get_background_color()const;*/
+        bool copy_object(const object & source);
         
-        virtual bool import_object(/*unknown args*/);
-        virtual bool interact(const object & check_interaction);
+        bool import_object(/*unknown args*/);
+        bool interact(const object & check_interaction);
         string* get_item_info();
         item* get_item();
         
@@ -88,13 +88,13 @@ virtual class item: public object
         item(item &toCopy);
         item(string name, color itemColor, char displayChar);
         ~item();
-        virtual char get_display_char()const;
-        virtual color get_char_color()const;
-        virtual color get_background_color()const;
-        virtual bool copy_object(const object & source);
+        /*virtual char get_display_char()const = 0;
+        virtual color get_char_color()const = 0;
+        virtual color get_background_color()const = 0;
+        virtual bool copy_object(const object & source) =0;
         
-        virtual bool import_object(/*unknown args*/);
-        virtual bool interact(const object & check_interaction);
+        virtual bool import_object(/*unknown args*/) = 0;
+        /*virtual bool interact(const object & check_interaction) = 0;*/
         
     protected:
 
@@ -108,13 +108,13 @@ class tool: public item
         tool();
         tool(tool &toCopy);
         ~tool();
-        virtual char get_display_char()const;
-        virtual color get_char_color()const;
-        virtual color get_background_color()const;
-        virtual bool copy_object(const object & source);
+        /*char get_display_char()const;
+        color get_char_color()const;
+        color get_background_color()const;*/
+        bool copy_object(const object & source);
         
-        virtual bool import_object(/*unknown args*/);
-        virtual bool interact(const object & check_interaction);
+        bool import_object(/*unknown args*/);
+        bool interact(const object & check_interaction);
     protected:        
       string effectiveAgainst;
       int multiplier; 
@@ -128,12 +128,12 @@ class food: public item
         food(good &toCopy);
         food(string name, color itemColor, char displayChar, int wCost, int eRest);
         ~food();
-        virtual char get_display_char()const;
-        virtual color get_char_color()const;
-        virtual color get_background_color()const;
-        virtual bool copy_object(const object & source);
-        virtual bool import_object(/*unknown args*/);
-        virtual bool interact(const object & check_interaction);
+        /*char get_display_char()const;
+        color get_char_color()const;
+        color get_background_color()const;*/
+        bool copy_object(const object & source);
+        bool import_object(/*unknown args*/);
+        bool interact(const object & check_interaction);
         int* bool get_cost_rest();
         
     protected:

@@ -78,29 +78,29 @@ hero::hero(const hero& source)
 {
 }
 
-virtual char hero::get_display_char()const
+char hero::get_display_char()const
 {
       return display_char;
 }
 
 
-virtual color hero::get_char_color()const
+color hero::get_char_color()const
 {
       return char_color;
 }
 
 
-virtual color hero::get_background_color()const; 
+color hero::get_background_color()const; 
 {
       return background_color;
 }
 
-virtual bool hero::import_object(/*unknown args*/);
+bool hero::import_object(/*unknown args*/);
 {
       //incomplete
           return true;
 }
-virtual bool hero::copy_object(const object & source);
+bool hero::copy_object(const object & source);
 {
       //incomplete
   if (source)
@@ -108,7 +108,7 @@ virtual bool hero::copy_object(const object & source);
 }
 
 
-virtual bool hero::interact(const object & check_interaction);
+bool hero::interact(const object & check_interaction);
 {
       //incomplet
       food * ptr = dynamic_cast<food *>(check_interaction);
@@ -172,37 +172,38 @@ grovnic::~grovnic()
   }
 }
 
-virtual char grovnic::get_display_char()const
+char grovnic::get_display_char()const
 {
   if(inventory)
     return inventory.get_display_char();
   return NULL;
 }
 
-virtual color grovnic::get_char_color()const
+color grovnic::get_char_color()const
 {
   if(inventory)
     return inventory.get_char_color();
   return NULL;
 }
 
-virtual color grovnic::get_background_color()const
+/*color grovnic::get_background_color()const
 {
 }
+*/ 
 
-virtual bool grovnic::copy_object(const object & source)
+bool grovnic::copy_object(const object & source)
 {
 
 }
 
 //Takes an object and adds it to the grovnic's inventory
-virtual bool grovnic::import_object(/**/)
+bool grovnic::import_object(/**/)
 {
 }
 
 //Assumed to only be hero interacting to puck up tool/food
 //TODP - obstacle RTTI
-virtual bool grovnic::interact(const object & check_interaction)
+bool grovnic::interact(const object & check_interaction)
 {
   //Needs to potentially remove the grocnik item as well as lower hero stats
   display_char = '\0';
@@ -292,24 +293,24 @@ tool::~tool()
 }
 
 //All toolds will be a lowercase t 
-virtual char tool::get_display_char()const
+char tool::get_display_char()const
 {}
 
-virtual color tool::get_char_color()const
+color tool::get_char_color()const
 {}
 
-virtual color tool::get_background_color()const
+color tool::get_background_color()const
 {}
 
-virtual bool tool::copy_object(const object & source)
+bool tool::copy_object(const object & source)
 {}
 
-virtual bool tool::import_object(/*unknown args*/)
+bool tool::import_object(/*unknown args*/)
 {
   return true;
 }
 
-virtual bool tool::interact(const object & check_interaction)
+bool tool::interact(const object & check_interaction)
 {
   return check_interaction.import_object(*this);
 }
@@ -329,33 +330,33 @@ food::~food()
 {}
 
 //All food has the same cymbofor now
-virtual char food::get_display_char()const
+char food::get_display_char()const
 {
 //  return F;
 }
 
-virtual color food::get_char_color()const
+color food::get_char_color()const
 {
 
 }
 
-virtual color food::get_background_color()const
+color food::get_background_color()const
 {
 
 }
 
-virtual bool food::copy_object(const object & source)
+bool food::copy_object(const object & source)
 {
 
 }
 
-virtual bool food::import_object(/*unknown args*/)
+bool food::import_object(/*unknown args*/)
 {
 
 }
 
 //The only thing ineracting with foos should be the hero, which will pick it up. 
-virtual bool food::interact(const object & check_interaction)
+bool food::interact(const object & check_interaction)
 {
   return check_interaction.import_object(*this);
 }
