@@ -1,5 +1,6 @@
 //first draft of object class
 #include <string.h>
+#include <sstream.h>
 using namespace std;
 
 
@@ -65,10 +66,12 @@ class grovnic: public object
         
         virtual bool import_object(/*unknown args*/);
         virtual bool interact(const object & check_interaction);
+        string* get_item_info();
+        item* get_item();
         
     protected:
         int energy_cost;
-        object* inventory; //only one object can occupy a grovnik
+        item* inventory; //only one object can occupy a grovnik
 
 
     private:
@@ -92,6 +95,7 @@ virtual class item: public object
         
         virtual bool import_object(/*unknown args*/);
         virtual bool interact(const object & check_interaction);
+        
     protected:
 
 
@@ -130,6 +134,7 @@ class food: public item
         virtual bool copy_object(const object & source);
         virtual bool import_object(/*unknown args*/);
         virtual bool interact(const object & check_interaction);
+        int* bool get_cost_rest();
         
     protected:
         int wiffle_cost;
