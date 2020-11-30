@@ -67,6 +67,7 @@ class hero: public object
         object* get_inventory_items();
     protected:
 
+        bool add_to_inventory(object*& inventory_item);//this will null whatever pointer is passed to the function if it returns true
         object* inventory;
         int energy;
         int wiffle;

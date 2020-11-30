@@ -208,4 +208,10 @@ object* hero::get_inventory_items();
 
 }
 
+bool hero::add_to_inventory(object& inventory_item);
+{
+    int i = 0;
+    while(inventory[i++]);//finds first empty inventory spot
+    inventory[i] = & inventory_item;
+}
 
