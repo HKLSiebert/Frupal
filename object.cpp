@@ -207,13 +207,19 @@ object* hero::get_inventory_items()
     return inventory;
 }
 
-bool hero::add_to_inventory(object* & inventory_item)
+bool hero::add_to_inventory(object*& inventory_item);
 {
     int i = 0;
-    while(i< Inventory_size&&inventory[i]);//finds first empty inventory spot
-    
-    inventory[i] = inventory_item;
-    inventory_item = NULL;
-    return i<Inventory_size;
+    while(i < Inventory_size && inventory[i])
+    {
+        ++i;
+    }
+    if(i<Inventory_size)
+    {
+        inventory[i] = inventory_item;
+        inventory_item = NULL;
+    }
+    return i<Inventory_size; 
+
 }
 
