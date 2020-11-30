@@ -27,7 +27,7 @@ virtual class object
         virtual char get_display_char()const;
         virtual color get_char_color()const;
         virtual color get_background_color()const;
-        virtual bool import_object(/*unknown args*/);
+        virtual bool copy_object(string name_i, string description_i, char display_char_i, color char_color_i, color background_color_i);
         virtual bool copy_object(const object & source);
         
         //not sure how we are passing color yet. It could be a struct with the appropriate ints I think the display class can answer how color should be passed
@@ -54,7 +54,7 @@ class hero: public object
         virtual char get_display_char()const;
         virtual color get_char_color()const;
         virtual color get_background_color()const; 
-        virtual bool import_object(/*unknown args*/);
+        virtual bool copy_object(/*unknown args*/);
         virtual bool copy_object(const object & source);
         virtual bool interact(const object & check_interaction);
         string[] get_inventory_list()const;
@@ -78,7 +78,7 @@ class grovnic: public object
         virtual color get_background_color()const;
         virtual bool copy_object(const object & source);
         
-        virtual bool import_object(/*unknown args*/);
+        virtual bool copy_object(/*unknown args*/);
         virtual bool interact(const object & check_interaction);
     protected:
         int energy_cost;
@@ -100,7 +100,7 @@ virtual class item: public object
         virtual color get_background_color()const;
         virtual bool copy_object(const object & source);
         
-        virtual bool import_object(/*unknown args*/);
+        virtual bool copy_object(/*unknown args*/);
         virtual bool interact(const object & check_interaction);
     protected:
 
@@ -118,7 +118,7 @@ class tool: public item
         virtual color get_background_color()const;
         virtual bool copy_object(const object & source);
         
-        virtual bool import_object(/*unknown args*/);
+        virtual bool copy_object(/*unknown args*/);
         virtual bool interact(const object & check_interaction);
     protected:        
 
@@ -133,7 +133,7 @@ class food: public item
         virtual color get_char_color()const;
         virtual color get_background_color()const;
         virtual bool copy_object(const object & source);
-        virtual bool import_object(/*unknown args*/);
+        virtual bool copy_object(/*unknown args*/);
         virtual bool interact(const object & check_interaction);
         
     protected:

@@ -40,7 +40,7 @@ virtual color object::get_background_color()const
     return background_color;
 }
 
-virtual bool object::import_object(/*unknown args*/)
+virtual bool object::import_object(string name_i, string description_i, char display_char_i, color char_color_i, color background_color_i)
 {
     //incomplete
 
@@ -50,8 +50,12 @@ virtual bool object::import_object(/*unknown args*/)
 
 virtual bool object::copy_object(const object & source)
 {
-    //incomplete
-    return treu;
+    name = source.name;
+    description = source.description;
+    display_char = source.display_char;
+    char_color.copy(source.char_color);
+    background_color.copy(source.background_color);
+    return true;
 }
 
 
@@ -68,9 +72,15 @@ virtual bool interact(const object & check_interaction)
 
 hero::hero()
 {
+
 }
 
-hero::hero(const hero& source)
+hero::hero()
+{
+
+}
+
+hero::hero(const object& source)
 {
     copy_object(source);
 }
