@@ -31,8 +31,8 @@ class Display{
 		void updateClues();
 		void updatePlayerPosition(int y, int x);	
 	private:
-		void maxY, maxX, mapY, mapX, mapBeginningY, mapBeginningX menuSize, posY, posX;
+		int maxY, maxX, mapY, mapX, mapBeginningY, mapBeginningX, menuSize, posY, posX;
 		WINDOW *map;
 		WINDOW *menu;
 
-}
+};

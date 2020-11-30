@@ -1,4 +1,4 @@
-#include <object.h>
+#include "object.h"
 
 //object class
 
@@ -23,34 +23,33 @@ object::~object()
 }
 
 
-virtual char object::get_display_char()const
+char object::get_display_char()const
 {
       return display_char;
 }
 
-virtual color object::get_char_color()const
+color object::get_char_color()const
 {
       return char_color;
 }
 
-virtual color object::get_background_color()const
+color object::get_background_color()const
 {
       return background_color;
 }
 
-virtual string object::get_name()
+string object::get_name()
 {
     return name;
 }
 
-virtual string object::get_description()
+string object::get_description()
 {
     return description;
 
 }
 
-
-virtual bool object::copy_object(string name_i, string description_i, char display_char_i, color char_color_i, color background_color_i)
+bool object::copy_object(string name_i, string description_i, char display_char_i, color char_color_i, color background_color_i)
 {
     name = name_i;
     description = description_i;
@@ -58,11 +57,11 @@ virtual bool object::copy_object(string name_i, string description_i, char displ
     char_color.copy(char_color_i);
     background_color.copy(background_color_i);
 
-          return true;
+    return true;
 }
 
 
-virtual bool object::copy_object(const object & source)
+bool object::copy_object(const object & source)
 {
     name = source.name;
     description = source.description;
@@ -75,11 +74,13 @@ virtual bool object::copy_object(const object & source)
 
 
 //not sure how we are passing color yet. It could be a struct with the appropriate ints I think the display class can answer how color should be passed
-virtual bool object::interact(const object & check_interaction)
+bool object::interact(const object & check_interaction)
 {
       //incomplete
           return true;
 }
+
+string object::get_name(){}
 
 
 
@@ -89,7 +90,7 @@ hero::hero()
 
 }
 
-hero::hero(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const oject* inventory):object(name_i, description_i, display_char_i, char_color_i, background_color_i), energy(energy_i),wiffle(wiffle_i)
+hero::hero(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const object* inventory):object(name_i, description_i, display_char_i, char_color_i, background_color_i), energy(energy_i),wiffle(wiffle_i)
 {
     inventory = new object[Inventory_size];
     if(inventory)
@@ -120,35 +121,35 @@ hero::hero(const object& source):object(source),energy(source.energy),wiffle(sou
     delete inventory;
 }
 
-virtual char hero::get_display_char()const
+char hero::get_display_char()const
 {
     return display_char;
 }
 
 
-virtual color hero::get_char_color()const
+color hero::get_char_color()const
 {
     return char_color;
 }
 
 
-virtual color hero::get_background_color()const; 
+color hero::get_background_color()const
 {
     return background_color;
 }
 
-virtual string hero::get_name()
+string hero::get_name()
 {
     return name;
 }
 
-virtual string hero::get_description()
+string hero::get_description()
 {
     return description;
 
 }
 
-virtual bool hero::copy_object(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const oject* inventory)
+bool hero::copy_object(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const object* inventory)
 { 
     object::copy_object(name_i, description_i, display_char_i, bacground_color_i);
     energy = energy_i;
@@ -163,7 +164,7 @@ virtual bool hero::copy_object(const string name_i, const string description_i, 
     return true;
 }
 
-virtual bool hero::copy_object(const object & source);
+bool hero::copy_object(const object & source)
 {
     object::copy_object(source);
     for(int i =0; i<Inventory_size; ++i)
@@ -177,7 +178,7 @@ virtual bool hero::copy_object(const object & source);
 }
 
 
-&string[] hero::get_inventory_list()const;
+&string[] hero::get_inventory_list()const
 {
     string inventory_items[Inventory_size];
     for(int i =0;i<Inventory_size;++i)
@@ -192,41 +193,47 @@ virtual bool hero::copy_object(const object & source);
     return inventory_items;
 }
 
-object* hero::get_inventory_items();
+object* hero::get_inventory_items()
 {
     return inventory;
 
 }
 
-bool hero::add_to_inventory(object& inventory_item);
+bool hero::add_to_inventory(object*& inventory_item)
 {
     int i = 0;
     while(inventory[i++]);//finds first empty inventory spot
     inventory[i] = & inventory_item;
 }
 
-bool hero::interact(const object & check_interaction);
+bool hero::interact(const object & check_interaction)
 {
       //incomplet
-      food * ptr = dynamic_cast<food *>(check_interaction);
-      if (ptr) {
-        if (wiffle >= check_interaction.wiffle_cost){
-          wiffle -= check_interaction.wiffle_cost;
-          energy += check_interaction.energy_restoration;
+      const object * temp = &check_interaction;
+      const grovnic * ptr3 = dynamic_cast<const grovnic *>(temp);
+      if (ptr3){
+        if (strcmp(check_interaction.get_name(), inventory->effectiveAgainst) == 0){
+          wiffle -= (energy_cost/inventory->get_multiplier());
+          ptr3->interact(inventory);
+          //display char cannot change here
           return true;
         }
       }
-      tool * ptr2 = dynamic_cast<tool *>(check_interaction);
-      if (ptr2){
-        this.copy_object(check_interaction);
-        return true;
-      }
-      grovnic * pt3 = dynamic_cast<grovnic *>(check_interaction)
-      if (ptr3){
-        if (strcmp(check_interaction.name, inventory->effectiveAgainst) == 0){
-          wiffle -= (check_interaction.energy_cost/inventory->multiplier);
-          check_interaction.interact(inventory);
-          //display char cannot change here
+      const item * ptr4 = dynamic_cast<const item *>(temp);
+      if (ptr4){
+        const food * ptr = dynamic_cast<const food *>(temp);
+        if (ptr) {
+          int cost = ptr->get_cost();
+          int rest = ptr->get_rest();
+          if (wiffle >= cost){
+            wiffle -= cost;
+            energy += rest;
+            return true;
+          }
+        }
+        const tool * ptr2 = dynamic_cast<const tool *>(temp);
+        if (ptr2){
+          this->copy_object(&check_interaction);
           return true;
         }
       }
@@ -239,10 +246,10 @@ grovnic::grovnic():energy_cost(0), inventory(NULL)
 grovnic::grovnic(grovnic &toCopy):object(toCopy), energy_cost(toCopy.energy_cost)
 {
   if (toCopy.inventory)
-    inventory = new object(toCopy.inventory);
+    inventory = new tool(toCopy.inventory);
 }
 
-grovnic::grovnik(string name, color bgColor, int cost, color displayColor, char displayChar):object(/*TODO*/), energy_cost(cost), inventory(NULL)
+grovnic::grovnic(string name, color bgColor, int cost, color displayColor, char displayChar):object(/*TODO*/), energy_cost(cost), inventory(NULL)
 {}
 
 grovnic::grovnic(string name, color bgColor, int cost):object(/*TODO*/), energy_cost(cost), inventory(NULL)
@@ -260,31 +267,30 @@ grovnic::~grovnic()
 char grovnic::get_display_char()const
 {
   if(inventory)
-    return inventory.get_display_char();
+    return inventory->get_display_char();
   return NULL;
 }
 
 color grovnic::get_char_color()const
 {
   if(inventory)
-    return inventory.get_char_color();
-  return NULL;
+    return inventory->get_char_color();
+  color ret;
+  ret.r = 0;
+  ret.g = 0;
+  ret.b = 0;
+  return ret;
 }
 
-/*color grovnic::get_background_color()const
+color grovnic::get_background_color()const
 {
 }
-*/ 
 
 bool grovnic::copy_object(const object & source)
 {
 
 }
 
-//Takes an object and adds it to the grovnic's inventory
-bool grovnic::import_object(/**/)
-{
-}
 
 //Assumed to only be hero interacting to puck up tool/food
 //TODP - obstacle RTTI
@@ -295,20 +301,11 @@ bool grovnic::interact(const object & check_interaction)
   return true;
 }
 
-void grovnic::get_item_info() const
+string grovnic::get_item_info() const
 {
   if (!inventory) return NULL;
 
-  osstringstream oss;
-
-  food * ptr = dynamic_cast<food *> (inventory);
-  if (ptr) {
-    oss << "Name: " << inventory.name << " Wiffles cost: " << inventory.wiffle_cost << " Energy Restoration: " << inventory.energy_restoration; 
-  }
-  else {
-    oss << "Name: " << inventory.name << " Effective Against: " << inventory.effectiveAgainst << " Multiplier: " << inventory.multiplier; 
-  }
-  string ret = oss.str();
+  string ret = inventory->get_item_info();
   return ret;
 }
 
@@ -330,34 +327,29 @@ item::item():object()
 item::item(item &toCopy):object(toCopy)
 {}
 
-item::item(string name, color itemColor, char displayChar:object(/*TODO*/)
+item::item(string name, color itemColor, char displayChar):object(/*TODO*/)
 {}
 
 item::~item()
 {}
 
-virtual char item::get_display_char()const
+char item::get_display_char()const
 {}
 
-virtual color item::get_char_color()const
+color item::get_char_color()const
 {}
 
-virtual color item::get_background_color()const
+color item::get_background_color()const
 {}
 
-virtual bool item::copy_object(const object & source)
+bool item::copy_object(const object & source)
 {
 
-}
-
-virtual bool item::import_object(/*unknown args*/)
-{
-  return true;
 }
 
 //The only thing interacting with items should be the hero, which will pick it up
 //Interact with grovnic or tool? 
-virtual bool item::interact(const object & check_interaction)
+bool item::interact(const object & check_interaction)
 {
 
 //  return check_interaction.import_object(*this);
@@ -368,13 +360,11 @@ virtual bool item::interact(const object & check_interaction)
 tool::tool():effectiveAgainst(NULL), multiplier(1)
 {}
 
-tool::tool(item &toCopy):item(toCopy), effectiveAgainst(toCopy.effectiveAgainst), multiplier(toCopy.multiplier)
+tool::tool(tool &toCopy):item(toCopy), effectiveAgainst(toCopy.effectiveAgainst), multiplier(toCopy.multiplier)
 {}
 
 tool::~tool()
 {
-  delete effectiveAgainst;
-  effectiveAgainst = NULL;
 }
 
 //All toolds will be a lowercase t 
@@ -390,25 +380,38 @@ color tool::get_background_color()const
 bool tool::copy_object(const object & source)
 {}
 
-bool tool::import_object(/*unknown args*/)
+bool tool::interact(const object & check_interaction)
 {
   return true;
 }
 
-bool tool::interact(const object & check_interaction)
+string tool::get_effect()const
 {
-  return check_interaction.import_object(*this);
+  return effectiveAgainst;
 }
 
-food::food():whiffle_cost(0), energy_restoration(0)
+int tool::get_multiplier()const
+{
+  return multiplier;
+}
+
+string tool::get_item_info() const
+{
+  stringstream oss;
+
+  oss << "Name: " << name << " Effective Against: " << effectiveAgainst << " Multiplier: " << multiplier; 
+  string ret = oss.str();
+  return ret;
+}
+food::food():wiffle_cost(0), energy_restoration(0)
 {
 
 }
 
-food::food(food &toCopy): item(toCopy), whiffle_cost(toCopy.whiffle_cost), energy_restoration(toCopy.energy_restoration)
+food::food(food &toCopy): item(toCopy), wiffle_cost(toCopy.wiffle_cost), energy_restoration(toCopy.energy_restoration)
 {}
 
-food::food(string name, color itemColor, char displayChar, int wCost, int eRest):item(toCopy), whiffle_cost(wCost), energy_restoration(eRest)
+food::food(string name, color itemColor, char displayChar, int wCost, int eRest):item(name, itemColor, displayChar), wiffle_cost(wCost), energy_restoration(eRest)
 {}
 
 food::~food()
@@ -435,19 +438,29 @@ bool food::copy_object(const object & source)
 
 }
 
-bool food::import_object(/*unknown args*/)
-{
-
-}
-
 //The only thing ineracting with foos should be the hero, which will pick it up. 
 bool food::interact(const object & check_interaction)
 {
-  return check_interaction.import_object(*this);
+  return true;
 }
 
-int* bool food::get_cost_rest(){
+int food::get_cost() const{
 
-  return [wiffle_cost, energy_restoration];
+  return wiffle_cost;
 
+}
+
+int food::get_rest() const{
+
+  return energy_restoration;
+
+}
+
+string food::get_item_info() const
+{
+  stringstream oss;
+
+  oss << "Name: " << name << " Wiffles cost: " << wiffle_cost << " Energy Restoration: " << energy_restoration; 
+  string ret = oss.str();
+  return ret;
 }

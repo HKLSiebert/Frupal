@@ -1,6 +1,6 @@
 //first draft of object class
 #include <string.h>
-#include <sstream.h>
+#include <sstream>
 using namespace std;
 
 struct color{
@@ -10,20 +10,21 @@ struct color{
 
     bool copy(const color&source)
     {
-        this.r = source.r;
-        this.g = source.g;
-        this.b = source.b;
+        this->r = source.r;
+        this->g = source.g;
+        this->b = source.b;
 
-        return this.r==source.r && this.g==source.g&&this.b == source.b;
+        return this->r==source.r && this->g==source.g&&this->b == source.b;
 
     }
 };
 
-virtual class object
+class object
 {
     public:
         object();
         object(const object& source);
+        object(string name_i, string description_i, char display_char_i, color char_color_i, color background_color_i);
         virtual ~object();
         virtual char get_display_char()const;
         virtual color get_char_color()const;
@@ -52,13 +53,13 @@ class hero: public object
 {
     public:
         hero();
-        hero(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const oject* inventory);
+        hero(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const object* inventory);
         hero(const object& source);
         virtual ~hero();
         virtual char get_display_char()const;
         virtual color get_char_color()const;
         virtual color get_background_color()const; 
-        virtual bool copy_object(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const oject* inventory);
+        virtual bool copy_object(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const object* inventory);
         virtual bool copy_object(const object & source);
         virtual bool interact(const object & check_interaction);
         virtual string get_name()const;
@@ -82,48 +83,45 @@ class grovnic: public object
     public:
         grovnic();
         grovnic(grovnic &toCopy);
-        grovnik(string name, color bgColor, int cost, color displayColor, char displayChar);
+        grovnic(string name, color bgColor, int cost, color displayColor, char displayChar);
         grovnic(string name, color bgColor, int cost);
         ~grovnic();
         char get_display_char()const;
         color get_char_color()const;
-        /*color get_background_color()const;*/
+        color get_background_color()const;
         bool copy_object(const object & source);
         
-        bool import_object(/*unknown args*/);
         bool interact(const object & check_interaction);
-        string* get_item_info();
-        item* get_item();
+        string get_item_info() const;
+        class item* get_item();
+        bool is_occupied();
         
     protected:
         int energy_cost;
-        item* inventory; //only one object can occupy a grovnik
-
+        class item* inventory; //only one object can occupy a grovnik
 
     private:
-
-
-
 };
 
 
-virtual class item: public object
+class item: public object
 {
     public:
         item();
         item(item &toCopy);
         item(string name, color itemColor, char displayChar);
         ~item();
-        /*virtual char get_display_char()const = 0;
+        virtual char get_display_char()const = 0;
         virtual color get_char_color()const = 0;
         virtual color get_background_color()const = 0;
         virtual bool copy_object(const object & source) =0;
         
         virtual bool import_object(/*unknown args*/) = 0;
-        /*virtual bool interact(const object & check_interaction) = 0;*/
+        virtual bool interact(const object & check_interaction) = 0;
         
         virtual string get_name()const;
         virtual string get_description()const;
+        string get_item_info() const;
 
     protected:
 
@@ -136,36 +134,39 @@ class tool: public item
     public:
         tool();
         tool(tool &toCopy);
-        /*char get_display_char()const;
+        char get_display_char()const;
         color get_char_color()const;
-        color get_background_color()const;*/
+        color get_background_color()const;
         bool copy_object(const object & source);
         
-        bool import_object(/*unknown args*/);
         bool interact(const object & check_interaction);
         virtual ~tool();
         virtual string get_name()const;
         virtual string get_description()const;
+        string get_item_info() const;
+        string get_effect()const;
+        int get_multiplier()const;
 
     protected:        
       string effectiveAgainst;
       int multiplier; 
 
-}
+};
 
 class food: public item
 {
     public:
         food();
-        food(good &toCopy);
+        food(food &toCopy);
         food(string name, color itemColor, char displayChar, int wCost, int eRest);
-        /*char get_display_char()const;
+        char get_display_char()const;
         color get_char_color()const;
-        color get_background_color()const;*/
+        color get_background_color()const;
         bool copy_object(const object & source);
-        bool import_object(/*unknown args*/);
         bool interact(const object & check_interaction);
-        int* bool get_cost_rest();
+        int get_cost() const;
+        int get_rest() const;
+        string get_item_info() const;
         
         virtual ~food();
         virtual string get_name()const;
@@ -175,4 +176,4 @@ class food: public item
     protected:
         int wiffle_cost;
         int energy_restoration;
-}
+};
