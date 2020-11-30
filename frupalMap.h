@@ -1,5 +1,7 @@
 
 // Constants, to match "monday_demo_map.png" mockup on group Slack channel.
+#include <string>
+
 #define DEMO_MAP_NAME "Monday Demo"
 
 #define DEMO_MAP_HEIGHT 11
@@ -10,6 +12,7 @@
 
 #define DEMO_MAX_MAP_ITEMS 3
 
+using namespace std;
 
 // Example items can include tool (axe), food, tree, obstacle, binoculars, etc.
 struct mapItem {
