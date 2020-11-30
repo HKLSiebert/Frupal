@@ -9,11 +9,11 @@ struct color{
 
     bool copy(const color&source)
     {
-        this.r = source.r;
-        this.g = source.g;
-        this.b = source.b;
+        r = source.r;
+        g = source.g;
+        b = source.b;
 
-        return this.r==source.r && this.g==source.g&&this.b == source.b;
+        return r==source.r && g==source.g&&b == source.b;
 
     }
 };
