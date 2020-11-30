@@ -8,7 +8,7 @@ object::object()
 
 }
 
-object::object(string name_i, string description_i, char display_char_i, color char_color_i, color background_color_i):name(name_i):description(description_i:display_char(display_char_i)
+object::object(string name_i, string description_i, char display_char_i, color char_color_i, color background_color_i):name(name_i),description(description_i),display_char(display_char_i)
 {
     char_color.copy(char_color_i);
     background_color.copy(background_color_i);
@@ -50,7 +50,7 @@ virtual string object::get_description()
     return description;
 
 }
-        
+
 
 virtual bool object::copy_object(string name_i, string description_i, char display_char_i, color char_color_i, color background_color_i)
 {
@@ -92,10 +92,16 @@ hero::hero()
 
 }
 
-hero::hero(string name_i, string description_i, char display_char_i, color char_color_i, color background_color_i,int energy_i, int wiffle_i):object(name_i, description_i, display_char_i, char_color_i, background_color_i), energy(energy_i),wiffle(wiffle_i)
+hero::hero(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const oject* inventory):object(name_i, description_i, display_char_i, char_color_i, background_color_i), energy(energy_i),wiffle(wiffle_i)
 {
     inventory = new object[Inventory_size];
-
+    if(inventory)
+    {
+        for(int i =0; i<Inventory_size; ++i)
+        {
+            inventory[i] = new object(inventory_i[i]);
+        }
+    }
 }
 
 hero::hero(const object& source):object(source),energy(source.energy),wiffle(source.wiffle)
@@ -145,38 +151,60 @@ virtual string hero::get_description()
 
 }
 
-virtual bool hero::copy_object(string name_i, string description_i, char display_char_i, color char_color_i, color background_color_i,int energy_i, int wiffle_i);
+virtual bool hero::copy_object(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const oject* inventory)
 { 
     object::copy_object(name_i, description_i, display_char_i, bacground_color_i);
     energy = energy_i;
     wiffle = wiffle_i;
+    if(inventory)
+    {
+        for(int i =0; i<Inventory_size; ++i)
+        {
+            inventory[i] = new object(inventory_i[i]);
+        }
+    }
     return true;
 }
+
 virtual bool hero::copy_object(const object & source);
 {
-    //incomplete
+    object::copy_object(source);
+    for(int i =0; i<Inventory_size; ++i)
+    {
+        inventory[i] = new object(source.inventory[i]);
+    }
+    energy = source.energy;
+    wiffle = wiffle.energy;
+
     return true;
 }
 
 
 virtual bool hero::interact(const object & check_interaction);
 {
+
     //incomplete
     return true;
 }
 
-string[] hero::get_inventory_list()const;
+&string[] hero::get_inventory_list()const;
 {
-    for(
+    string inventory_items[Inventory_size];
+    for(int i =0;i<Inventory_size;++i)
+    {
+        if(inventory[i])
+        {
+            inventory_items[i] = inventory[i].get_name();
+        }
 
-    return
+    }
 
-
+    return inventory_items;
 }
 
 object* hero::get_inventory_items();
 {
-
+    return inventory;
 
 }
 
