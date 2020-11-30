@@ -75,14 +75,16 @@ hero::hero()
 
 }
 
-hero::hero()
+hero::hero(string name_i, string description_i, char display_char_i, color char_color_i, color background_color_i,int energy_i, int wiffle_i):object(name_i, description_i, display_char_i, char_color_i, background_color_i), energy(energy_i),wiffle(wiffle_i)
 {
-
+        object* inventory;
+        int energy;
+        int wiffle;
 }
 
-hero::hero(const object& source)
+hero::hero(const object& source):object(source),energy(source.energy),wiffle(source.wiffle)
 {
-    copy_object(source);
+
 }
 
 ~hero::hero()

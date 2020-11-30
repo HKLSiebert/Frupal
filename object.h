@@ -23,7 +23,7 @@ virtual class object
     public:
         object();
         object(const object& source);
-        ~object();
+        virtual ~object();
         virtual char get_display_char()const;
         virtual color get_char_color()const;
         virtual color get_background_color()const;
@@ -49,8 +49,9 @@ class hero: public object
 {
     public:
         hero();
+        hero(string name_i, string description_i, char display_char_i, color char_color_i, color background_color_i,int energy_i, int wiffle_i);
         hero(const hero& source);
-        ~hero();
+        virtual ~hero();
         virtual char get_display_char()const;
         virtual color get_char_color()const;
         virtual color get_background_color()const; 
@@ -60,6 +61,7 @@ class hero: public object
         string[] get_inventory_list()const;
         object* get_inventory_items();
     protected:
+    
         object* inventory;
         int energy;
         int wiffle;
@@ -72,7 +74,7 @@ class grovnic: public object
     public:
         grovnic();
         grovnic(const grovnic & source);
-        ~grovnic();
+        virtual ~grovnic();
         virtual char get_display_char()const;
         virtual color get_char_color()const;
         virtual color get_background_color()const;
@@ -94,7 +96,7 @@ virtual class item: public object
 {
     public:
         item();
-        ~item();
+        virtual ~item();
         virtual char get_display_char()const;
         virtual color get_char_color()const;
         virtual color get_background_color()const;
@@ -112,7 +114,7 @@ class tool: public item
 {
     public:
         tool();
-        ~tool();
+        virtual ~tool();
         virtual char get_display_char()const;
         virtual color get_char_color()const;
         virtual color get_background_color()const;
@@ -128,7 +130,7 @@ class food: public item
 {
     public:
         food();
-        ~food();
+        virtual ~food();
         virtual char get_display_char()const;
         virtual color get_char_color()const;
         virtual color get_background_color()const;
