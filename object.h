@@ -61,7 +61,7 @@ class hero: public object
         virtual color get_background_color()const; 
         virtual bool copy_object(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const object* inventory_i[Inventory_size]);
         virtual bool copy_object(const hero & source);
-        bool interact(const object & check_interaction);
+        bool interact(const class grovnic & check_interaction);
         virtual string get_name()const;
         virtual string get_description()const;
 
@@ -81,22 +81,27 @@ class grovnic: public object
     public:
         grovnic();
         grovnic(grovnic &toCopy);
-        grovnic(string name, color bgColor, int cost, color displayColor, char displayChar);
-        grovnic(string name, color bgColor, int cost);
+        grovnic(string name, string desc, color bgColor, int cost, color displayColor, char displayChar);
+        grovnic(string name, string desc, color bgColor, int cost, color displayColor, char displayChar, class tool inv);
+        grovnic(string name, string desc, color bgColor, int cost, color displayColor, char displayChar, class food inv);
+        grovnic(string name, string desc, color bgColor, int cost);
         ~grovnic();
         char get_display_char()const;
         color get_char_color()const;
         color get_background_color()const;
-        bool copy_object(const object & source);
         
         string get_item_info() const;
         class item* get_item();
         bool is_occupied();
+        bool is_Seen();
+        void toggleSeen();
+        bool empty_inventory();
         
-        virtual string get_name()const;
-        virtual string get_description()const;
+        string get_name()const;
+        string get_description()const;
 
     protected:
+        bool isSeen;
         int energy_cost;
         class item* inventory; //only one object can occupy a grovnik
 
@@ -109,17 +114,16 @@ class item: public object
     public:
         item();
         item(item &toCopy);
-        item(string name, color itemColor, char displayChar);
+        item(string name, string desc, char displayChar, color charColor);
         virtual ~item();
-        virtual char get_display_char()const = 0;
-        virtual color get_char_color()const = 0;
-        virtual color get_background_color()const = 0;
-        virtual bool copy_object(const object & source) =0;
+        virtual char get_display_char()const;
+        virtual color get_char_color()const;
+        virtual color get_background_color()const;
         
         
         virtual string get_name()const;
         virtual string get_description()const;
-        string get_item_info() const;
+        virtual string get_item_info() const;
 
     protected:
 
@@ -133,14 +137,10 @@ class tool: public item
         tool();
         tool(tool &toCopy);
         virtual ~tool();
-        virtual char get_display_char()const;
-        virtual color get_char_color()const;
-        virtual color get_background_color()const;
-        virtual bool copy_object(const object & source);
+        char get_display_char()const;
+        color get_char_color()const;
+        color get_background_color()const;
 
-        virtual bool copy_object(/*unknown args*/);
-        virtual string get_name()const;
-        virtual string get_description()const;
         string get_item_info() const;
         string get_effect()const;
         int get_multiplier()const;
@@ -156,19 +156,15 @@ class food: public item
     public:
         food();
         food(food &toCopy);
-        food(string name, color itemColor, char displayChar, int wCost, int eRest);
+        food(string name, string desc, color itemColor, char displayChar, int wCost, int eRest);
         char get_display_char()const;
         color get_char_color()const;
         color get_background_color()const;
-        bool copy_object(const object & source);
         int get_cost() const;
         int get_rest() const;
         string get_item_info() const;
         
         virtual ~food();
-        virtual string get_name()const;
-        virtual string get_description()const;
-
 
     protected:
         int wiffle_cost;
