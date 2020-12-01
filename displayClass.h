@@ -27,6 +27,7 @@ WHITE   7
 */
 
 class Display{
+
         public:
                 Display();
                 Display(int y, int x); //hero starting coordinates
@@ -49,4 +50,4 @@ class Display{
                 WINDOW *menu;
 
 };
-~     
+

@@ -2,9 +2,11 @@
 #include <ncurses.h>
 #include <string>
 
+
 #include "frupalMap.h"
 
 #include "displayClass.h"
+#include "object.h"
 
 using namespace std;
 
@@ -80,6 +82,7 @@ int main( int argc, char ** argv ) {
 
 	refresh();
 	endwin();
+
 
 		return 0;
 }
