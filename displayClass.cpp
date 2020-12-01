@@ -72,11 +72,7 @@ void Display::updateMap(/*TODO: array of grovnicks*/) {
         for(int i = 0; i < 11; ++i) {                                                                                   
                 for(int j = 0; j < 11; ++j) {
                                 wattron(map, COLOR_PAIR(GRASS_PAIR)); //assuming all grovnicks are meadows for demo
-                                /*if(grovnick has food)
-                                        mvwprintw(map, mapBeginningY+i, mapBeginningX+j, FOOD);
-                                else if(grovnick has tools)
-                                        mvwprintw(map, mapBeginningY+i, mapBeginningX+j, TOOL);
-                                else mvwprintw(map, mapBeginningY+i, mapBeginningX+j, "");*/
+
                                 if(j == 0 && i == 0)
                                         mvwaddch(map, mapBeginningY+i, mapBeginningX+j, OBSTACLE);
                                 else if(j == 10 && i == 0)
