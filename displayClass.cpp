@@ -98,4 +98,54 @@ void Display::updatePlayerPosition(int y, int x) {
         mvwaddch(map, posY, posX, PLAYER);
         wattroff(map, COLOR_PAIR(PLAYER_PAIR));
         wrefresh(map);
-}               
+}  
+
+void Display::initialMap(status& object) {
+        int mapMiddle = mapY/2;
+        int toDisplay = 128-mapMiddle;
+        list grovnick;
+        char toPrint = ' ';
+        for(int i = 0; i < 128; ++i) {
+                for(int j = 0; j < mapY; ++j) {
+                        grovnick = object.draw_display(j+(toDisplay)/2, i);
+
+                        if(grovnick.content == "null")
+                                toPrint == ' ';
+                ///     else if(grovnick.content == "axe" || grovnick.content == "hatchet")
+                //              toPrint = TOOL;
+                        else if(grovnick.content == "food")
+                                toPrint == FOOD;
+                        else if(grovnick.content == "ship")
+                                toPrint == SHIP;
+                        else if(grovnick.content == "tree" || grovnick.content == "boulder")
+                                toPrint == OBSTACLE;
+                        else if(grovnick.content == "$")
+                                toPrint == TREASURE;
+                        else toPrint == ' ';
+
+
+                        if(grovnick.terrain == "meadow") {
+                                wattron(map, COLOR_PAIR(GRASS_PAIR));
+                                mvwaddch(map, j, i+mapBeginningX, toPrint);
+                                wattroff(map, COLOR_PAIR(GRASS_PAIR));
+                        }
+                        else if(grovnick.terrain == "swamp") {
+                                wattron(map, COLOR_PAIR(SWAMP_PAIR));
+                                mvwaddch(map, j, i+mapBeginningX, toPrint);
+                                wattroff(map, COLOR_PAIR(SWAMP_PAIR));
+                        }
+                        else if(grovnick.terrain == "water") {
+                                wattron(map, COLOR_PAIR(WATER_PAIR));
+                                mvwaddch(map, j, i+mapBeginningX, toPrint);
+                                wattroff(map, COLOR_PAIR(WATER_PAIR));
+                        }
+                        else if(grovnick.terrain == "wall") {
+                                wattron(map, COLOR_PAIR(WALL_PAIR));
+                                mvwaddch(map, j, i+mapBeginningX, toPrint);
+                                wattroff(map, COLOR_PAIR(WALL_PAIR));
+                        }
+
+                }
+        }
+        wrefresh(map);
+}             
