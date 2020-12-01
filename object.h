@@ -61,7 +61,7 @@ class hero: public object
         virtual color get_background_color()const; 
         virtual bool copy_object(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const object* inventory_i[Inventory_size]);
         virtual bool copy_object(const hero & source);
-        bool interact(const class grovnic & check_interaction);
+        bool interact(const object& check_interaction);
         virtual string get_name()const;
         virtual string get_description()const;
 
@@ -82,8 +82,8 @@ class grovnic: public object
         grovnic();
         grovnic(grovnic &toCopy);
         grovnic(string name, string desc, color bgColor, int cost, color displayColor, char displayChar);
-        grovnic(string name, string desc, color bgColor, int cost, color displayColor, char displayChar, class tool inv);
-        grovnic(string name, string desc, color bgColor, int cost, color displayColor, char displayChar, class food inv);
+        grovnic(string name, string desc, color bgColor, int cost, color displayColor, char displayChar, class tool &inv);
+        grovnic(string name, string desc, color bgColor, int cost, color displayColor, char displayChar, class food &inv);
         grovnic(string name, string desc, color bgColor, int cost);
         ~grovnic();
         char get_display_char()const;
@@ -136,6 +136,7 @@ class tool: public item
     public:
         tool();
         tool(tool &toCopy);
+        tool(string name, string desc, color itemColor, char displayChar, string eff, int mult);
         virtual ~tool();
         char get_display_char()const;
         color get_char_color()const;

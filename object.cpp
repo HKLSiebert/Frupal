@@ -201,7 +201,7 @@ bool hero::add_to_inventory(object*& inventory_item)
 
 }
 
-bool hero::interact(const grovnic & check_interaction)
+bool hero::interact(const object & check_interaction)
 {
       //incomplet
       return false;
@@ -222,12 +222,12 @@ grovnic::grovnic(grovnic &toCopy):object(toCopy), energy_cost(toCopy.energy_cost
 grovnic::grovnic(string name, string desc, color bgColor, int cost, color displayColor, char displayChar):object(name, desc, displayChar, displayColor, bgColor), energy_cost(cost), inventory(NULL)
 {}
 
-grovnic::grovnic(string name, string desc, color bgColor, int cost, color displayColor, char displayChar, tool inv):object(name, desc, displayChar, displayColor, bgColor), energy_cost(cost)
+grovnic::grovnic(string name, string desc, color bgColor, int cost, color displayColor, char displayChar, tool & inv):object(name, desc, displayChar, displayColor, bgColor), energy_cost(cost)
 {
   inventory = new tool(inv);
 }
 
-grovnic::grovnic(string name, string desc, color bgColor, int cost, color displayColor, char displayChar, food inv):object(name, desc, displayChar, displayColor, bgColor), energy_cost(cost)
+grovnic::grovnic(string name, string desc, color bgColor, int cost, color displayColor, char displayChar, food & inv):object(name, desc, displayChar, displayColor, bgColor), energy_cost(cost)
 {
   inventory = new food(inv);
 }
@@ -365,6 +365,9 @@ tool::tool():effectiveAgainst(NULL), multiplier(1)
 {}
 
 tool::tool(tool &toCopy):item(toCopy), effectiveAgainst(toCopy.effectiveAgainst), multiplier(toCopy.multiplier)
+{}
+
+tool::tool(string name, string desc, color itemColor, char displayChar, string eff, int mult):item(name, desc, displayChar, itemColor), effectiveAgainst(eff), multiplier(mult)
 {}
 
 tool::~tool()

@@ -1,8 +1,9 @@
 #include <fstream>
 #include <ncurses.h>
 #include <string>
-
+#include <iostream>
 #include "displayClass.h"
+#include "object.h"
 
 using namespace std;
 
@@ -45,6 +46,7 @@ int main( int argc, char ** argv ) {
 //		or by some other public member function of displayClass?
 
 // TODO Keyboard input handled within main function
+
 
 		return 0;
 }
