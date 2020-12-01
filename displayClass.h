@@ -2,6 +2,7 @@
 #include <ncurses.h>
 #include <string>
 #include <iostream>
+#include "status.h"
 
 #define PLAYER '@'
 #define FOOD 'F'
@@ -33,6 +34,7 @@ class Display{
                 Display(int y, int x); //hero starting coordinates
                 ~Display();
                 void getInput();
+                void initialMap(status& object);
                 void updateMap();
                 //int updateMenu(/*object Cursor*/);
                 //int updateGrovnick(int x, int y);
@@ -44,6 +46,7 @@ class Display{
                 int updateTools();
                 int updateClues();*/
                 void updatePlayerPosition(int y, int x);
+      
         private:
                 int maxY, maxX, mapY, mapX,  mapBeginningY, mapBeginningX, menuSize, posY, posX;
                 WINDOW *map;
