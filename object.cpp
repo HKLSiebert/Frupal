@@ -90,26 +90,26 @@ hero::hero(const string name_i, const string description_i, const char display_c
     {
         for(int i =0; i<Inventory_size; ++i)
         {
-            inventory[i] = new object(inventory_i[i]*);
+            inventory[i] = new object(*(inventory_i[i]));
         }
     }
 }
 
-hero::hero(const object& source):object(source),energy(source.energy),wiffle(source.wiffle)
+hero::hero(const hero& source):object(source),energy(source.energy),wiffle(source.wiffle)
 {
 
     inventory = new object*[Inventory_size];
     for(int i =0; i<Inventory_size; ++i)
     {
-        inventory[i] = new object(source.inventory[i]);
+        inventory[i] = new object(*(source.inventory[i]));
     }
 }
 
-~hero::hero()
+hero::~hero()
 {
     for(int i =0; i<Inventory_size; ++i)
     {
-        inventory[i];
+       delete inventory[i];
     }
     delete inventory;
 }
@@ -131,12 +131,12 @@ color hero::get_background_color()const
     return background_color;
 }
 
-string hero::get_name()
+string hero::get_name()const
 {
     return name;
 }
 
-string hero::get_description()
+string hero::get_description()const
 {
     return description;
 
@@ -144,28 +144,28 @@ string hero::get_description()
 
 bool hero::copy_object(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const object* inventory_i[Inventory_size])
 { 
-    object::copy_object(name_i, description_i, display_char_i, background_color_i);
+    object::copy_object(name_i, description_i, display_char_i,char_color_i, background_color_i);
     energy = energy_i;
     wiffle = wiffle_i;
     if(inventory)
     {
         for(int i =0; i<Inventory_size; ++i)
         {
-            inventory[i] = new object(inventory_i[i]);
+            inventory[i] = new object(*(inventory_i[i]));
         }
     }
     return true;
 }
 
-bool hero::copy_object(const object & source)
+bool hero::copy_object(const hero & source)
 {
     object::copy_object(source);
     for(int i =0; i<Inventory_size; ++i)
     {
-        inventory[i] = new object(source.inventory[i]*);
+        inventory[i] = new object(*(source.inventory[i]));
     }
     energy = source.energy;
-    wiffle = wiffle.energy;
+    wiffle = source.wiffle;
     return true;
 }
 
@@ -179,7 +179,7 @@ bool hero::interact(const object & check_interaction)
 
 string* hero::get_inventory_list()const
 {
-    string inventory_items[Inventory_size];
+    string* inventory_items = new string[Inventory_size];
     for(int i =0;i<Inventory_size;++i)
     {
         if(inventory[i])

@@ -53,13 +53,13 @@ class hero: public object
     public:
         hero();
         hero(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const object* inventory_i[Inventory_size]);
-        hero(const object& source);
+        hero(const hero& source);
         virtual ~hero();
         virtual char get_display_char()const;
         virtual color get_char_color()const;
         virtual color get_background_color()const; 
         virtual bool copy_object(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const object* inventory_i[Inventory_size]);
-        virtual bool copy_object(const object & source);
+        virtual bool copy_object(const hero & source);
         bool interact(const object & check_interaction);
         virtual string get_name()const;
         virtual string get_description()const;
