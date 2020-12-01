@@ -38,12 +38,12 @@ color object::get_background_color()const
       return background_color;
 }
 
-string object::get_name()
+string object::get_name()const
 {
     return name;
 }
 
-string object::get_description()
+string object::get_description()const
 {
     return description;
 
@@ -71,52 +71,39 @@ bool object::copy_object(const object & source)
     return true;
 }
 
-
-
-//not sure how we are passing color yet. It could be a struct with the appropriate ints I think the display class can answer how color should be passed
-bool object::interact(const object & check_interaction)
-{
-      //incomplete
-          return true;
-}
-
-string object::get_name(){}
-
-
-
 hero::hero()
 {
-    inventory = new object[Inventory_size];
+    inventory = new object*[Inventory_size];
 
 }
 
-hero::hero(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const object* inventory):object(name_i, description_i, display_char_i, char_color_i, background_color_i), energy(energy_i),wiffle(wiffle_i)
+hero::hero(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const object* inventory_i[Inventory_size]):object(name_i, description_i, display_char_i, char_color_i, background_color_i), energy(energy_i),wiffle(wiffle_i)
 {
-    inventory = new object[Inventory_size];
+    inventory = new object*[Inventory_size];
     if(inventory)
     {
         for(int i =0; i<Inventory_size; ++i)
         {
-            inventory[i] = new object(inventory_i[i]);
+            inventory[i] = new object(*(inventory_i[i]));
         }
     }
 }
 
-hero::hero(const object& source):object(source),energy(source.energy),wiffle(source.wiffle)
+hero::hero(const hero& source):object(source),energy(source.energy),wiffle(source.wiffle)
 {
 
-    inventory = new object[Inventory_size];
+    inventory = new object*[Inventory_size];
     for(int i =0; i<Inventory_size; ++i)
     {
-        inventory[i] = new object(source.inventory[i]);
+        inventory[i] = new object(*(source.inventory[i]));
     }
 }
 
-~hero::hero()
+hero::~hero()
 {
     for(int i =0; i<Inventory_size; ++i)
     {
-        inventory[i];
+       delete inventory[i];
     }
     delete inventory;
 }
@@ -133,59 +120,58 @@ color hero::get_char_color()const
 }
 
 
-color hero::get_background_color()const
+color hero::get_background_color()const 
 {
     return background_color;
 }
 
-string hero::get_name()
+string hero::get_name()const
 {
     return name;
 }
 
-string hero::get_description()
+string hero::get_description()const
 {
     return description;
 
 }
 
-bool hero::copy_object(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const object* inventory)
+bool hero::copy_object(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const object* inventory_i[Inventory_size])
 { 
-    object::copy_object(name_i, description_i, display_char_i, bacground_color_i);
+    object::copy_object(name_i, description_i, display_char_i,char_color_i, background_color_i);
     energy = energy_i;
     wiffle = wiffle_i;
     if(inventory)
     {
         for(int i =0; i<Inventory_size; ++i)
         {
-            inventory[i] = new object(inventory_i[i]);
+            inventory[i] = new object(*(inventory_i[i]));
         }
     }
     return true;
 }
 
-bool hero::copy_object(const object & source)
+bool hero::copy_object(const hero & source)
 {
     object::copy_object(source);
     for(int i =0; i<Inventory_size; ++i)
     {
-        inventory[i] = new object(source.inventory[i]);
+        inventory[i] = new object(*(source.inventory[i]));
     }
     energy = source.energy;
-    wiffle = wiffle.energy;
-
+    wiffle = source.wiffle;
     return true;
 }
 
 
-&string[] hero::get_inventory_list()const
+string* hero::get_inventory_list()const
 {
-    string inventory_items[Inventory_size];
+    string* inventory_items = new string[Inventory_size];
     for(int i =0;i<Inventory_size;++i)
     {
         if(inventory[i])
         {
-            inventory_items[i] = inventory[i].get_name();
+            inventory_items[i] = inventory[i]->get_name();
         }
 
     }
@@ -193,17 +179,26 @@ bool hero::copy_object(const object & source)
     return inventory_items;
 }
 
-object* hero::get_inventory_items()
+
+object** hero::get_inventory_items()
 {
     return inventory;
-
 }
 
 bool hero::add_to_inventory(object*& inventory_item)
 {
     int i = 0;
-    while(inventory[i++]);//finds first empty inventory spot
-    inventory[i] = & inventory_item;
+    while(i < Inventory_size && inventory[i])
+    {
+        ++i;
+    }
+    if(i<Inventory_size)
+    {
+        inventory[i] = inventory_item;
+        inventory_item = NULL;
+    }
+    return i<Inventory_size; 
+
 }
 
 bool hero::interact(const object & check_interaction)

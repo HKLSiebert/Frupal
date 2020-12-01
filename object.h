@@ -10,19 +10,22 @@ struct color{
 
     bool copy(const color&source)
     {
-        this->r = source.r;
-        this->g = source.g;
-        this->b = source.b;
+        r = source.r;
+        g = source.g;
+        b = source.b;
 
-        return this->r==source.r && this->g==source.g&&this->b == source.b;
+        return r==source.r && g==source.g&&b == source.b;
 
     }
 };
+
+const static int Inventory_size = 100;
 
 class object
 {
     public:
         object();
+        object(string name_i, string description_i, char display_char_i, color char_color_i, color background_color_i);
         object(const object& source);
         object(string name_i, string description_i, char display_char_i, color char_color_i, color background_color_i);
         virtual ~object();
@@ -30,12 +33,11 @@ class object
         virtual color get_char_color()const;
         virtual color get_background_color()const;
         virtual bool copy_object(string name_i, string description_i, char display_char_i, color char_color_i, color background_color_i);
-        virtual bool copy_object(const object & source);
+        virtual bool copy_object(const object& source);
         virtual string get_name()const;
         virtual string get_description()const;
 
         //not sure how we are passing color yet. It could be a struct with the appropriate ints I think the display class can answer how color should be passed
-        virtual bool interact(const object & check_interaction);
 
     protected:
         string name;
@@ -46,36 +48,33 @@ class object
 
     private:
 
-
 };
 
 class hero: public object
 {
     public:
         hero();
-        hero(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const object* inventory);
-        hero(const object& source);
+        hero(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const object* inventory_i[Inventory_size]);
+        hero(const hero& source);
         virtual ~hero();
         virtual char get_display_char()const;
         virtual color get_char_color()const;
         virtual color get_background_color()const; 
-        virtual bool copy_object(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const object* inventory);
-        virtual bool copy_object(const object & source);
-        virtual bool interact(const object & check_interaction);
+        virtual bool copy_object(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const object* inventory_i[Inventory_size]);
+        virtual bool copy_object(const hero & source);
+        bool interact(const object & check_interaction);
         virtual string get_name()const;
         virtual string get_description()const;
 
-        &string[] get_inventory_list()const;
-        object* get_inventory_items();
+        string* get_inventory_list()const;
+        object** get_inventory_items();
     protected:
-
-        bool add_to_inventory(object*& inventory_item);//this will null whatever pointer is passed to the function if it returns true
-        object* inventory;
+        bool add_to_inventory(object* & inventory_item);//this will null whatever pointer is passed to the function if it returns true
+        object** inventory;
         int energy;
         int wiffle;
 
     private:
-        const int Inventory_size = 100;
 };
 
 class grovnic: public object
@@ -96,6 +95,9 @@ class grovnic: public object
         class item* get_item();
         bool is_occupied();
         
+        virtual string get_name()const;
+        virtual string get_description()const;
+
     protected:
         int energy_cost;
         class item* inventory; //only one object can occupy a grovnik
@@ -110,14 +112,12 @@ class item: public object
         item();
         item(item &toCopy);
         item(string name, color itemColor, char displayChar);
-        ~item();
+        virtual ~item();
         virtual char get_display_char()const = 0;
         virtual color get_char_color()const = 0;
         virtual color get_background_color()const = 0;
         virtual bool copy_object(const object & source) =0;
         
-        virtual bool import_object(/*unknown args*/) = 0;
-        virtual bool interact(const object & check_interaction) = 0;
         
         virtual string get_name()const;
         virtual string get_description()const;
@@ -134,13 +134,13 @@ class tool: public item
     public:
         tool();
         tool(tool &toCopy);
-        char get_display_char()const;
-        color get_char_color()const;
-        color get_background_color()const;
-        bool copy_object(const object & source);
-        
-        bool interact(const object & check_interaction);
         virtual ~tool();
+        virtual char get_display_char()const;
+        virtual color get_char_color()const;
+        virtual color get_background_color()const;
+        virtual bool copy_object(const object & source);
+
+        virtual bool copy_object(/*unknown args*/);
         virtual string get_name()const;
         virtual string get_description()const;
         string get_item_info() const;
