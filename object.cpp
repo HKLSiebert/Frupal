@@ -286,16 +286,6 @@ bool grovnic::copy_object(const object & source)
 
 }
 
-
-//Assumed to only be hero interacting to puck up tool/food
-//TODP - obstacle RTTI
-bool grovnic::interact(const object & check_interaction)
-{
-  //Needs to potentially remove the grocnik item as well as lower hero stats
-  display_char = '\0';
-  return true;
-}
-
 string grovnic::get_item_info() const
 {
   if (!inventory) return NULL;
@@ -342,16 +332,6 @@ bool item::copy_object(const object & source)
 
 }
 
-//The only thing interacting with items should be the hero, which will pick it up
-//Interact with grovnic or tool? 
-bool item::interact(const object & check_interaction)
-{
-
-//  return check_interaction.import_object(*this);
-  return false;
-
-}
-
 tool::tool():effectiveAgainst(NULL), multiplier(1)
 {}
 
@@ -374,11 +354,6 @@ color tool::get_background_color()const
 
 bool tool::copy_object(const object & source)
 {}
-
-bool tool::interact(const object & check_interaction)
-{
-  return true;
-}
 
 string tool::get_effect()const
 {
@@ -431,12 +406,6 @@ color food::get_background_color()const
 bool food::copy_object(const object & source)
 {
 
-}
-
-//The only thing ineracting with foos should be the hero, which will pick it up. 
-bool food::interact(const object & check_interaction)
-{
-  return true;
 }
 
 int food::get_cost() const{

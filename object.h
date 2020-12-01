@@ -27,7 +27,6 @@ class object
         object();
         object(string name_i, string description_i, char display_char_i, color char_color_i, color background_color_i);
         object(const object& source);
-        object(string name_i, string description_i, char display_char_i, color char_color_i, color background_color_i);
         virtual ~object();
         virtual char get_display_char()const;
         virtual color get_char_color()const;
@@ -90,7 +89,6 @@ class grovnic: public object
         color get_background_color()const;
         bool copy_object(const object & source);
         
-        bool interact(const object & check_interaction);
         string get_item_info() const;
         class item* get_item();
         bool is_occupied();
@@ -163,7 +161,6 @@ class food: public item
         color get_char_color()const;
         color get_background_color()const;
         bool copy_object(const object & source);
-        bool interact(const object & check_interaction);
         int get_cost() const;
         int get_rest() const;
         string get_item_info() const;
