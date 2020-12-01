@@ -22,7 +22,7 @@ $ ./frupal *AlternateMap*
 ---
 
 ## Game Play
-* User Controls - Arrow keys, to look around. Keys 1, 2, 3, 4, to move around.
+* User Controls - Arrow keys, to move one grovnick in either North, East, South, or West direction.
 * Terminology	- Grovnick, "a square section of the Frupal map"; Whiffle, "currency"; Energy, "health".
 * Story         - Explore uncharted territory. Discover the royal diamonds in order to win.
 * Challenges	- Some actions can deplete Energy. 
