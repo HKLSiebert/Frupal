@@ -31,7 +31,7 @@ class object
         virtual color get_char_color()const;
         virtual color get_background_color()const;
         virtual bool copy_object(string name_i, string description_i, char display_char_i, color char_color_i, color background_color_i);
-        virtual bool copy_object(const object source);
+        virtual bool copy_object(const object& source);
         virtual string get_name()const;
         virtual string get_description()const;
 

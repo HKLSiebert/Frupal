@@ -85,12 +85,12 @@ hero::hero()
 
 hero::hero(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const object* inventory_i[Inventory_size]):object(name_i, description_i, display_char_i, char_color_i, background_color_i), energy(energy_i),wiffle(wiffle_i)
 {
-    inventory = new object[Inventory_size];
+    inventory = new object*[Inventory_size];
     if(inventory)
     {
         for(int i =0; i<Inventory_size; ++i)
         {
-            inventory[i] = new object(inventory_i[i]);
+            inventory[i] = new object(inventory_i[i]*);
         }
     }
 }
@@ -162,7 +162,7 @@ bool hero::copy_object(const object & source)
     object::copy_object(source);
     for(int i =0; i<Inventory_size; ++i)
     {
-        inventory[i] = new object(source.inventory[i]);
+        inventory[i] = new object(source.inventory[i]*);
     }
     energy = source.energy;
     wiffle = wiffle.energy;
