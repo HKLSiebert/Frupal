@@ -2,47 +2,48 @@
                                                                            
 
 Display::Display(int y, int x, status& object) {                                                                                                                     
-        initscr(); 
-        noecho();       
-
+  initscr();
+        refresh();
         if(has_colors() == FALSE){
                 endwin();
-                printf("This terminal does not support color. Exiting...\n");                                           
-                exit(1);                                                                                               
-        }   
-
-        start_color();                                                                                                 
-        init_pair(PLAYER_PAIR, COLOR_YELLOW, COLOR_RED);                                                               
+                printf("This terminal does not support color. Exiting...\n");
+                exit(1);
+        }
+        start_color();
+        init_pair(PLAYER_PAIR, COLOR_YELLOW, COLOR_RED);
         init_pair(GRASS_PAIR, COLOR_BLACK, COLOR_GREEN);
-        init_pair(BLANK_PAIR, COLOR_GREEN, COLOR_GREEN); 
+        init_pair(BLANK_PAIR, COLOR_GREEN, COLOR_GREEN);
         init_pair(SWAMP_PAIR, COLOR_BLACK, COLOR_MAGENTA);
         init_pair(WATER_PAIR, COLOR_BLACK, COLOR_BLUE);
-        init_pair(WALL_PAIR, COLOR_BLACK, COLOR_WHITE);  
+        init_pair(WALL_PAIR, COLOR_BLACK, COLOR_WHITE);
+        noecho();
 
-  
-        posY = DEMO_HERO_START_Y;
-        posX = DEMO_HERO_START_X;    
-
-        getmaxyx(stdscr, maxY, maxX);                                                                                                               
+        posY = posX = BEGIN_AT;
+        int maxY, maxX;
+        getmaxyx(stdscr, maxY, maxX);
         menuSize = 30;
-        map = newwin(maxY, maxX-menuSize, 0, 0);                                                                                                     
-        menu = newwin(maxY, menuSize, 0, maxX - menuSize); 
-
+        map = newwin(maxY, maxX-menuSize, 0, 0);
+        menu = newwin(maxY, menuSize, 0, maxX - menuSize);
         keypad( stdscr, TRUE );
-        keypad( map, TRUE );   
-                                                                                                  
-        getmaxyx(map, mapY, mapX);                                                                                                                      
-        mapBeginningY = (mapY-MAP_SIZE)/2;                                                                                             
-        mapBeginningX = (mapX-MAP_SIZE)/2;                                                                                                                     
+        keypad( map, TRUE );
+        getmaxyx(map, mapY, mapX);
+        mapPosY = (mapY-1)/2;
+
+        if(mapX % 2 == 0)
+                mapPosX = (mapX-1)/2;
+        else mapPosX = mapX/2-1;
+
+        mapBeginningY = mapY/2;
+        mapBeginningX = (mapX-MAP_SIZE)/2;
         box(map, 0, 0);
         box(menu, 0, 0);
-        wprintw(menu, "Menu");                                                                                                         
+        wprintw(menu, "Menu");
         wprintw(map, "Map");
         wrefresh(menu);
-        wrefresh(map);                                                                                                  
-                                                                                                                       
-        initialMap(object);                                                                                                  
-        updatePlayerPosition(y, x, object);                                                                                              
+        wrefresh(map);
+
+        initialMap(object);
+        updatePlayerPosition(y, x, object, 0);                                                                                           
 }                                                                                 
                                                                                     
 Display::~Display() {                                                               
@@ -50,38 +51,76 @@ Display::~Display() {
         delwin(map);                                                                
         endwin();                                                        
 }                                                                                   
-                                                                                    
-void Display::getInput() {                                                          
-        getch();                                          
-}    
-                                                 
+                                                                                                                                  
                                                           
 void Display::updatePlayerPosition(int y, int x) {
-        wattron(map, COLOR_PAIR(GRASS_PAIR));
-        mvwaddch(map, posY, posX, ' ');
-        wattroff(map, COLOR_PAIR(GRASS_PAIR));
+        if( y < 0 || y > 127 || x < 0 || x > 127) return;
+
+
+
+        if(y < startedY){
+                startedY = y;
+                updateMap(startedY, object);
+                mvwaddch(map, mapPosY, mapPosX, PLAYER);
+                wrefresh(map);
+                return;
+        }
+        if(y > stoppedY){
+                ++startedY;
+                updateMap(startedY, object);
+                mvwaddch(map, mapPosY, mapPosX, PLAYER);
+                wrefresh(map);
+                return;
+        }
+
+        list grovnick = object.draw_display(posY,posX);
+        char toPrint = determineContent(grovnick.content);
+        printGrovnick(grovnick.terrain, mapPosY, mapPosX, toPrint);
 
         wattron(map, COLOR_PAIR(PLAYER_PAIR));
-        posY = mapBeginningY + y;
-        posX = mapBeginningX + x;
-        mvwaddch(map, posY, posX, PLAYER);
+        if(direction == KEY_LEFT) --mapPosX;
+        else if(direction == KEY_RIGHT) ++mapPosX;
+        else if(direction == KEY_UP) --mapPosY;
+        else if(direction == KEY_DOWN) ++mapPosY;
+        mvwaddch(map, mapPosY, mapPosX, PLAYER);
         wattroff(map, COLOR_PAIR(PLAYER_PAIR));
         wrefresh(map);
+
+        posY = y;
+        posX = x;
+
 }  
 
-void Display::initialMap(status& object) {
-        int mapMiddle = mapY/2;
-        int toDisplay = 128-mapMiddle;
-        startedY = toDisplay/2;
+
+void Display::updateMap(int startedY, status& object) {
         list grovnick;
         char toPrint = ' ';
         for(int i = 0; i < 128; ++i) {
                 for(int j = 0; j < mapY; ++j) {
-                        grovnick = object.draw_display(j+(toDisplay)/2, i);
+                        grovnick = object.draw_display(j+startedY, i);
                         toPrint = ' ';
                         toPrint = determineContent(grovnick.content);
                         printGrovnick(grovnick.terrain, j, i+mapBeginningX, toPrint);
-                        if(mapY > stoppedY) stoppedY = mapY;
+                        printGrovnick(grovnick.terrain, j, i+mapBeginningX, toPrint);
+                        stoppedY = j+startedY;
+                }
+        }
+        wrefresh(map);
+
+}
+
+
+void Display::initialMap(status& object) {
+         startedY = (MAP_SIZE - mapY)/2;
+        list grovnick;
+        char toPrint = ' ';
+        for(int i = 0; i < 128; ++i) {
+                for(int j = 0; j < mapY; ++j) {
+                        grovnick = object.draw_display(j+startedY, i);
+                        toPrint = ' ';
+                        toPrint = determineContent(grovnick.content);
+                        printGrovnick(grovnick.terrain, j, i+mapBeginningX, toPrint);
+                        if(j+startedY > stoppedY) stoppedY = j+startedY;
                 }
         }
         wrefresh(map);
