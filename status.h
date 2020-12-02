@@ -3,10 +3,10 @@
 #include <iostream>
 #include "frupalMap.h"
 #include <fstream>
-//#include "displayClass.h"
 #include "object.h"
 using namespace std;
-
+const int SIZEX=128;
+const int SIZEY=128;
 struct list
 {
   string name;
@@ -27,8 +27,8 @@ class status
   public:
     status();
     status(frupalMap & startmap);
-    void update_map(int x, int y/* user input*/);
-    void load_map(frupalMap & startmap);//loads up the mapp array to update it;
+    void updatemap(int x, int y/* user input*/);
+    void loadmap(frupalMap & startmap);//loads up the mapp array to update it;
     void read_map(); //reads map from external file into list **map_display
     bool game_progress();//is user did or did they complete the game?
     int success();
@@ -43,3 +43,4 @@ class status
     object ** map;
     hero * my_hero;
     list ** map_display[128][128]; //we know the map is going to be 128x128
+};
