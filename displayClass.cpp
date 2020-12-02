@@ -53,7 +53,7 @@ Display::~Display() {
 }                                                                                   
                                                                                                                                   
                                                           
-void Display::updatePlayerPosition(int y, int x) {
+void Display::updatePlayerPosition(int y, int x, status& object, int direction) {
         if( y < 0 || y > 127 || x < 0 || x > 127) return;
 
 
@@ -100,7 +100,6 @@ void Display::updateMap(int startedY, status& object) {
                         grovnick = object.draw_display(j+startedY, i);
                         toPrint = ' ';
                         toPrint = determineContent(grovnick.content);
-                        printGrovnick(grovnick.terrain, j, i+mapBeginningX, toPrint);
                         printGrovnick(grovnick.terrain, j, i+mapBeginningX, toPrint);
                         stoppedY = j+startedY;
                 }

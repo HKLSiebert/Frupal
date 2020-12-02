@@ -42,7 +42,7 @@ class Display{
                 char determineContent(string content);    
       
         private:
-                int mapY, mapX, mapBeginningY, mapBeginningX, menuSize, posY, posX, mapPosX, mapPosY startedY, startedX;
+                int mapY, mapX, mapBeginningY, mapBeginningX, menuSize, posY, posX, mapPosX, mapPosY, startedY, stoppedY;
                 WINDOW *map;
                 WINDOW *menu;
 
