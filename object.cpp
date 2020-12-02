@@ -281,6 +281,12 @@ item* grovnic::get_item()
   return inventory;  
 }
 
+bool grovnic::add_item(class item & toCopy)
+{
+  inventory = new item(toCopy);
+  return true;
+}
+
 bool grovnic::is_occupied()
 {
   if (inventory) return true;
@@ -404,7 +410,7 @@ string tool::get_item_info() const
 {
   stringstream oss;
 
-  oss << "Name: " << name << "\nEffective Against: " << effectiveAgainst << "\nMultiplier: " << multiplier; 
+  oss << ">>Name: " << name << "\n>>Effective Against: " << effectiveAgainst << "\n>>Multiplier: " << multiplier; 
   string ret = oss.str();
   return ret;
 }
@@ -452,7 +458,48 @@ string food::get_item_info() const
 {
   stringstream oss;
 
-  oss << "Name: " << name << " Wiffles cost: " << wiffle_cost << " Energy Restoration: " << energy_restoration; 
+  oss << ">>Name: " << name << "\n>>Wiffles cost: " << wiffle_cost << "\n>>Energy Restoration: " << energy_restoration; 
   string ret = oss.str();
   return ret;
+}
+
+obstacle::obstacle():eCost(0)
+{}
+
+obstacle::obstacle(obstacle &toCopy):item(toCopy), eCost(toCopy.eCost)
+{}
+
+obstacle::obstacle(string name, string desc, color itemColor, char displayChar, int cost):item(name, desc, displayChar, itemColor), eCost(eCost)
+{}
+
+obstacle::~obstacle()
+{}
+
+char obstacle::get_display_char()const
+{
+  return display_char;
+}
+color obstacle::get_char_color()const
+{
+  return char_color;
+}
+
+color obstacle::get_background_color()const
+{
+  return background_color;
+}
+
+int obstacle::get_eCost() const
+{
+  return eCost;
+}
+
+string obstacle::get_item_info() const
+{
+  stringstream oss;
+
+  oss << ">>Name: " << name << "\n>>Energy Cost: " << eCost;
+  string ret = oss.str();
+  return ret; 
+  
 }

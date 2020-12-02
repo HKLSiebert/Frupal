@@ -92,6 +92,7 @@ class grovnic: public object
         
         string get_item_info() const;
         class item* get_item();
+        bool add_item(class item & toCopy);
         bool is_occupied();
         bool is_Seen();
         void toggleSeen();
@@ -170,4 +171,23 @@ class food: public item
     protected:
         int wiffle_cost;
         int energy_restoration;
+};
+
+class obstacle: public item
+{
+  public:
+    obstacle();
+    obstacle(obstacle &toCopy);
+    obstacle(string name, string desc, color itemColor, char displayChar, int cost);
+    ~obstacle();
+    char get_display_char()const;
+    color get_char_color()const;
+    color get_background_color()const;
+    int get_eCost() const;
+    string get_item_info() const;
+
+  protected:
+    int eCost;
+    
+
 };
