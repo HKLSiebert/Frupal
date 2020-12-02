@@ -26,14 +26,13 @@ class status
 {
   public:
     status();
-    status(frupalMap & startmap);
     void updatemap(int x, int y/* user input*/);
-    void loadmap(frupalMap & startmap);//loads up the mapp array to update it;
+    //void loadmap(frupalMap & startmap);//loads up the mapp array to update it;
     void read_map(); //reads map from external file into list **map_display
-    bool game_progress();//is user did or did they complete the game?
+    int gameprogress();//is user did or did they complete the game?
     int success();
     void cursor(/*dont exactly know what im doing for the cursor yet*/);
-    list* draw_display(int x,int y);//function to pass the updated index to draw
+    list draw_display(int x,int y);//function to pass the updated index to draw
     bool update(char userinput);
   protected:
     int startx;//starting coords of hero
@@ -42,5 +41,5 @@ class status
     int mapy;
     object ** map;
     hero * my_hero;
-    list ** map_display[128][128]; //we know the map is going to be 128x128
+    list ** map_display; //we know the map is going to be 128x128
 };
