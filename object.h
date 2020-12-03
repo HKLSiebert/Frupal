@@ -81,7 +81,7 @@ class grovnic: public object
     public:
         grovnic();
         grovnic(grovnic &toCopy);
-        grovnic(string name);
+        grovnic(string name, string content, string desc);
         grovnic(string name, string desc, color bgColor, int cost, color displayColor, char displayChar);
         grovnic(string name, string desc, color bgColor, int cost, color displayColor, char displayChar, class tool &inv);
         grovnic(string name, string desc, color bgColor, int cost, color displayColor, char displayChar, class food &inv);
