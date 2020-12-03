@@ -81,6 +81,7 @@ class grovnic: public object
     public:
         grovnic();
         grovnic(grovnic &toCopy);
+        grovnic(string name);
         grovnic(string name, string desc, color bgColor, int cost, color displayColor, char displayChar);
         grovnic(string name, string desc, color bgColor, int cost, color displayColor, char displayChar, class tool &inv);
         grovnic(string name, string desc, color bgColor, int cost, color displayColor, char displayChar, class food &inv);
@@ -97,6 +98,7 @@ class grovnic: public object
         bool is_Seen();
         void toggleSeen();
         bool empty_inventory();
+        int get_total_energy_cost() const;
         
         string get_name()const;
         string get_description()const;

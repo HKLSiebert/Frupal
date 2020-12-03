@@ -218,6 +218,26 @@ grovnic::grovnic(grovnic &toCopy):object(toCopy), energy_cost(toCopy.energy_cost
   }
 }
 
+grovnic::grovnic(string name):object(name, NULL, '\0', color(), color()), inventory(NULL)
+{
+  if (name == "meadow")
+  {
+    energy_cost = 1;
+
+  }
+  else if (name == "swamp")
+  {
+    energy_cost = 2;
+  }
+  else if (name == "water")
+  {
+    energy_cost = 101;
+  }
+  else if (name == "wall")
+  {
+    energy_cost = 101;
+  }
+}
 
 grovnic::grovnic(string name, string desc, color bgColor, int cost, color displayColor, char displayChar):object(name, desc, displayChar, displayColor, bgColor), energy_cost(cost), inventory(NULL)
 {}
@@ -324,6 +344,18 @@ string grovnic::get_name()const
 string grovnic::get_description()const
 {
   return description;
+}
+
+int grovnic::get_total_energy_cost()const
+{
+  if (inventory){
+    obstacle * ptr = dynamic_cast<obstacle *>(inventory);
+    if (ptr)
+    {
+      return energy_cost + ptr->get_eCost();
+    }
+  }
+  return energy_cost;
 }
 
 item::item():object()
