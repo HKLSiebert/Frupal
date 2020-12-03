@@ -300,7 +300,8 @@ bool grovnic::is_Seen()
 
 void grovnic::toggleSeen()
 {
-  isSeen = !isSeen;
+  if (!isSeen)
+    isSeen = true;
   return;
 }
 
