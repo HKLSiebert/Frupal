@@ -1,5 +1,10 @@
 #include "status.h"
 
+status::status(){   
+        x = y = cursorX = 63;
+        cursorY = 64;
+        read_map();    
+}  
 
 status::status(frupalMap & startmap)
 {
@@ -8,6 +13,20 @@ status::status(frupalMap & startmap)
   map = new object*[/* size of map*/];
   loadmap(startmap);
 }
+
+
+status::~status(){
+        for(int i = 0; i < 128; i++) {
+                for(int j = 0; j < 128; j++){
+                        delete [] map[i][j];
+                }
+                delete [] map[i];
+        }
+        delete map;
+
+}
+
+
 bool status::update(char userinput)
 {
   switch(getch())
@@ -64,19 +83,54 @@ bool status::update(char userinput)
 
 void status::read_map() {                                                                                                                                                       
         
-        string terrain, content;                                                                                                                                                
-        ifstream fp("map.txt");                                                                                                                                                
+        string terrain, content, desc;                                               
+        ifstream fp("map.txt"); 
         if (! fp) {
-                printw("Failed to open map");                                                                                                                                   
-                return;                                                                                                                                                         
-        }                                                                                                                                                                       
-        
-        for(int i = 0; i < 128; i++) {  
-                for(int j = 0; j < 128; j++){
-                        getline(fp, map_display[j][i].terrain, ';');                                                                                                            
-                        getline(fp, map_display[j][i].content, ';');                                                                                                            
-                        map_display[j][i].visible = false;                                                                                                                                                                                                                                                                    
-                        }                                                                                                                                                       
-        }                                                                                                                                                               
+                printw("Failed to open map");                                        
+                return;
+        }       
+        map = new grovnic**[128];                                                    
+        for(int i = 0; i < 128; i++) {                                               
+                map[i] = new grovnic*[128];                                          
+                for(int j = 0; j < 128; j++){                                        
+                        getline(fp, terrain, ';');                                   
+                        getline(fp, content, ';');
+                        getline(fp, desc, ';');
+                        map[i][j] = new grovnic(terrain, content, desc);                                                                                                                                                              
 } 
+
+void status::set_visible(){
+        if(x>0 && y>0)
+                map[x-1][y-1] -> toggleSeen();
+
+        if(y>0)
+                map[x][y-1] -> toggleSeen();
+
+        if(x<128 && y >0)
+                map[x+1][y-1] -> toggleSeen();
+
+        if(x>0)
+                map[x-1][y] -> toggleSeen();
+
+        if(x<128)
+                map[x+1][y] -> toggleSeen();
+
+        if(x>0 && y<128)
+                map[x-1][y+1] -> toggleSeen();
+
+        if(y<128)
+                map[x][y+1] -> toggleSeen();
+
+        if(x<128 && y<128)
+                map[x+1][y+1] -> toggleSeen();
+
+        map[x][y] -> toggleSeen();
+}
+
+int status::getCursorX(){
+        return cursorX;
+}
+int status::getCursorY(){
+        return cursorY;
+}
 
