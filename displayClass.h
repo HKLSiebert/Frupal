@@ -25,6 +25,7 @@
 #define BEGIN_AT 63
 
 class Display{
+
         public:
                 Display(int y, int x, status& object); //hero starting coordinates and status object for loading in map
                 ~Display();
@@ -41,4 +42,4 @@ class Display{
                 WINDOW *menu;
 
 };
-~     
+
