@@ -2,11 +2,17 @@
 #include <string>
 #include <iostream>
 #include "frupalMap.h"
+#include <ncurses.h>
 #include <fstream>
 #include "object.h"
 using namespace std;
 const int SIZEX=128;
 const int SIZEY=128;
+
+
+/*
+Don't need this struct anymore
+
 struct list
 {
   string name;
@@ -15,31 +21,41 @@ struct list
   color char_color;
   color background_color;
   bool visible;
-
-  //added by elena
-  string content; 
-  string terrain; //no need to pass color if terrain is passed
 };
+*/
+
 
 //Need to remember if hero has binoculars have to update how many sqaures he can look at.
 class status
 {
   public:
     status();
-    void updatemap(int x, int y/* user input*/);
+    status(frupalMap & startmap);
+    ~status();
+ 
+    //void updatemap(int x, int y/* user input*/);
     //void loadmap(frupalMap & startmap);//loads up the mapp array to update it;
+
     void read_map(); //reads map from external file into list **map_display
     int gameprogress();//is user did or did they complete the game?
     int success();
     void cursor(/*dont exactly know what im doing for the cursor yet*/);
-    list draw_display(int x,int y);//function to pass the updated index to draw
+
+ 
     bool update(char userinput);
+    grovnic* get_grovnic(int x, int y);//returns grovnic ptr according to coords
+    int getCursorX();
+    int getCursorY();
+    void set_visible();
   protected:
-    int startx;//starting coords of hero
+    int startx;//coords of hero
     int starty;
-    int mapx;
-    int mapy;
-    object ** map;
+
+    int cursorX; //coords of cursor
+    int cursorY;
+
     hero * my_hero;
-    list ** map_display; //we know the map is going to be 128x128
+    grovnic ***map; //map of grovnicks, dynamically allocated, 128x128
 };
+
+

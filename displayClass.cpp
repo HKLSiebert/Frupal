@@ -2,7 +2,7 @@
                                                                            
 
 Display::Display(int y, int x, status& object) {                                                                                                                     
-  initscr();
+        initscr();
         refresh();
         if(has_colors() == FALSE){
                 endwin();
@@ -16,9 +16,13 @@ Display::Display(int y, int x, status& object) {
         init_pair(SWAMP_PAIR, COLOR_BLACK, COLOR_MAGENTA);
         init_pair(WATER_PAIR, COLOR_BLACK, COLOR_BLUE);
         init_pair(WALL_PAIR, COLOR_BLACK, COLOR_WHITE);
+        init_pair(INV_PAIR, COLOR_BLACK, COLOR_BLACK);
+        init_pair(CURSOR_PAIR, COLOR_BLACK, COLOR_YELLOW);
+
         noecho();
 
-        posY = posX = BEGIN_AT;
+        posY = posX =curPosX = BEGIN_AT;
+        curPosY = BEGIN_AT+1;
         int maxY, maxX;
         getmaxyx(stdscr, maxY, maxX);
         menuSize = 30;
@@ -27,11 +31,14 @@ Display::Display(int y, int x, status& object) {
         keypad( stdscr, TRUE );
         keypad( map, TRUE );
         getmaxyx(map, mapY, mapX);
-        mapPosY = (mapY-1)/2;
+        mapPosY  = (mapY-1)/2;
+        curMapY = mapPosY+1;
 
         if(mapX % 2 == 0)
                 mapPosX = (mapX-1)/2;
         else mapPosX = mapX/2-1;
+
+        curMapX = mapPosX;
 
         mapBeginningY = mapY/2;
         mapBeginningX = (mapX-MAP_SIZE)/2;
@@ -39,11 +46,14 @@ Display::Display(int y, int x, status& object) {
         box(menu, 0, 0);
         wprintw(menu, "Menu");
         wprintw(map, "Map");
-        wrefresh(menu);
-        wrefresh(map);
+
 
         initialMap(object);
-        updatePlayerPosition(y, x, object, 0);                                                                                           
+
+        updatePlayerPosition(y, x, object, 0);
+        updateCursor(object,0);
+        wrefresh(menu);
+        wrefresh(map);                                                                                        
 }                                                                                 
                                                                                     
 Display::~Display() {                                                               
@@ -55,52 +65,86 @@ Display::~Display() {
                                                           
 void Display::updatePlayerPosition(int y, int x, status& object, int direction) {
         if( y < 0 || y > 127 || x < 0 || x > 127) return;
+        grovnic* location = object.get_grovnic(posY, posX);
 
-
-
-        if(y < startedY){
-                startedY = y;
-                updateMap(startedY, object);
+        if(y < startedY){            
+                startedY = y;   
+                updateMap(startedY, object);    
+                wattron(map, COLOR_PAIR(PLAYER_PAIR));
                 mvwaddch(map, mapPosY, mapPosX, PLAYER);
+                wattroff(map, COLOR_PAIR(PLAYER_PAIR));
                 wrefresh(map);
-                return;
-        }
+                printY();
+                return; 
+        }       
         if(y > stoppedY){
                 ++startedY;
                 updateMap(startedY, object);
+                wattron(map, COLOR_PAIR(PLAYER_PAIR));
                 mvwaddch(map, mapPosY, mapPosX, PLAYER);
-                wrefresh(map);
-                return;
-        }
+                wattroff(map, COLOR_PAIR(PLAYER_PAIR)); 
+                wrefresh(map); 
+                printY();
+                return; 
+        }       
 
-        list grovnick = object.draw_display(posY,posX);
-        char toPrint = determineContent(grovnick.content);
-        printGrovnick(grovnick.terrain, mapPosY, mapPosX, toPrint);
+        char toPrint = determineContent(location->get_item_info());
+        printGrovnick(location->get_name(), mapPosY, mapPosX, toPrint);
 
-        wattron(map, COLOR_PAIR(PLAYER_PAIR));
+
         if(direction == KEY_LEFT) --mapPosX;
         else if(direction == KEY_RIGHT) ++mapPosX;
         else if(direction == KEY_UP) --mapPosY;
         else if(direction == KEY_DOWN) ++mapPosY;
+        wattron(map, COLOR_PAIR(PLAYER_PAIR));
         mvwaddch(map, mapPosY, mapPosX, PLAYER);
         wattroff(map, COLOR_PAIR(PLAYER_PAIR));
-        wrefresh(map);
-
+        wrefresh(map); 
+ 
         posY = y;
         posX = x;
 
 }  
 
 
+
+
+void Display::updateCursor(status& object, int direction){
+        int y = object.getCursorY();
+        int x = object.getCursorX();
+        if(y == startedY || y == stoppedY) return;
+        grovnic* location = object.get_grovnic(curPosY, curPosX);
+        //if(!location -> is_Seen()) return;
+        char toPrint = determineContent(location->get_item_info());
+        printGrovnick(location->get_name(), curMapY, curMapX, toPrint);
+
+
+
+        if(direction == 'a') --curMapX;
+        else if(direction == 'd') ++curMapX;
+        else if(direction == 'w') --curMapY;
+        else if(direction == 's') ++curMapY;
+
+        curPosX = x;
+        curPosY = y;
+        location = object.get_grovnic(curPosY, curPosX);
+        toPrint = determineContent(location->get_item_info());
+        wattron(map, COLOR_PAIR(CURSOR_PAIR));
+        mvwaddch(map, curMapY, curMapX, toPrint);
+        wattroff(map, COLOR_PAIR(CURSOR_PAIR));
+        wrefresh(map);
+}
+
+
 void Display::updateMap(int startedY, status& object) {
-        list grovnick;
         char toPrint = ' ';
         for(int i = 0; i < 128; ++i) {
                 for(int j = 0; j < mapY; ++j) {
-                        grovnick = object.draw_display(j+startedY, i);
+
+                        grovnic *location = object.get_grovnic(j+startedY,i);
                         toPrint = ' ';
-                        toPrint = determineContent(grovnick.content);
-                        printGrovnick(grovnick.terrain, j, i+mapBeginningX, toPrint);
+                        toPrint = determineContent(location->get_item_info());
+                        printGrovnick(location->get_name(), j, i+mapBeginningX, toPrint);
                         stoppedY = j+startedY;
                 }
         }
@@ -110,16 +154,15 @@ void Display::updateMap(int startedY, status& object) {
 
 
 void Display::initialMap(status& object) {
-         startedY = (MAP_SIZE - mapY)/2;
-        list grovnick;
+        startedY = (MAP_SIZE - mapY)/2;
         char toPrint = ' ';
         for(int i = 0; i < 128; ++i) {
                 for(int j = 0; j < mapY; ++j) {
-                        grovnick = object.draw_display(j+startedY, i);
+                        grovnic* location = object.get_grovnic(j+startedY,i);
                         toPrint = ' ';
-                        toPrint = determineContent(grovnick.content);
-                        printGrovnick(grovnick.terrain, j, i+mapBeginningX, toPrint);
-                        if(j+startedY > stoppedY) stoppedY = j+startedY;
+                        toPrint = determineContent(location->get_item_info());
+                        printGrovnick(location->get_name(), j, i+mapBeginningX, toPrint);
+                        stoppedY = j+startedY;
                 }
         }
         wrefresh(map);
