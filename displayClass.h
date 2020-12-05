@@ -22,6 +22,7 @@
 #define INV_PAIR 7
 #define CURSOR_PAIR 8
 #define MAP_SIZE 128
+#define MENU_SIZE 128
 #define BEGIN_AT 63
 
 class Display{
