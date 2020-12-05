@@ -249,6 +249,8 @@ grovnic::grovnic(string name, string content, string desc):object(name, NULL, '\
     else if (content == "food")
       inventory = new food(content, desc, color(), '\0', 50, 100);
   }
+    else
+      inventory = NULL;
 }
 
 grovnic::grovnic(string name, string desc, color bgColor, int cost, color displayColor, char displayChar):object(name, desc, displayChar, displayColor, bgColor), energy_cost(cost), inventory(NULL)
