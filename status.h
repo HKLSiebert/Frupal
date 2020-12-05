@@ -22,7 +22,7 @@ class status
     int success();
     void cursor(char);
 
-    bool update(char userinput);
+    void update(char userinput);
     grovnic* get_grovnic(int x, int y);//returns grovnic ptr according to coords
     int getCursorX();
     int getCursorY();

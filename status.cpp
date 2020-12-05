@@ -17,69 +17,43 @@ status::~status(){
 
 }
 
-bool status::update(char userinput)
+void status::update(char userinput)
 {
-  if(userinput == 's' || userinput == 'n' || userinput == 'w' || userinput == 'e'){
-    int flag=1;
-    if(userinput == 'w'){
-      if(startx - 1 >= 0){
-        if(my_hero->interact(map[startx-1][starty]))
-          --startx;
-        else
-          flag=0;
-      }
-      else
-        flag=0;
+  if(userinput == 'w'){
+    if(startx - 1 >= 0){
+      if(my_hero->interact(map[startx-1][starty]))
+        --startx;
     }
-    if(userinput == 'e'){
-      if(startx + 1 <= SIZEX){
-        if(my_hero->interact(map[startx+1][starty]))
-          ++startx;
-        else
-          flag=0;
-      }
-      else
-        flag=0;
-    }
-    if(userinput == 'n'){
-      if(starty - 1 >= 0){
-        if(my_hero->interact(map[startx][starty-1]))
-          --starty;
-        else
-          flag=0;
-      }
-      else
-        flag=0;
-    }
-    if(userinput == 's'){
-      if(starty + 1 <= SIZEY){
-        if(my_hero->interact(map[startx][starty + 1]))
-          ++starty;
-        else
-          flag=0;
-      }
-      else
-        flag=0;
-    }
-    if(flag == 0)
-      return false;
-    return true;
   }
-  else
-    cursor(userinput);
-  return true;
+  if(userinput == 'e'){
+    if(startx + 1 <= SIZEX){
+      if(my_hero->interact(map[startx+1][starty]))
+        ++startx;
+    }
+  }
+  if(userinput == 'n'){
+    if(starty - 1 >= 0){
+      if(my_hero->interact(map[startx][starty-1]))
+        --starty;
+    }
+  }
+  if(userinput == 's'){
+    if(starty + 1 <= SIZEY){
+      if(my_hero->interact(map[startx][starty + 1]))
+        ++starty;
+    }
+  }
 }
 void status::cursor(char userinput)
 {
-  //however we figure out how were passing userinput will change those comparisons to that..
-  /*if(userinput == left)
+  if(userinput == 'w')
     --cursorX;
-  else if(userinput == right)
+  else if(userinput == 'e')
     ++cursorX;
-  else if(userinput == up)
+  else if(userinput == 'n')
     --cursorY;
-  else if(userinput == down)
-    ++cursorY;*/
+  else if(userinput == 's')
+    ++cursorY;
 }
 
 int status::gameprogress()
@@ -87,7 +61,7 @@ int status::gameprogress()
   if(my_hero->get_energy() <= 0)
     return -1; //lost the game
   //if(my_hero->check_jewel()) //bool return value
-    return 1; //won the game
+  return 1; //won the game
   return 0;//game still going
 }
 
@@ -141,8 +115,31 @@ void status::set_visible(){
     map[startx+1][starty+1] -> toggleSeen();
 
   map[startx][starty] -> toggleSeen();
-  //if(/*my_hero->binoculars()*/);//if hero has binoculars
-  //will make the extra spaces visible also.
+  /*if(my_hero->binoculars()){//if hero has binoculars
+    if(startx-1>0 && starty-1>0)
+      map[startx-2][starty-2] -> toggleSeen();
+
+    if(starty-1>0)
+      map[startx][starty-2] -> toggleSeen();
+
+    if(startx+1<128 && starty-1 >0)
+      map[startx+2][starty-2] -> toggleSeen();
+
+    if(startx-1>0)
+      map[startx-2][starty] -> toggleSeen();
+
+    if(startx+1<128)
+      map[startx+2][starty] -> toggleSeen();
+
+    if(startx-1>0 && starty+1<128)
+      map[startx-2][starty+2] -> toggleSeen();
+
+    if(starty+1<128)
+      map[startx][starty+2] -> toggleSeen();
+
+    if(startx+1<128 && starty+1<128)
+      map[startx+2][starty+2] -> toggleSeen();
+  }*/
 }
 
 int status::getCursorX(){
