@@ -20,63 +20,90 @@ status::~status(){
 }
 
 
-void status::update(int userinput)
+bool status::update(int userinput)
 {
+  int flag = 0;
   if(userinput == 'w'){
     if(startx - 1 >= 0){
-      if(my_hero->interact(map[startx-1][starty]))
+      if(my_hero->interact(map[startx-1][starty])){
         --startx;
+        flag=1;
+        set_visible();
+      }
     }
   }
-
   if(userinput == 'e'){
     if(startx + 1 <= SIZEX){
-      if(my_hero->interact(map[startx+1][starty]))
+      if(my_hero->interact(map[startx+1][starty])){
         ++startx;
+        flag=1;
+        set_visible();
+      }
     }
   }
-
-  if(userinput == 'n'){
-    if(starty - 1 >= 0){
-      if(my_hero->interact(map[startx][starty-1]))
+  if(userinput == 'n'){ if(starty - 1 >= 0){
+      if(my_hero->interact(map[startx][starty-1])){
         --starty;
+        flag=1;
+        set_visible();
+      }
     }
-
   }
   if(userinput == 's'){
     if(starty + 1 <= SIZEY){
-      if(my_hero->interact(map[startx][starty + 1]))
+      if(my_hero->interact(map[startx][starty + 1])){
         ++starty;
+        flag=1;
+        set_visible();
+      }
     }
   }
+  if(flag==1)
+    return true;
+  return false;
 }
-void status::cursor(int userinput)
+bool status::cursor(int userinput)
 {
+  int flag = 0;
   if(userinput == 'w')
-    --cursorX;
-  else if(userinput == 'e')
-    ++cursorX;
-  else if(userinput == 'n')
-    --cursorY;
-  else if(userinput == 's')
-    ++cursorY;
+    if(startx - 1 >= 0){
+      --cursorX;
+      flag=1;
+    }
+
+  if(userinput == 'e')
+    if(startx + 1 <= SIZEX){
+      ++cursorX;
+      flag=1;
+    }
+
+  if(userinput == 'n')
+    if(starty - 1 >= 0){
+        --cursorY;
+        flag=1;
+    }
+  if(userinput == 's')
+    if(starty + 1 <= SIZEY){
+        ++cursorY;
+        flag=1;
+    }
+  if(flag==1)
+    return true;
+  return false;
 }
 
 int status::gameprogress()
 {
   if(my_hero->get_energy() <= 0)
     return -1; //lost the game
-  //if(my_hero->check_jewel()) //bool return value
-  return 1; //won the game
+  if(my_hero->check_diamond()) //bool return value
+    return 1; //won the game
   return 0;//game still going
 }
 
 grovnic* status::get_grovnic(int x, int y){
   return map[x][y];
-}
-
-void status::read_map() {                                                                                                                                                       
-
+} void status::read_map() {                                                                                                                                                       
   string terrain, content, desc;                                               
   ifstream fp("map.txt"); 
   if (! fp) {
@@ -122,7 +149,7 @@ void status::set_visible(){
 
   map[starty][startx] -> toggleSeen();
 
-  /*if(my_hero->binoculars()){//if hero has binoculars
+  if(my_hero->check_binoculars()){//if hero has binoculars
     if(startx-1>0 && starty-1>0)
       map[startx-2][starty-2] -> toggleSeen();
 
@@ -147,7 +174,7 @@ void status::set_visible(){
 
     if(startx+1<128 && starty+1<128)
       map[startx+2][starty+2] -> toggleSeen();
-  }*/
+  }
 }
 
 int status::getCursorX(){
@@ -167,7 +194,7 @@ int status::getHeroEnergy(){
         return my_hero->get_energy();
 }
 int status::getHeroWiffle(){
-        return my_hero->get_wiffle();
+        return my_hero->get_wiffles();
 }
 
 bool status::isCursorVisible(){
