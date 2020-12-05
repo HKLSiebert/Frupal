@@ -5,6 +5,7 @@ status::status(){
   cursorY = 64;
   read_map();    
   set_visible();
+
 }  
 
 status::~status(){
@@ -18,6 +19,7 @@ status::~status(){
 
 }
 
+
 void status::update(int userinput)
 {
   if(userinput == KEY_LEFT){
@@ -26,17 +28,20 @@ void status::update(int userinput)
         --startx;
     }
   }
+
   if(userinput == KEY_RIGHT){
     if(startx + 1 <= SIZEX){
       if(my_hero->interact(map[startx+1][starty]))
         ++startx;
     }
   }
+
   if(userinput == KEY_UP){
     if(starty - 1 >= 0){
       if(my_hero->interact(map[startx][starty-1]))
         --starty;
     }
+
   }
   if(userinput == KEY_DOWN){
     if(starty + 1 <= SIZEY){
@@ -140,6 +145,7 @@ void status::set_visible(){
     if(starty+1<128)
       map[startx][starty+2] -> toggleSeen();
 
+
     if(startx+1<128 && starty+1<128)
       map[startx+2][starty+2] -> toggleSeen();
   }*/
@@ -168,5 +174,6 @@ int status::getHeroWiffle(){
 bool status::isCursorVisible(){
         if(map[cursorY][cursorX]->is_Seen()) return true;
         return false;
+
 }
 
