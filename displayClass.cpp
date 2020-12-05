@@ -2,7 +2,7 @@
                                                                            
 
 Display::Display(int y, int x, status& object) {          
-        int x, maxX, maxY;
+        int temp, maxX, maxY;
 
         initscr();
         noecho();
@@ -34,7 +34,7 @@ Display::Display(int y, int x, status& object) {
         keypad( stdscr, TRUE );
         keypad( map, TRUE );
         getmaxyx(map, mapY, mapX);
-        getmaxyx(menu, menuY, x);
+        getmaxyx(menu, menuY, temp);
         mapPosY  = (mapY-1)/2;
         curMapY = mapPosY+1;
         if(mapX % 2 == 0)
@@ -60,7 +60,7 @@ Display::~Display() {
 }                                                                                   
                                                                                                                                   
                                                           
-void Display::updatePlayerPosition(int y, int x, status& object, int direction) {
+void Display::updatePlayerPosition(status& object, int direction) {
         int y = object.getHeroY();
         int x = object.getHeroX();
         char toPrint = ' ';
