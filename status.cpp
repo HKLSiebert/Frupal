@@ -28,6 +28,7 @@ bool status::update(int userinput)
       if(my_hero->interact(map[startx-1][starty])){
         --startx;
         flag=1;
+        set_visible();
       }
     }
   }
@@ -36,14 +37,15 @@ bool status::update(int userinput)
       if(my_hero->interact(map[startx+1][starty])){
         ++startx;
         flag=1;
+        set_visible();
       }
     }
   }
-  if(userinput == 'n'){
-    if(starty - 1 >= 0){
+  if(userinput == 'n'){ if(starty - 1 >= 0){
       if(my_hero->interact(map[startx][starty-1])){
         --starty;
         flag=1;
+        set_visible();
       }
     }
   }
@@ -52,6 +54,7 @@ bool status::update(int userinput)
       if(my_hero->interact(map[startx][starty + 1])){
         ++starty;
         flag=1;
+        set_visible();
       }
     }
   }
@@ -59,16 +62,34 @@ bool status::update(int userinput)
     return true;
   return false;
 }
-void status::cursor(int userinput)
+bool status::cursor(int userinput)
 {
+  int flag = 0;
   if(userinput == 'w')
-    --cursorX;
-  else if(userinput == 'e')
-    ++cursorX;
-  else if(userinput == 'n')
-    --cursorY;
-  else if(userinput == 's')
-    ++cursorY;
+    if(startx - 1 >= 0){
+      --cursorX;
+      flag=1;
+    }
+
+  if(userinput == 'e')
+    if(startx + 1 <= SIZEX){
+      ++cursorX;
+      flag=1;
+    }
+
+  if(userinput == 'n')
+    if(starty - 1 >= 0){
+        --cursorY;
+        flag=1;
+    }
+  if(userinput == 's')
+    if(starty + 1 <= SIZEY){
+        ++cursorY;
+        flag=1;
+    }
+  if(flag==1)
+    return true;
+  return false;
 }
 
 int status::gameprogress()
@@ -82,10 +103,7 @@ int status::gameprogress()
 
 grovnic* status::get_grovnic(int x, int y){
   return map[x][y];
-}
-
-void status::read_map() {                                                                                                                                                       
-
+} void status::read_map() {                                                                                                                                                       
   string terrain, content, desc;                                               
   ifstream fp("map.txt"); 
   if (! fp) {
