@@ -25,7 +25,7 @@ bool status::update(int userinput)
   int flag = 0;
   if(userinput == 'w'){
     if(startx - 1 >= 0){
-      if(my_hero->interact(map[startx-1][starty])){
+      if(my_hero->interact(*map[startx-1][starty])){
         --startx;
         flag=1;
         set_visible();
@@ -34,7 +34,7 @@ bool status::update(int userinput)
   }
   if(userinput == 'e'){
     if(startx + 1 <= SIZEX){
-      if(my_hero->interact(map[startx+1][starty])){
+      if(my_hero->interact(*map[startx+1][starty])){
         ++startx;
         flag=1;
         set_visible();
@@ -42,7 +42,7 @@ bool status::update(int userinput)
     }
   }
   if(userinput == 'n'){ if(starty - 1 >= 0){
-      if(my_hero->interact(map[startx][starty-1])){
+      if(my_hero->interact(*map[startx][starty-1])){
         --starty;
         flag=1;
         set_visible();
@@ -51,7 +51,7 @@ bool status::update(int userinput)
   }
   if(userinput == 's'){
     if(starty + 1 <= SIZEY){
-      if(my_hero->interact(map[startx][starty + 1])){
+      if(my_hero->interact(*map[startx][starty + 1])){
         ++starty;
         flag=1;
         set_visible();
@@ -103,7 +103,8 @@ int status::gameprogress()
 
 grovnic* status::get_grovnic(int x, int y){
   return map[x][y];
-} void status::read_map() {                                                                                                                                                       
+} 
+void status::read_map() {                                                                                                                                                       
   string terrain, content, desc;                                               
   ifstream fp("map.txt"); 
   if (! fp) {
