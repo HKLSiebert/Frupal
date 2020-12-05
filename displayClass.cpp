@@ -26,7 +26,7 @@ Display::Display(int y, int x, status& object) {
         init_pair(CURSOR_PAIR, COLOR_BLACK, COLOR_YELLOW);
 
 
-        posY = posX =curPosX = BEGIN_AT;k
+        posY = posX =curPosX = BEGIN_AT;
         curPosY = BEGIN_AT+1;
         getmaxyx(stdscr, maxY, maxX);
         map = newwin(maxY, maxX-MENU_SIZE, 0, 0);
