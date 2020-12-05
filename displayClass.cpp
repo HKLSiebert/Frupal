@@ -265,7 +265,7 @@ char Display::determineContent(string content) {
                 return SHIP;
         if(content == "tree" || content == "boulder")
                 return OBSTACLE;
-        if(content == "treasure")
+        if(content == "diamond")
                 return TREASURE;
         return ' ';
 
