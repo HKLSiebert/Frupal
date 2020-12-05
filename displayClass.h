@@ -28,7 +28,7 @@
 class Display{
 
         public:
-                Display(int y, int x, status& object); //hero starting coordinates and status object for loading in map
+                Display(status& object); //hero starting coordinates and status object for loading in map
                 ~Display();
                 void updatePlayerPosition(status& object, int direction); //use if player is updated
                 void updateCursor(status& object, int direction); //use is cursor updates
