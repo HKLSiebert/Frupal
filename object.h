@@ -65,12 +65,19 @@ class hero: public object
         virtual string get_name()const;
         virtual string get_description()const;
         bool check_binoculars()const;
+        bool check_diamond()const;
+        bool check_boat()const;
+        int get_energy()const;
+        int get_wiffles()const;
 
         string* get_inventory_list()const;
         object** get_inventory_items();
     protected:
+        int check_inventory_for_useful_item(string grovnic_name);
         int check_inventory(const string grov_obst_name);
-        bool binoculars;
+        bool binoculars = false;
+        bool diamond = false;
+        bool boat = false;
         bool add_to_inventory(object* & inventory_item);//this will null whatever pointer is passed to the function if it returns true
         object** inventory;
         int energy;

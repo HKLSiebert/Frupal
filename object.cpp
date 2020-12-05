@@ -184,6 +184,26 @@ string* hero::get_inventory_list()const
     return inventory_items;
 }
 
+bool hero::check_boat()const
+{
+    return diamond;
+}
+bool hero::check_diamond()const
+{
+    return diamond;
+}
+int hero::get_energy()const
+{
+    return energy;
+}
+
+int hero::get_wiffles()const
+{
+    return wiffle;
+}
+
+
+
 
 object** hero::get_inventory_items()
 {
@@ -210,6 +230,7 @@ bool hero::interact(const grovnic & check_interaction)
     item* grovnic_inventory_temp;
     if (move_tile)
     {
+
         if(check_interaction.get_energy_cost() < energy)
         {
             item* grovnic_inventory_temp = check_interaction.get_item();
@@ -232,39 +253,28 @@ bool hero::interact(const grovnic & check_interaction)
                 tool * tool_item = dynamic_cast<tool *>(grovnic_inventory_temp->get_item());
                 if (tool_item){
                     add_to_inventory(tool_item);
-
-                    return true;
-                }
-
-
-            }
-
-        }
-
-        food * ptr = dynamic_cast<food *>(check_interaction);
-        if (ptr) {
-            if (wiffle >= check_interaction.wiffle_cost){
-                wiffle -= check_interaction.wiffle_cost;
-                energy += check_interaction.energy_restoration;
-                return true;
-            }
-        }
-        tool * ptr2 = dynamic_cast<tool *>(check_interaction);
-        if (ptr2){
-            this.copy_object(check_interaction);
-            return true;
-        }
-        grovnic * pt3 = dynamic_cast<grovnic *>(check_interaction)
-            if (ptr3){
-                if (strcmp(check_interaction.name, inventory->effectiveAgainst) == 0){
-                    wiffle -= (check_interaction.energy_cost/inventory->multiplier);
-                    check_interaction.interact(inventory);
-                    //display char cannot change here
+                    tool_item = NULL;
+                    check_interaction.empty_inventory();
                     return true;
                 }
             }
+            energy -=check_inventory_for_useful_item(check_interaction.get_name)*check_interaction.get_energy_cost();
+        }
+                return false;
+    }
 
-        return false;
+    int hero::check_inventory_for_useful_item(string grovnic_name)
+    {
+        for (int i = 0; i < Inventory_size; ++i)
+        {
+            if(inventory[i]->string get_item_info() == grovnic_name)
+            {
+                delete inventory[i];
+                inventory[i] = NULL;
+                return 0;
+            }
+        }
+        return 1;
     }
 
     grovnic::grovnic():energy_cost(0), inventory(NULL)
