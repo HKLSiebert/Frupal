@@ -238,8 +238,12 @@ grovnic::grovnic(string name, string content, string desc):object(name, NULL, '\
   {
     if (content == "axe")
       inventory = new tool(content, desc, color(), '\0', "tree", 2);
+    else if (content == "hammer")
+      inventory = new tool(content, desc, color(), '\0', "boulder", 4);
     else if (content == "tree")
       inventory = new obstacle(content, desc, color(), '\0', 19);
+    else if (content == "boulder")
+      inventory = new obstacle(content, desc, color(), '\0', 27);
     else if (content == "diamonds"|| content == "clue")
       inventory = new item(content, desc, '\0', color());
     else if (content == "food")
