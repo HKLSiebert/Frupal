@@ -66,8 +66,8 @@ int status::gameprogress()
 {
   if(my_hero->get_energy() <= 0)
     return -1; //lost the game
-  //if(my_hero->check_jewel()) //bool return value
-  return 1; //won the game
+  if(my_hero->check_diamond()) //bool return value
+    return 1; //won the game
   return 0;//game still going
 }
 
@@ -122,7 +122,7 @@ void status::set_visible(){
 
   map[starty][startx] -> toggleSeen();
 
-  /*if(my_hero->binoculars()){//if hero has binoculars
+  if(my_hero->check_binoculars()){//if hero has binoculars
     if(startx-1>0 && starty-1>0)
       map[startx-2][starty-2] -> toggleSeen();
 
@@ -147,7 +147,7 @@ void status::set_visible(){
 
     if(startx+1<128 && starty+1<128)
       map[startx+2][starty+2] -> toggleSeen();
-  }*/
+  }
 }
 
 int status::getCursorX(){
@@ -167,7 +167,7 @@ int status::getHeroEnergy(){
         return my_hero->get_energy();
 }
 int status::getHeroWiffle(){
-        return my_hero->get_wiffle();
+        return my_hero->get_wiffles();
 }
 
 bool status::isCursorVisible(){
