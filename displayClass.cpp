@@ -107,10 +107,10 @@ void Display::updatePlayerPosition(int y, int x, status& object, int direction) 
         }
 
 
-        if(direction == KEY_LEFT) --mapPosX;
-        else if(direction == KEY_RIGHT) ++mapPosX;
-        else if(direction == KEY_UP) --mapPosY;
-        else if(direction == KEY_DOWN) ++mapPosY;
+        if(direction == 'w') --mapPosX;
+        else if(direction == 'e') ++mapPosX;
+        else if(direction == 'n') --mapPosY;
+        else if(direction == 's') ++mapPosY;
         wattron(map, COLOR_PAIR(PLAYER_PAIR));
         mvwaddch(map, mapPosY, mapPosX, PLAYER);
         wattroff(map, COLOR_PAIR(PLAYER_PAIR));
@@ -118,6 +118,8 @@ void Display::updatePlayerPosition(int y, int x, status& object, int direction) 
 
         posY = y;
         posX = x;
+
+        updatePlayerMenu(object);
 
 }  
 
@@ -178,6 +180,9 @@ void Display::updateCursor(status& object, int direction){
 
 
         wrefresh(map);
+
+        if(object.isCursorVisible())
+                updateCursorMenu(object);
 }
 
 
@@ -308,25 +313,3 @@ void Display::initialMenu(){
 
 }
 
-bool Display::update(int userinput, status& object){
-  switch(userinput)
-  {
-    case 'a':
-    case 'd':
-    case 'w':
-    case 's':
-        updateCursor(object, userinput);
-        if(object.isCursorVisible())
-                updateCursorMenu(object);
-        break;
-    case KEY_LEFT:
-    case KEY_RIGHT:
-    case KEY_UP:
-    case KEY_DOWN:
-        updatePlayerPosition(object, userinput);
-        updatePlayerMenu(object);
-        break;
-  }
-  return 1;
-
-}
