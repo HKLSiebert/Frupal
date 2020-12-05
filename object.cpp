@@ -228,7 +228,7 @@ bool hero::add_to_inventory(tool*& inventory_item)
 bool hero::interact(grovnic & check_interaction)
 {
     item* grovnic_inventory_temp;
-    if(check_interaction.get_energy_cost() < energy)
+    if(check_interaction.get_total_energy_cost() < energy)
     {
         item* grovnic_inventory_temp = check_interaction.get_item();
         if(grovnic_inventory_temp)
@@ -255,7 +255,7 @@ bool hero::interact(grovnic & check_interaction)
                 return true;
             }
         }
-        energy -=check_inventory_for_useful_item(check_interaction.get_name())*check_interaction.get_energy_cost();
+        energy -=check_inventory_for_useful_item(check_interaction.get_name())*check_interaction.get_total_energy_cost();
         return true;
     }
     return false;
@@ -308,11 +308,15 @@ grovnic::grovnic(string name, string content, string desc):object(name, NULL, '\
       inventory = new tool(content, desc, color(), '\0', "tree", 2);
     else if (content == "hammer")
       inventory = new tool(content, desc, color(), '\0', "boulder", 4);
+    else if (content == "diamonds" || content == "binoculars")
+      inventory = new tool(content, desc, color(), '\0', "", 1);
+    else if (content == "boat")
+      inventory = new tool(content, desc, color(), '\0', "water", 100);
     else if (content == "tree")
       inventory = new obstacle(content, desc, color(), '\0', 19);
     else if (content == "boulder")
       inventory = new obstacle(content, desc, color(), '\0', 27);
-    else if (content == "diamonds"|| content == "clue")
+    else if (content == "clue")
       inventory = new item(content, desc, '\0', color());
     else if (content == "food")
       inventory = new food(content, desc, color(), '\0', 50, 100);
@@ -423,11 +427,6 @@ string grovnic::get_name()const
     return name;
 }
 
-int grovnic::get_energy_cost()const
-{
-    return energy_cost;
-}
-
 string grovnic::get_description()const
 {
     return description;
@@ -484,9 +483,10 @@ string item::get_description()const
 
 string item::get_item_info()const
 {
-    string test = "";
-    return test; 
-
+    stringstream oss;
+  oss << ">>Name: " << name << "\n>>Description:" << description; 
+  string ret = oss.str();
+  return ret;
 }
 
 tool::tool():effectiveAgainst(NULL), multiplier(1)
