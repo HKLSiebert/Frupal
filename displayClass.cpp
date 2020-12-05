@@ -1,7 +1,7 @@
 #include "displayClass.h"                                                           
                                                                            
 
-Display::Display(int y, int x, status& object) {          
+Display::Display(status& object) {          
         int temp, maxX, maxY;
 
         initscr();
