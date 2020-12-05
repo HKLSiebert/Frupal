@@ -61,7 +61,7 @@ class hero: public object
         virtual color get_background_color()const; 
         virtual bool copy_object(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const object* inventory_i[Inventory_size]);
         virtual bool copy_object(const hero & source);
-        bool interact(const object& check_interaction);
+        bool interact(grovnic& check_interaction);
         virtual string get_name()const;
         virtual string get_description()const;
         bool check_binoculars()const;
@@ -78,7 +78,7 @@ class hero: public object
         bool binoculars = false;
         bool diamond = false;
         bool boat = false;
-        bool add_to_inventory(object* & inventory_item);//this will null whatever pointer is passed to the function if it returns true
+        bool add_to_inventory(tool*& inventory_item);//this will null whatever pointer is passed to the function if it returns true
         object** inventory;
         int energy;
         int wiffle;
