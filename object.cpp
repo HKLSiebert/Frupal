@@ -71,9 +71,10 @@ bool object::copy_object(const object & source)
     return true;
 }
 
-hero::hero()
+hero::hero():energy(100), wiffle(1000)
 {
     inventory = new tool*[Inventory_size];
+    
 
 }
 
