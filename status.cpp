@@ -22,34 +22,33 @@ status::~status(){
 
 void status::update(int userinput)
 {
-  if(userinput == KEY_LEFT){
+  if(userinput == 'w'){
     if(startx - 1 >= 0){
       if(my_hero->interact(map[startx-1][starty]))
         --startx;
     }
   }
 
-  if(userinput == KEY_RIGHT){
+  if(userinput == 'e'){
     if(startx + 1 <= SIZEX){
       if(my_hero->interact(map[startx+1][starty]))
         ++startx;
     }
   }
 
-  if(userinput == KEY_UP){
+  if(userinput == 'n'){
     if(starty - 1 >= 0){
       if(my_hero->interact(map[startx][starty-1]))
         --starty;
     }
 
   }
-  if(userinput == KEY_DOWN){
+  if(userinput == 's'){
     if(starty + 1 <= SIZEY){
       if(my_hero->interact(map[startx][starty + 1]))
         ++starty;
     }
   }
-  cursor(userinput);
 }
 void status::cursor(int userinput)
 {
