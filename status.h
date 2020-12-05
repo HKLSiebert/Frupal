@@ -20,13 +20,19 @@ class status
     void read_map(); //reads map from external file into list **map_display
     int gameprogress();//is user did or did they complete the game?
     int success();
-    void cursor(char);
 
-    void update(char userinput);
+    void cursor(int userinput);
+    bool update(int userinput);
+
     grovnic* get_grovnic(int x, int y);//returns grovnic ptr according to coords
     int getCursorX();
     int getCursorY();
+    int getHeroX();
+    int getHeroY();
     void set_visible();
+    int getHeroEnergy();
+    int getHeroWiffle();
+    bool isCursorVisible();
   protected:
     int startx;//coords of hero
     int starty;

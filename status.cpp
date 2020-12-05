@@ -4,6 +4,8 @@ status::status(){
   startx = starty = cursorX = 63;
   cursorY = 64;
   read_map();    
+  set_visible();
+
 }  
 
 status::~status(){
@@ -17,34 +19,39 @@ status::~status(){
 
 }
 
-void status::update(char userinput)
+
+void status::update(int userinput)
 {
-  if(userinput == 'w'){
+  if(userinput == KEY_LEFT){
     if(startx - 1 >= 0){
       if(my_hero->interact(map[startx-1][starty]))
         --startx;
     }
   }
-  if(userinput == 'e'){
+
+  if(userinput == KEY_RIGHT){
     if(startx + 1 <= SIZEX){
       if(my_hero->interact(map[startx+1][starty]))
         ++startx;
     }
   }
-  if(userinput == 'n'){
+
+  if(userinput == KEY_UP){
     if(starty - 1 >= 0){
       if(my_hero->interact(map[startx][starty-1]))
         --starty;
     }
+
   }
-  if(userinput == 's'){
+  if(userinput == KEY_DOWN){
     if(starty + 1 <= SIZEY){
       if(my_hero->interact(map[startx][starty + 1]))
         ++starty;
     }
   }
+  cursor(userinput);
 }
-void status::cursor(char userinput)
+void status::cursor(int userinput)
 {
   if(userinput == 'w')
     --cursorX;
@@ -91,30 +98,31 @@ void status::read_map() {
 
 void status::set_visible(){
   if(startx>0 && starty>0)
-    map[startx-1][starty-1] -> toggleSeen();
-
-  if(starty>0)
-    map[startx][starty-1] -> toggleSeen();
-
-  if(startx<128 && starty >0)
-    map[startx+1][starty-1] -> toggleSeen();
+    map[starty-1][startx-1] -> toggleSeen();
 
   if(startx>0)
-    map[startx-1][starty] -> toggleSeen();
+    map[starty][startx-1] -> toggleSeen();
 
-  if(startx<128)
-    map[startx+1][starty] -> toggleSeen();
+  if(starty<128 && startx >0)
+    map[starty+1][startx-1] -> toggleSeen();
 
-  if(startx>0 && starty<128)
-    map[startx-1][starty+1] -> toggleSeen();
+  if(starty>0)
+    map[starty-1][startx] -> toggleSeen();
 
   if(starty<128)
-    map[startx][starty+1] -> toggleSeen();
+    map[starty+1][startx] -> toggleSeen();
+
+  if(starty>0 && startx<128)
+    map[starty-1][startx+1] -> toggleSeen();
+
+  if(startx<128)
+    map[starty][startx+1] -> toggleSeen();
 
   if(startx<128 && starty<128)
-    map[startx+1][starty+1] -> toggleSeen();
+    map[starty+1][startx+1] -> toggleSeen();
 
-  map[startx][starty] -> toggleSeen();
+  map[starty][startx] -> toggleSeen();
+
   /*if(my_hero->binoculars()){//if hero has binoculars
     if(startx-1>0 && starty-1>0)
       map[startx-2][starty-2] -> toggleSeen();
@@ -137,6 +145,7 @@ void status::set_visible(){
     if(starty+1<128)
       map[startx][starty+2] -> toggleSeen();
 
+
     if(startx+1<128 && starty+1<128)
       map[startx+2][starty+2] -> toggleSeen();
   }*/
@@ -147,5 +156,24 @@ int status::getCursorX(){
 }
 int status::getCursorY(){
   return cursorY;
+}
+
+int status::getHeroX(){
+        return startx;
+}
+int status::getHeroY(){
+        return starty;
+}
+int status::getHeroEnergy(){
+        return my_hero->get_energy();
+}
+int status::getHeroWiffle(){
+        return my_hero->get_wiffle();
+}
+
+bool status::isCursorVisible(){
+        if(map[cursorY][cursorX]->is_Seen()) return true;
+        return false;
+
 }
 
