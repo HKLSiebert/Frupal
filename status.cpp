@@ -1,102 +1,70 @@
 #include "status.h"
 
 status::status(){   
-        startx = starty = cursorX = 63;
-        cursorY = 64;
-        read_map();    
+  startx = starty = cursorX = 63;
+  cursorY = 64;
+  read_map();    
+  set_visible();
 }  
 
-
 status::~status(){
-        for(int i = 0; i < 128; i++) {
-                for(int j = 0; j < 128; j++){
-                        delete [] map[i][j];
-                }
-                delete [] map[i];
-        }
-        delete map;
-
-}
-
-=======
-/*void status::loadmap(frupalMap & startmap)
-{
-  //need to load map so i can access and change whatever is necessary 
-}*/
-
-
-bool status::update(char userinput)
-{
-  int flag=1;
-  switch(userinput)
-  {
-    case KEY_LEFT:
-      if(startx - 1 >= 0){
-        if(my_hero->interact(map[starty][startx-1]))
-          --startx;
-        else
-          flag=0;
-      }
-      else
-        flag=0;
-      break;
-    case KEY_RIGHT:
-      if(startx + 1 <= SIZEX){
-        if(my_hero->interact(map[starty][startx+1]))
-          ++startx;
-        else
-          flag=0;
-      }
-      else
-        flag=0;
-      break;
-    case KEY_UP:
-      if(starty - 1 >= 0){
-        if(my_hero->interact(map[starty-1][startx]))
-          --starty;
-        else
-          flag=0;
-      }
-      else
-        flag=0;
-      break;
-    case KEY_DOWN:
-      if(starty + 1 <= SIZEY){
-        if(my_hero->interact(map[starty + 1][startx]))
-          ++starty;
-        else
-          flag=0;
-      }
-      else
-        flag=0;
-      break;
-    case 'x':
-    case 'X':
-      break;
+  for(int i = 0; i < 128; i++) {
+    for(int j = 0; j < 128; j++){
+      delete [] map[i][j];
+    }
+    delete [] map[i];
   }
-  if(flag == 0)
-    return false;
-  return true;
-}
-void status::updatemap(int x,int y)
-{
-  //figure out how interacting is working
+  delete map;
 
+}
+
+void status::update(int userinput)
+{
+  if(userinput == KEY_LEFT){
+    if(startx - 1 >= 0){
+      if(my_hero->interact(map[startx-1][starty]))
+        --startx;
+    }
+  }
+  if(userinput == KEY_RIGHT){
+    if(startx + 1 <= SIZEX){
+      if(my_hero->interact(map[startx+1][starty]))
+        ++startx;
+    }
+  }
+  if(userinput == KEY_UP){
+    if(starty - 1 >= 0){
+      if(my_hero->interact(map[startx][starty-1]))
+        --starty;
+    }
+  }
+  if(userinput == KEY_DOWN){
+    if(starty + 1 <= SIZEY){
+      if(my_hero->interact(map[startx][starty + 1]))
+        ++starty;
+    }
+  }
+  cursor(userinput);
+}
+void status::cursor(int userinput)
+{
+  if(userinput == 'w')
+    --cursorX;
+  else if(userinput == 'e')
+    ++cursorX;
+  else if(userinput == 'n')
+    --cursorY;
+  else if(userinput == 's')
+    ++cursorY;
 }
 
 int status::gameprogress()
 {
-  if(my_hero->energy <= 0)
+  if(my_hero->get_energy() <= 0)
     return -1; //lost the game
-  // if(my_hero->check for game ending jewel)//bool return value
-  // return 1 //won the game
+  //if(my_hero->check_jewel()) //bool return value
+  return 1; //won the game
   return 0;//game still going
-}
-
-//I was thinking maybe draw passes in what index they need then i return the list ptr which has everything that they need
-list status::draw_display(int x,int y)
-{
-  return map_display[y][x];
 }
 
 grovnic* status::get_grovnic(int x, int y){
@@ -104,58 +72,101 @@ grovnic* status::get_grovnic(int x, int y){
 }
 
 void status::read_map() {                                                                                                                                                       
-        
-        string terrain, content, desc;                                               
-        ifstream fp("map.txt"); 
-        if (! fp) {
-                printw("Failed to open map");                                        
-                return;
-        }       
-        map = new grovnic**[128];                                                    
-        for(int i = 0; i < 128; i++) {                                               
-                map[i] = new grovnic*[128];                                          
-                for(int j = 0; j < 128; j++){                                        
-                        getline(fp, terrain, ';');                                   
-                        getline(fp, content, ';');
-                        getline(fp, desc, ';');
-                        map[i][j] = new grovnic(terrain, content, desc);                                                                                                                                                                                                                                                                                                                                                                                                                                
-                }                                                                                                                                                       
-        }                                                                                                                                                               
 
+  string terrain, content, desc;                                               
+  ifstream fp("map.txt"); 
+  if (! fp) {
+    printw("Failed to open map");                                        
+    return;
+  }       
+  map = new grovnic**[128];                                                    
+  for(int i = 0; i < 128; i++) {                                               
+    map[i] = new grovnic*[128];                                          
+    for(int j = 0; j < 128; j++){                                        
+      getline(fp, terrain, ';');                                   
+      getline(fp, content, ';');
+      getline(fp, desc, ';');
+      map[i][j] = new grovnic(terrain, content, desc);
+    }
+  }
 } 
 
 void status::set_visible(){
-        if(startx>0 && starty>0)
-                map[startx-1][starty-1] -> toggleSeen();
+  if(startx>0 && starty>0)
+    map[starty-1][startx-1] -> toggleSeen();
 
-        if(starty>0)
-                map[startx][starty-1] -> toggleSeen();
+  if(startx>0)
+    map[starty][startx-1] -> toggleSeen();
 
-        if(startx<128 && starty >0)
-                map[startx+1][starty-1] -> toggleSeen();
+  if(starty<128 && startx >0)
+    map[starty+1][startx-1] -> toggleSeen();
 
-        if(startx>0)
-                map[startx-1][starty] -> toggleSeen();
+  if(starty>0)
+    map[starty-1][startx] -> toggleSeen();
 
-        if(startx<128)
-                map[startx+1][starty] -> toggleSeen();
+  if(starty<128)
+    map[starty+1][startx] -> toggleSeen();
 
-        if(startx>0 && starty<128)
-                map[startx-1][starty+1] -> toggleSeen();
+  if(starty>0 && startx<128)
+    map[starty-1][startx+1] -> toggleSeen();
 
-        if(starty<128)
-                map[startx][starty+1] -> toggleSeen();
+  if(startx<128)
+    map[starty][startx+1] -> toggleSeen();
 
-        if(startx<128 && starty<128)
-                map[startx+1][starty+1] -> toggleSeen();
+  if(startx<128 && starty<128)
+    map[starty+1][startx+1] -> toggleSeen();
 
-        map[startx][starty] -> toggleSeen();
+  map[starty][startx] -> toggleSeen();
+
+  /*if(my_hero->binoculars()){//if hero has binoculars
+    if(startx-1>0 && starty-1>0)
+      map[startx-2][starty-2] -> toggleSeen();
+
+    if(starty-1>0)
+      map[startx][starty-2] -> toggleSeen();
+
+    if(startx+1<128 && starty-1 >0)
+      map[startx+2][starty-2] -> toggleSeen();
+
+    if(startx-1>0)
+      map[startx-2][starty] -> toggleSeen();
+
+    if(startx+1<128)
+      map[startx+2][starty] -> toggleSeen();
+
+    if(startx-1>0 && starty+1<128)
+      map[startx-2][starty+2] -> toggleSeen();
+
+    if(starty+1<128)
+      map[startx][starty+2] -> toggleSeen();
+
+    if(startx+1<128 && starty+1<128)
+      map[startx+2][starty+2] -> toggleSeen();
+  }*/
 }
 
 int status::getCursorX(){
-        return cursorX;
+  return cursorX;
 }
 int status::getCursorY(){
-        return cursorY;
+  return cursorY;
+}
+
+int status::getHeroX(){
+        return startx;
+}
+int status::getHeroY(){
+        return starty;
+}
+int status::getHeroEnergy(){
+        return my_hero->get_energy();
+}
+int status::getHeroWiffle(){
+        return my_hero->get_wiffle();
+}
+
+bool status::isCursorVisible(){
+        if(map[cursorY][cursorX]->is_Seen()) return true;
+        return false;
 }
 
