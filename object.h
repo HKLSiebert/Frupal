@@ -64,11 +64,13 @@ class hero: public object
         bool interact(const object& check_interaction);
         virtual string get_name()const;
         virtual string get_description()const;
+        bool check_binoculars()const;
 
         string* get_inventory_list()const;
         object** get_inventory_items();
     protected:
         int check_inventory(const string grov_obst_name);
+        bool binoculars;
         bool add_to_inventory(object* & inventory_item);//this will null whatever pointer is passed to the function if it returns true
         object** inventory;
         int energy;

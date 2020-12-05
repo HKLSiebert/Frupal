@@ -107,6 +107,11 @@ hero::~hero()
     }
     delete inventory;
 }
+bool hero::check_binoculars()const
+{
+    return binoculars
+
+}
 
 char hero::get_display_char()const
 {
@@ -227,8 +232,6 @@ bool hero::interact(const grovnic & check_interaction)
                 tool * tool_item = dynamic_cast<tool *>(grovnic_inventory_temp->get_item());
                 if (tool_item){
                     add_to_inventory(tool_item);
-
-
 
                     return true;
                 }
