@@ -201,5 +201,4 @@ class obstacle: public item
   protected:
     int eCost;
     
-
 };
