@@ -73,18 +73,18 @@ bool object::copy_object(const object & source)
 
 hero::hero()
 {
-    inventory = new object*[Inventory_size];
+    inventory = new tool*[Inventory_size];
 
 }
 
-hero::hero(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const object* inventory_i[Inventory_size]):object(name_i, description_i, display_char_i, char_color_i, background_color_i), energy(energy_i),wiffle(wiffle_i)
+hero::hero(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const tool* inventory_i[Inventory_size]):object(name_i, description_i, display_char_i, char_color_i, background_color_i), energy(energy_i),wiffle(wiffle_i)
 {
-    inventory = new object*[Inventory_size];
+    inventory = new tool*[Inventory_size];
     if(inventory)
     {
         for(int i =0; i<Inventory_size; ++i)
         {
-            inventory[i] = new object(*(inventory_i[i]));
+            inventory[i] = new tool(*(inventory_i[i]));
         }
     }
 }
@@ -92,10 +92,10 @@ hero::hero(const string name_i, const string description_i, const char display_c
 hero::hero(const hero& source):object(source),energy(source.energy),wiffle(source.wiffle)
 {
 
-    inventory = new object*[Inventory_size];
+    inventory = new tool*[Inventory_size];
     for(int i =0; i<Inventory_size; ++i)
     {
-        inventory[i] = new object(*(source.inventory[i]));
+        inventory[i] = new tool(*(source.inventory[i]));
     }
 }
 
@@ -141,7 +141,7 @@ string hero::get_description()const
 
 }
 
-bool hero::copy_object(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const object* inventory_i[Inventory_size])
+bool hero::copy_object(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const tool* inventory_i[Inventory_size])
 { 
     object::copy_object(name_i, description_i, display_char_i,char_color_i, background_color_i);
     energy = energy_i;
@@ -150,7 +150,7 @@ bool hero::copy_object(const string name_i, const string description_i, const ch
     {
         for(int i =0; i<Inventory_size; ++i)
         {
-            inventory[i] = new object(*(inventory_i[i]));
+            inventory[i] = new tool(*(inventory_i[i]));
         }
     }
     return true;
@@ -161,7 +161,7 @@ bool hero::copy_object(const hero & source)
     object::copy_object(source);
     for(int i =0; i<Inventory_size; ++i)
     {
-        inventory[i] = new object(*(source.inventory[i]));
+        inventory[i] = new tool(*(source.inventory[i]));
     }
     energy = source.energy;
     wiffle = source.wiffle;
@@ -205,7 +205,7 @@ int hero::get_wiffles()const
 
 
 
-object** hero::get_inventory_items()
+tool** hero::get_inventory_items()
 {
     return inventory;
 }
@@ -219,7 +219,7 @@ bool hero::add_to_inventory(tool*& inventory_item)
     }
     if(i<Inventory_size)
     {
-        inventory[i] = new tool(inventory_item);
+        inventory[i] = new tool(*inventory_item);
     }
     return i<Inventory_size; 
 
@@ -227,20 +227,19 @@ bool hero::add_to_inventory(tool*& inventory_item)
 
 bool hero::interact(grovnic & check_interaction)
 {
-    /*
     item* grovnic_inventory_temp;
     if(check_interaction.get_energy_cost() < energy)
     {
         item* grovnic_inventory_temp = check_interaction.get_item();
         if(grovnic_inventory_temp)
         {
-            food * food_item = dynamic_cast<food *>(grovnic_inventory_temp->get_item());
+            food * food_item = dynamic_cast<food *>(grovnic_inventory_temp);
             if(food_item)
             {
-                if(food_item.get_cost()<=wiffle)
+                if(food_item->get_cost()<=wiffle)
                 {
 
-                    wiffle -= grovnic_inventory_temp->get_cost();
+                    wiffle -= food_item->get_cost();
                     energy += food_item->get_rest();
                     food_item = NULL;
                     check_interaction.empty_inventory();
@@ -248,7 +247,7 @@ bool hero::interact(grovnic & check_interaction)
                 }
 
             }
-            tool * tool_item = dynamic_cast<tool *>(grovnic_inventory_temp->get_item());
+            tool * tool_item = dynamic_cast<tool *>(grovnic_inventory_temp);
             if (tool_item){
                 add_to_inventory(tool_item);
                 tool_item = NULL;
@@ -256,8 +255,9 @@ bool hero::interact(grovnic & check_interaction)
                 return true;
             }
         }
-        energy -=check_inventory_for_useful_item(check_interaction.get_name)*check_interaction.get_energy_cost();
-    }*/
+        energy -=check_inventory_for_useful_item(check_interaction.get_name())*check_interaction.get_energy_cost();
+        return true;
+    }
     return false;
 }
 
@@ -265,7 +265,7 @@ int hero::check_inventory_for_useful_item(string grovnic_name)
 {
     for (int i = 0; i < Inventory_size; ++i)
     {
-        if(inventory[i]->get_item_info() == grovnic_name)
+        if(inventory[i]->get_effect() == grovnic_name)
         {
             delete inventory[i];
             inventory[i] = NULL;
@@ -382,6 +382,11 @@ string grovnic::get_name()const
     return name;
 }
 
+int grovnic::get_energy_cost()const
+{
+    return energy_cost;
+}
+
 string grovnic::get_description()const
 {
     return description;
@@ -390,7 +395,7 @@ string grovnic::get_description()const
 item::item():object()
 {}
 
-item::item(item &toCopy):object(toCopy)
+item::item(const item &toCopy):object(toCopy)
 {}
 
 item::item(string name, string desc, char displayChar, color itemColor):object(name, desc, displayChar, itemColor, color())
@@ -426,13 +431,15 @@ string item::get_description()const
 
 string item::get_item_info()const
 {
+    string test = "";
+    return test; 
 
 }
 
 tool::tool():effectiveAgainst(NULL), multiplier(1)
 {}
 
-tool::tool(tool &toCopy):item(toCopy), effectiveAgainst(toCopy.effectiveAgainst), multiplier(toCopy.multiplier)
+tool::tool(const tool &toCopy):item(toCopy), effectiveAgainst(toCopy.effectiveAgainst), multiplier(toCopy.multiplier)
 {}
 
 tool::tool(string name, string desc, color itemColor, char displayChar, string eff, int mult):item(name, desc, displayChar, itemColor), effectiveAgainst(eff), multiplier(mult)
