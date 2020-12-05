@@ -33,13 +33,14 @@ int main( int argc, char ** argv ) {
 	do {
 		switch( getch() )
 		{
+			/* Arrow keys to move hero on map. */
 			case KEY_LEFT:
 				/* Move Hero Left */
-				frupalStatus.update( 'e' );
+				frupalStatus.update( 'w' );
 				break;
 			case KEY_RIGHT:
 				/* Move Hero Right */
-				frupalStatus.update( 'w' );
+				frupalStatus.update( 'e' );
 				break;
 			case KEY_UP:
 				/* Move Hero Up */
@@ -49,6 +50,8 @@ int main( int argc, char ** argv ) {
 				/* Move Hero Down */
 				frupalStatus.update( 's' );
 				break;
+
+			/* WASD to control cursor movement */
 			case 'w':
 			case 'W':
 				/* Move Cursor Up */
@@ -69,6 +72,8 @@ int main( int argc, char ** argv ) {
 				/* Move Cursor Right */
 				frupalStatus.cursor( 'd' );
 				break;
+
+			/* User can exit game with 'x' key */
 			case 'x':
 			case 'X':
 				loop_again = false;	// Exit Frupal
