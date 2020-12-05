@@ -185,7 +185,7 @@ string* hero::get_inventory_list()const
 
 bool hero::check_boat()const
 {
-    return diamond;
+    return boat;
 }
 bool hero::check_diamond()const
 {
@@ -220,8 +220,10 @@ bool hero::add_to_inventory(tool*& inventory_item)
     {
         inventory[i] = new tool(*inventory_item);
     }
+
     binoculars =inventory_item->get_name() == "binocular" && i<Inventory_size;
     diamond =inventory_item->get_name() == "Black Diamond" && i<Inventory_size;
+    boat = inventory_item->get_name() == "Ship" && i<Inventory_size;
 
     return i<Inventory_size; 
 
@@ -229,53 +231,53 @@ bool hero::add_to_inventory(tool*& inventory_item)
 
 bool hero::interact(grovnic & check_interaction)
 {
-    item* grovnic_inventory_temp;
-    int energy_cost_to_move =check_interaction.get_total_energy_cost()/check_inventory_for_useful_item(check_interaction);
-    if(energy_cost_to_move < energy)
+    int energy_cost_to_move=1;
+    if(!(check_interaction.get_name() == "water" && boat))
     {
-        item* grovnic_inventory_temp = check_interaction.get_item();
-        if(grovnic_inventory_temp)
+        energy_cost_to_move =check_interaction.get_total_energy_cost()/check_inventory_for_useful_item(check_interaction);
+    }
+
+    item* grovnic_inventory_temp = check_interaction.get_item();
+    if(grovnic_inventory_temp)
+    {
+        food * food_item = dynamic_cast<food *>(grovnic_inventory_temp);
+        if(food_item)
         {
-            food * food_item = dynamic_cast<food *>(grovnic_inventory_temp);
-            if(food_item)
+            if(food_item->get_cost()<=wiffle)
             {
-                if(food_item->get_cost()<=wiffle)
-                {
 
-                    wiffle -= food_item->get_cost();
-                    energy += food_item->get_rest();
-                    food_item = NULL;
-                    check_interaction.empty_inventory();
-
-                }
-
-            }
-            tool * tool_item = dynamic_cast<tool *>(grovnic_inventory_temp);
-            if (tool_item){
-
-                if(tool_item->get_cost()<=wiffle)
-                {
-                    wiffle -= food_item->get_cost();
-                    add_to_inventory(tool_item);
-                    tool_item = NULL;
-                    check_interaction.empty_inventory();
-                }
-            }
-            obstacle * obst_item = dynamic_cast<tool *>(grovnic_inventory_temp);
-            if(obst_item && energy_cost_to_move< check_interaction.get_total_energy_cost())
-            {
-                obst_item = null;
+                wiffle -= food_item->get_cost();
+                energy += food_item->get_rest();
+                food_item = NULL;
                 check_interaction.empty_inventory();
+
             }
-
-
-
 
         }
-        energy -=check_inventory_for_useful_item(check_interaction.get_name())*check_interaction.get_energy_cost();
-        return true;
+        tool * tool_item = dynamic_cast<tool *>(grovnic_inventory_temp);
+        if (tool_item){
+
+            if(tool_item->get_cost()<=wiffle)
+            {
+                wiffle -= food_item->get_cost();
+                add_to_inventory(tool_item);
+                tool_item = NULL;
+                check_interaction.empty_inventory();
+            }
+        }
+        obstacle * obst_item = dynamic_cast<tool *>(grovnic_inventory_temp);
+        if(obst_item && energy_cost_to_move < check_interaction.get_total_energy_cost())
+        {
+            obst_item = null;
+            check_interaction.empty_inventory();
+        }
+
+
+
+
     }
-    return false;
+    energy -=energy_cost_to_move;
+
 }
 
 int hero::check_inventory_for_useful_item(grovnic & grovnic_check)
