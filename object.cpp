@@ -218,6 +218,40 @@ grovnic::grovnic(grovnic &toCopy):object(toCopy), energy_cost(toCopy.energy_cost
   }
 }
 
+grovnic::grovnic(string name, string content, string desc):object(name, NULL, '\0', color(), color())
+{
+  if (name == "meadow")
+  {
+    energy_cost = 1;
+
+  }
+  else if (name == "swamp")
+  {
+    energy_cost = 2;
+  }
+  else if (name == "water" || name =="wall")
+  {
+    energy_cost = 101;
+  }
+
+  if (!content.empty())
+  {
+    if (content == "axe")
+      inventory = new tool(content, desc, color(), '\0', "tree", 2);
+    else if (content == "hammer")
+      inventory = new tool(content, desc, color(), '\0', "boulder", 4);
+    else if (content == "tree")
+      inventory = new obstacle(content, desc, color(), '\0', 19);
+    else if (content == "boulder")
+      inventory = new obstacle(content, desc, color(), '\0', 27);
+    else if (content == "diamonds"|| content == "clue")
+      inventory = new item(content, desc, '\0', color());
+    else if (content == "food")
+      inventory = new food(content, desc, color(), '\0', 50, 100);
+  }
+    else
+      inventory = NULL;
+}
 
 grovnic::grovnic(string name, string desc, color bgColor, int cost, color displayColor, char displayChar):object(name, desc, displayChar, displayColor, bgColor), energy_cost(cost), inventory(NULL)
 {}
@@ -281,6 +315,12 @@ item* grovnic::get_item()
   return inventory;  
 }
 
+bool grovnic::add_item(class item & toCopy)
+{
+  inventory = new item(toCopy);
+  return true;
+}
+
 bool grovnic::is_occupied()
 {
   if (inventory) return true;
@@ -294,7 +334,8 @@ bool grovnic::is_Seen()
 
 void grovnic::toggleSeen()
 {
-  isSeen = !isSeen;
+  if (!isSeen)
+    isSeen = true;
   return;
 }
 
@@ -317,6 +358,18 @@ string grovnic::get_name()const
 string grovnic::get_description()const
 {
   return description;
+}
+
+int grovnic::get_total_energy_cost()const
+{
+  if (inventory){
+    obstacle * ptr = dynamic_cast<obstacle *>(inventory);
+    if (ptr)
+    {
+      return energy_cost + ptr->get_eCost();
+    }
+  }
+  return energy_cost;
 }
 
 item::item():object()
@@ -404,7 +457,7 @@ string tool::get_item_info() const
 {
   stringstream oss;
 
-  oss << "Name: " << name << "\nEffective Against: " << effectiveAgainst << "\nMultiplier: " << multiplier; 
+  oss << ">>Name: " << name << "\n>>Effective Against: " << effectiveAgainst << "\n>>Multiplier: " << multiplier; 
   string ret = oss.str();
   return ret;
 }
@@ -452,7 +505,48 @@ string food::get_item_info() const
 {
   stringstream oss;
 
-  oss << "Name: " << name << " Wiffles cost: " << wiffle_cost << " Energy Restoration: " << energy_restoration; 
+  oss << ">>Name: " << name << "\n>>Wiffles cost: " << wiffle_cost << "\n>>Energy Restoration: " << energy_restoration; 
   string ret = oss.str();
   return ret;
+}
+
+obstacle::obstacle():eCost(0)
+{}
+
+obstacle::obstacle(obstacle &toCopy):item(toCopy), eCost(toCopy.eCost)
+{}
+
+obstacle::obstacle(string name, string desc, color itemColor, char displayChar, int cost):item(name, desc, displayChar, itemColor), eCost(eCost)
+{}
+
+obstacle::~obstacle()
+{}
+
+char obstacle::get_display_char()const
+{
+  return display_char;
+}
+color obstacle::get_char_color()const
+{
+  return char_color;
+}
+
+color obstacle::get_background_color()const
+{
+  return background_color;
+}
+
+int obstacle::get_eCost() const
+{
+  return eCost;
+}
+
+string obstacle::get_item_info() const
+{
+  stringstream oss;
+
+  oss << ">>Name: " << name << "\n>>Energy Cost: " << eCost;
+  string ret = oss.str();
+  return ret; 
+  
 }
