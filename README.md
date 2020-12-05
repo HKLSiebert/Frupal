@@ -31,7 +31,7 @@ $ ./frupal *AlternateMap*
 ---
 
 ## Code Structure
-* displayClass
+* Display class
 * object class
 * hero class
 * grovnic class
