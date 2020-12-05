@@ -12,6 +12,10 @@ object::object(string name_i, string description_i, char display_char_i, color c
     background_color.copy(background_color_i);
 }
 
+object::object(string name_i, string description_i, char display_char_i):name(name_i),description(description_i),display_char(display_char_i)
+{
+}
+
 object::object(const object & source) 
 {
     copy_object(source);
@@ -71,7 +75,7 @@ bool object::copy_object(const object & source)
     return true;
 }
 
-hero::hero():energy(100), wiffle(1000)
+hero::hero():object("hero", "The @", '@'),energy(100), wiffle(1000)
 {
     inventory = new tool*[Inventory_size];
 }
@@ -250,7 +254,10 @@ bool hero::interact(grovnic & check_interaction)
                 energy += food_item->get_rest();
                 food_item = NULL;
                 check_interaction.empty_inventory();
-
+            }
+            else 
+            {
+                return false;
             }
 
         }
@@ -264,26 +271,27 @@ bool hero::interact(grovnic & check_interaction)
                 tool_item = NULL;
                 check_interaction.empty_inventory();
             }
+            else
+            {
+                return false;
+            }
+
         }
-        obstacle * obst_item = dynamic_cast<tool *>(grovnic_inventory_temp);
+        obstacle * obst_item = dynamic_cast<obstacle *>(grovnic_inventory_temp);
         if(obst_item && energy_cost_to_move < check_interaction.get_total_energy_cost())
         {
-            obst_item = null;
+            obst_item = NULL;
             check_interaction.empty_inventory();
         }
-
-
-
-
     }
     energy -=energy_cost_to_move;
-
+    return true;
 }
 
 int hero::check_inventory_for_useful_item(grovnic & grovnic_check)
 {
     string obst_name;
-    if(grovnic_check.isoccupied())
+    if(grovnic_check.is_occupied())
     {
         obst_name = grovnic_check.get_item()->get_name();
 
@@ -447,11 +455,6 @@ string grovnic::get_name()const
     return name;
 }
 
-int grovnic::get_energy_cost()const
-{
-    return energy_cost;
-}
-
 string grovnic::get_description()const
 {
     return description;
@@ -613,7 +616,7 @@ obstacle::obstacle():eCost(0)
 obstacle::obstacle(obstacle &toCopy):item(toCopy), eCost(toCopy.eCost)
 {}
 
-obstacle::obstacle(string name, string desc, color itemColor, char displayChar, int cost):item(name, desc, displayChar, itemColor), eCost(eCost)
+obstacle::obstacle(string name, string desc, color itemColor, char displayChar, int cost):item(name, desc, displayChar, itemColor), eCost(cost)
 {}
 
 obstacle::~obstacle()

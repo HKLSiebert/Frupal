@@ -25,6 +25,7 @@ class object
 {
     public:
         object();
+        object(string name_i, string description_i, char display_char_i);
         object(string name_i, string description_i, char display_char_i, color char_color_i, color background_color_i);
         object(const object& source);
         virtual ~object();
@@ -73,7 +74,7 @@ class hero: public object
         string* get_inventory_list()const;
         class tool** get_inventory_items();
     protected:
-        int check_inventory_for_useful_item(const string grovnic_name);
+        int check_inventory_for_useful_item(class grovnic& grovnic_name);
         int check_inventory(const string grov_obst_name);
         bool binoculars = false;
         bool diamond = false;
@@ -200,5 +201,4 @@ class obstacle: public item
 
   protected:
     int eCost;
-    
-};
+}; 
