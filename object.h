@@ -53,23 +53,33 @@ class hero: public object
 {
     public:
         hero();
-        hero(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const object* inventory_i[Inventory_size]);
+        hero(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const class tool* inventory_i[Inventory_size]);
         hero(const hero& source);
         virtual ~hero();
         virtual char get_display_char()const;
         virtual color get_char_color()const;
         virtual color get_background_color()const; 
-        virtual bool copy_object(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const object* inventory_i[Inventory_size]);
+        virtual bool copy_object(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const class tool* inventory_i[Inventory_size]);
         virtual bool copy_object(const hero & source);
-        bool interact(const object& check_interaction);
+        bool interact(class grovnic& check_interaction);
         virtual string get_name()const;
         virtual string get_description()const;
+        bool check_binoculars()const;
+        bool check_diamond()const;
+        bool check_boat()const;
+        int get_energy()const;
+        int get_wiffles()const;
 
         string* get_inventory_list()const;
-        object** get_inventory_items();
+        class tool** get_inventory_items();
     protected:
-        bool add_to_inventory(object* & inventory_item);//this will null whatever pointer is passed to the function if it returns true
-        object** inventory;
+        int check_inventory_for_useful_item(const string grovnic_name);
+        int check_inventory(const string grov_obst_name);
+        bool binoculars = false;
+        bool diamond = false;
+        bool boat = false;
+        bool add_to_inventory(class tool*& inventory_item);//this will null whatever pointer is passed to the function if it returns true
+        class tool** inventory;
         int energy;
         int wiffle;
 
@@ -81,6 +91,7 @@ class grovnic: public object
     public:
         grovnic();
         grovnic(grovnic &toCopy);
+        grovnic(string name, string content, string desc);
         grovnic(string name, string desc, color bgColor, int cost, color displayColor, char displayChar);
         grovnic(string name, string desc, color bgColor, int cost, color displayColor, char displayChar, class tool &inv);
         grovnic(string name, string desc, color bgColor, int cost, color displayColor, char displayChar, class food &inv);
@@ -92,10 +103,12 @@ class grovnic: public object
         
         string get_item_info() const;
         class item* get_item();
+        bool add_item(class item & toCopy);
         bool is_occupied();
         bool is_Seen();
         void toggleSeen();
         bool empty_inventory();
+        int get_total_energy_cost() const;
         
         string get_name()const;
         string get_description()const;
@@ -113,7 +126,7 @@ class item: public object
 {
     public:
         item();
-        item(item &toCopy);
+        item(const item &toCopy);
         item(string name, string desc, char displayChar, color charColor);
         virtual ~item();
         virtual char get_display_char()const;
@@ -135,7 +148,7 @@ class tool: public item
 {
     public:
         tool();
-        tool(tool &toCopy);
+        tool(const tool &toCopy);
         tool(string name, string desc, color itemColor, char displayChar, string eff, int mult);
         virtual ~tool();
         char get_display_char()const;
@@ -170,4 +183,23 @@ class food: public item
     protected:
         int wiffle_cost;
         int energy_restoration;
+};
+
+class obstacle: public item
+{
+  public:
+    obstacle();
+    obstacle(obstacle &toCopy);
+    obstacle(string name, string desc, color itemColor, char displayChar, int cost);
+    ~obstacle();
+    char get_display_char()const;
+    color get_char_color()const;
+    color get_background_color()const;
+    int get_eCost() const;
+    string get_item_info() const;
+
+  protected:
+    int eCost;
+    
+
 };

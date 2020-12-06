@@ -151,6 +151,7 @@ void status::set_visible(){
   map[starty][startx] -> toggleSeen();
 
   if(my_hero->check_binoculars()){//if hero has binoculars
+
     if(starty-2>0 && startx-2>0)
       map[starty-2][startx-2] -> toggleSeen();
 
@@ -175,6 +176,7 @@ void status::set_visible(){
     if(starty+2<128 && startx+2<128)
       map[starty+2][startx+2] -> toggleSeen();
 
+
     if(starty-2>0 && startx+1<128)
       map[starty-2][startx+1] -> toggleSeen();
     if(starty-2>0 && startx-1>0)
@@ -194,6 +196,7 @@ void status::set_visible(){
       map[starty-1][startx-2] -> toggleSeen();
     if(starty+1<128 && startx-2>0)
       map[starty+1][startx-2] -> toggleSeen();
+
   }
 }
 

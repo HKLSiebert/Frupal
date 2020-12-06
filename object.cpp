@@ -14,7 +14,7 @@ object::object(string name_i, string description_i, char display_char_i, color c
 
 object::object(const object & source) 
 {
-      copy_object(source);
+    copy_object(source);
 }
 
 object::~object()
@@ -25,17 +25,17 @@ object::~object()
 
 char object::get_display_char()const
 {
-      return display_char;
+    return display_char;
 }
 
 color object::get_char_color()const
 {
-      return char_color;
+    return char_color;
 }
 
 color object::get_background_color()const
 {
-      return background_color;
+    return background_color;
 }
 
 string object::get_name()const
@@ -73,18 +73,18 @@ bool object::copy_object(const object & source)
 
 hero::hero()
 {
-    inventory = new object*[Inventory_size];
+    inventory = new tool*[Inventory_size];
 
 }
 
-hero::hero(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const object* inventory_i[Inventory_size]):object(name_i, description_i, display_char_i, char_color_i, background_color_i), energy(energy_i),wiffle(wiffle_i)
+hero::hero(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const tool* inventory_i[Inventory_size]):object(name_i, description_i, display_char_i, char_color_i, background_color_i), energy(energy_i),wiffle(wiffle_i)
 {
-    inventory = new object*[Inventory_size];
+    inventory = new tool*[Inventory_size];
     if(inventory)
     {
         for(int i =0; i<Inventory_size; ++i)
         {
-            inventory[i] = new object(*(inventory_i[i]));
+            inventory[i] = new tool(*(inventory_i[i]));
         }
     }
 }
@@ -92,10 +92,10 @@ hero::hero(const string name_i, const string description_i, const char display_c
 hero::hero(const hero& source):object(source),energy(source.energy),wiffle(source.wiffle)
 {
 
-    inventory = new object*[Inventory_size];
+    inventory = new tool*[Inventory_size];
     for(int i =0; i<Inventory_size; ++i)
     {
-        inventory[i] = new object(*(source.inventory[i]));
+        inventory[i] = new tool(*(source.inventory[i]));
     }
 }
 
@@ -103,9 +103,14 @@ hero::~hero()
 {
     for(int i =0; i<Inventory_size; ++i)
     {
-       delete inventory[i];
+        delete inventory[i];
     }
     delete inventory;
+}
+bool hero::check_binoculars()const
+{
+    return binoculars;
+
 }
 
 char hero::get_display_char()const
@@ -136,7 +141,7 @@ string hero::get_description()const
 
 }
 
-bool hero::copy_object(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const object* inventory_i[Inventory_size])
+bool hero::copy_object(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const tool* inventory_i[Inventory_size])
 { 
     object::copy_object(name_i, description_i, display_char_i,char_color_i, background_color_i);
     energy = energy_i;
@@ -145,7 +150,7 @@ bool hero::copy_object(const string name_i, const string description_i, const ch
     {
         for(int i =0; i<Inventory_size; ++i)
         {
-            inventory[i] = new object(*(inventory_i[i]));
+            inventory[i] = new tool(*(inventory_i[i]));
         }
     }
     return true;
@@ -156,7 +161,7 @@ bool hero::copy_object(const hero & source)
     object::copy_object(source);
     for(int i =0; i<Inventory_size; ++i)
     {
-        inventory[i] = new object(*(source.inventory[i]));
+        inventory[i] = new tool(*(source.inventory[i]));
     }
     energy = source.energy;
     wiffle = source.wiffle;
@@ -179,13 +184,33 @@ string* hero::get_inventory_list()const
     return inventory_items;
 }
 
+bool hero::check_boat()const
+{
+    return diamond;
+}
+bool hero::check_diamond()const
+{
+    return diamond;
+}
+int hero::get_energy()const
+{
+    return energy;
+}
 
-object** hero::get_inventory_items()
+int hero::get_wiffles()const
+{
+    return wiffle;
+}
+
+
+
+
+tool** hero::get_inventory_items()
 {
     return inventory;
 }
 
-bool hero::add_to_inventory(object*& inventory_item)
+bool hero::add_to_inventory(tool*& inventory_item)
 {
     int i = 0;
     while(i < Inventory_size && inventory[i])
@@ -194,42 +219,123 @@ bool hero::add_to_inventory(object*& inventory_item)
     }
     if(i<Inventory_size)
     {
-        inventory[i] = inventory_item;
-        inventory_item = NULL;
+        inventory[i] = new tool(*inventory_item);
     }
     return i<Inventory_size; 
 
 }
 
-bool hero::interact(const object & check_interaction)
+bool hero::interact(grovnic & check_interaction)
 {
-      //incomplet
-      return false;
+    item* grovnic_inventory_temp;
+    if(check_interaction.get_total_energy_cost() < energy)
+    {
+        item* grovnic_inventory_temp = check_interaction.get_item();
+        if(grovnic_inventory_temp)
+        {
+            food * food_item = dynamic_cast<food *>(grovnic_inventory_temp);
+            if(food_item)
+            {
+                if(food_item->get_cost()<=wiffle)
+                {
+
+                    wiffle -= food_item->get_cost();
+                    energy += food_item->get_rest();
+                    food_item = NULL;
+                    check_interaction.empty_inventory();
+
+                }
+
+            }
+            tool * tool_item = dynamic_cast<tool *>(grovnic_inventory_temp);
+            if (tool_item){
+                add_to_inventory(tool_item);
+                tool_item = NULL;
+                check_interaction.empty_inventory();
+                return true;
+            }
+        }
+        energy -=check_inventory_for_useful_item(check_interaction.get_name())*check_interaction.get_total_energy_cost();
+        return true;
+    }
+    return false;
 }
-  
+
+int hero::check_inventory_for_useful_item(string grovnic_name)
+{
+    for (int i = 0; i < Inventory_size; ++i)
+    {
+        if(inventory[i]->get_effect() == grovnic_name)
+        {
+            delete inventory[i];
+            inventory[i] = NULL;
+            return 0;
+        }
+    }
+    return 1;
+}
+
 grovnic::grovnic():energy_cost(0), inventory(NULL)
 {}
 
 grovnic::grovnic(grovnic &toCopy):object(toCopy), energy_cost(toCopy.energy_cost)
 {
-  if(toCopy.inventory)
-  {
-    inventory = new item(*(toCopy.inventory));
-  }
+    if(toCopy.inventory)
+    {
+        inventory = new item(*(toCopy.inventory));
+    }
 }
 
+grovnic::grovnic(string name, string content, string desc):object(name, NULL, '\0', color(), color())
+{
+  if (name == "meadow")
+  {
+    energy_cost = 1;
+
+  }
+  else if (name == "swamp")
+  {
+    energy_cost = 2;
+  }
+  else if (name == "water" || name =="wall")
+  {
+    energy_cost = 101;
+  }
+
+  if (!content.empty())
+  {
+    if (content == "axe")
+      inventory = new tool(content, desc, color(), '\0', "tree", 2);
+    else if (content == "hammer")
+      inventory = new tool(content, desc, color(), '\0', "boulder", 4);
+    else if (content == "diamonds" || content == "binoculars")
+      inventory = new tool(content, desc, color(), '\0', "", 1);
+    else if (content == "boat")
+      inventory = new tool(content, desc, color(), '\0', "water", 100);
+    else if (content == "tree")
+      inventory = new obstacle(content, desc, color(), '\0', 19);
+    else if (content == "boulder")
+      inventory = new obstacle(content, desc, color(), '\0', 27);
+    else if (content == "clue")
+      inventory = new item(content, desc, '\0', color());
+    else if (content == "food")
+      inventory = new food(content, desc, color(), '\0', 50, 100);
+  }
+    else
+      inventory = NULL;
+}
 
 grovnic::grovnic(string name, string desc, color bgColor, int cost, color displayColor, char displayChar):object(name, desc, displayChar, displayColor, bgColor), energy_cost(cost), inventory(NULL)
 {}
 
 grovnic::grovnic(string name, string desc, color bgColor, int cost, color displayColor, char displayChar, tool & inv):object(name, desc, displayChar, displayColor, bgColor), energy_cost(cost)
 {
-  inventory = new tool(inv);
+    inventory = new tool(inv);
 }
 
 grovnic::grovnic(string name, string desc, color bgColor, int cost, color displayColor, char displayChar, food & inv):object(name, desc, displayChar, displayColor, bgColor), energy_cost(cost)
 {
-  inventory = new food(inv);
+    inventory = new food(inv);
 }
 
 grovnic::grovnic(string name, string desc, color bgColor, int cost):object(name, desc, '\0', color(), bgColor), energy_cost(cost), inventory(NULL)
@@ -237,92 +343,111 @@ grovnic::grovnic(string name, string desc, color bgColor, int cost):object(name,
 
 grovnic::~grovnic()
 {
-  if (inventory)
-  {
-    delete inventory;
-    inventory = NULL;
-  }
+    if (inventory)
+    {
+        delete inventory;
+        inventory = NULL;
+    }
 }
 
 char grovnic::get_display_char()const
 {
-  if(inventory)
-    return inventory->get_display_char();
-  return display_char;
+    if(inventory)
+        return inventory->get_display_char();
+    return display_char;
 }
 
 color grovnic::get_char_color()const
 {
-  if(inventory)
-    return inventory->get_char_color();
-  color ret;
-  ret.r = 0;
-  ret.g = 0;
-  ret.b = 0;
-  return ret;
+    if(inventory)
+        return inventory->get_char_color();
+    color ret;
+    ret.r = 0;
+    ret.g = 0;
+    ret.b = 0;
+    return ret;
 }
 
 color grovnic::get_background_color()const
 {
-  return background_color;
+    return background_color;
 }
 
 string grovnic::get_item_info() const
 {
-  if (!inventory) return NULL;
+    if (!inventory) return NULL;
 
-  string ret = inventory->get_item_info();
-  return ret;
+    string ret = inventory->get_item_info();
+    return ret;
 }
 
 
 item* grovnic::get_item()
 {
-  return inventory;  
+    return inventory;  
+}
+
+bool grovnic::add_item(class item & toCopy)
+{
+  inventory = new item(toCopy);
+  return true;
 }
 
 bool grovnic::is_occupied()
 {
-  if (inventory) return true;
-  else return false;
+    if (inventory) return true;
+    else return false;
 }
 
 bool grovnic::is_Seen()
 {
-  return isSeen; 
+    return isSeen; 
 }
 
 void grovnic::toggleSeen()
 {
-  isSeen = !isSeen;
+  if (!isSeen)
+    isSeen = true;
   return;
 }
 
 //Call get_item() before this method in order to get inventory for "trash"
 bool grovnic::empty_inventory()
 {
-  if (inventory)
-  {
-    inventory = NULL;
-    return true;
-  }
-  return false;
+    if (inventory)
+    {
+        inventory = NULL;
+        return true;
+    }
+    return false;
 }
 
 string grovnic::get_name()const
 {
-  return name;
+    return name;
 }
 
 string grovnic::get_description()const
 {
-  return description;
+    return description;
+}
+
+int grovnic::get_total_energy_cost()const
+{
+  if (inventory){
+    obstacle * ptr = dynamic_cast<obstacle *>(inventory);
+    if (ptr)
+    {
+      return energy_cost + ptr->get_eCost();
+    }
+  }
+  return energy_cost;
 }
 
 item::item():object()
 {}
 
-item::item(item &toCopy):object(toCopy)
+item::item(const item &toCopy):object(toCopy)
 {}
 
 item::item(string name, string desc, char displayChar, color itemColor):object(name, desc, displayChar, itemColor, color())
@@ -333,38 +458,41 @@ item::~item()
 
 char item::get_display_char()const
 {
-  return display_char;
+    return display_char;
 }
 
 color item::get_char_color()const
 {
-  return char_color;
+    return char_color;
 }
 
 color item::get_background_color()const
 {
-  return background_color;
+    return background_color;
 }
 
 string item::get_name()const
 {
-  return name;
+    return name;
 }
 
 string item::get_description()const
 {
-  return description;
+    return description;
 }
 
 string item::get_item_info()const
 {
-  
+    stringstream oss;
+  oss << ">>Name: " << name << "\n>>Description:" << description; 
+  string ret = oss.str();
+  return ret;
 }
 
 tool::tool():effectiveAgainst(NULL), multiplier(1)
 {}
 
-tool::tool(tool &toCopy):item(toCopy), effectiveAgainst(toCopy.effectiveAgainst), multiplier(toCopy.multiplier)
+tool::tool(const tool &toCopy):item(toCopy), effectiveAgainst(toCopy.effectiveAgainst), multiplier(toCopy.multiplier)
 {}
 
 tool::tool(string name, string desc, color itemColor, char displayChar, string eff, int mult):item(name, desc, displayChar, itemColor), effectiveAgainst(eff), multiplier(mult)
@@ -377,34 +505,33 @@ tool::~tool()
 //All toolds will be a lowercase t 
 char tool::get_display_char()const
 {
-  return display_char;
+    return display_char;
 }
 
 color tool::get_char_color()const
 {
-  return char_color;
+    return char_color;
 }
 
 color tool::get_background_color()const
 {
-  return background_color;
+    return background_color;
 }
 
 string tool::get_effect()const
 {
-  return effectiveAgainst;
+    return effectiveAgainst;
 }
 
 int tool::get_multiplier()const
 {
-  return multiplier;
+    return multiplier;
 }
 
 string tool::get_item_info() const
 {
-  stringstream oss;
-
-  oss << "Name: " << name << "\nEffective Against: " << effectiveAgainst << "\nMultiplier: " << multiplier; 
+    stringstream oss;
+  oss << ">>Name: " << name << "\n>>Effective Against: " << effectiveAgainst << "\n>>Multiplier: " << multiplier; 
   string ret = oss.str();
   return ret;
 }
@@ -423,36 +550,76 @@ food::~food()
 
 char food::get_display_char()const
 {
-  return display_char;
+    return display_char;
 }
 
 color food::get_char_color()const
 {
-  return char_color;
+    return char_color;
 }
 
 color food::get_background_color()const
 {
-  return background_color;
+    return background_color;
 }
 
 int food::get_cost() const{
 
-  return wiffle_cost;
+    return wiffle_cost;
 
 }
 
 int food::get_rest() const{
 
-  return energy_restoration;
+    return energy_restoration;
 
 }
 
 string food::get_item_info() const
 {
-  stringstream oss;
-
-  oss << "Name: " << name << " Wiffles cost: " << wiffle_cost << " Energy Restoration: " << energy_restoration; 
+    stringstream oss;
+  oss << ">>Name: " << name << "\n>>Wiffles cost: " << wiffle_cost << "\n>>Energy Restoration: " << energy_restoration; 
   string ret = oss.str();
   return ret;
+}
+
+obstacle::obstacle():eCost(0)
+{}
+
+obstacle::obstacle(obstacle &toCopy):item(toCopy), eCost(toCopy.eCost)
+{}
+
+obstacle::obstacle(string name, string desc, color itemColor, char displayChar, int cost):item(name, desc, displayChar, itemColor), eCost(eCost)
+{}
+
+obstacle::~obstacle()
+{}
+
+char obstacle::get_display_char()const
+{
+  return display_char;
+}
+color obstacle::get_char_color()const
+{
+  return char_color;
+}
+
+color obstacle::get_background_color()const
+{
+  return background_color;
+}
+
+int obstacle::get_eCost() const
+{
+  return eCost;
+}
+
+string obstacle::get_item_info() const
+{
+  stringstream oss;
+
+  oss << ">>Name: " << name << "\n>>Energy Cost: " << eCost;
+  string ret = oss.str();
+  return ret; 
+  
 }
