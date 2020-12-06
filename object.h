@@ -26,6 +26,7 @@ class object
 {
     public:
         object();
+        object(string name_i, string description_i, char display_char_i);
         object(string name_i, string description_i, char display_char_i, color char_color_i, color background_color_i);
         object(const object& source);
         virtual ~object();
@@ -74,7 +75,7 @@ class hero: public object
         string* get_inventory_list()const;
         class tool** get_inventory_items();
     protected:
-        int check_inventory_for_useful_item(const string grovnic_name);
+        int check_inventory_for_useful_item(class grovnic& grovnic_name);
         int check_inventory(const string grov_obst_name);
         bool binoculars = false;
         bool diamond = false;
@@ -150,7 +151,7 @@ class tool: public item
     public:
         tool();
         tool(const tool &toCopy);
-        tool(string name, string desc, color itemColor, char displayChar, string eff, int mult);
+        tool(string name, string desc, color itemColor, char displayChar, string eff, int multi, int cost);
         virtual ~tool();
         char get_display_char()const;
         color get_char_color()const;
@@ -159,10 +160,12 @@ class tool: public item
         string get_item_info() const;
         string get_effect()const;
         int get_multiplier()const;
+        int get_cost()const;
 
     protected:        
       string effectiveAgainst;
       int multiplier; 
+      int cost;
 
 };
 
@@ -201,6 +204,4 @@ class obstacle: public item
 
   protected:
     int eCost;
-    
-
-};
+}; 
