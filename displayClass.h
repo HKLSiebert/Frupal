@@ -22,16 +22,16 @@
 #define INV_PAIR 7
 #define CURSOR_PAIR 8
 #define MAP_SIZE 128
+#define MENU_SIZE 128
 #define BEGIN_AT 63
 
 class Display{
 
         public:
-                Display(int y, int x, status& object); //hero starting coordinates and status object for loading in map
+                Display(status& object); //hero starting coordinates and status object for loading in map
                 ~Display();
-                bool update(int userinput, status& object); //use update() in main
-                void updatePlayerPosition(status& object, int direction);
-                void updateCursor(status& object, int direction);
+                void updatePlayerPosition(status& object, int direction); //use if player is updated
+                void updateCursor(status& object, int direction); //use is cursor updates
                 void updateCursorMenu(status& object);
                 void updatePlayerMenu(status& obejct);
                 void updateMap(int startedY, status& object);

@@ -14,15 +14,11 @@ Run with default map:
 $ ./frupal
 ```
 
-Run with alternate map:
-```
-$ ./frupal *AlternateMap*
-```
 
 ---
 
 ## Game Play
-* User Controls - Arrow keys, to move one grovnick in either North, East, South, or West direction.
+* User Controls - Arrow keys to move hero North, East, South, or West. WASD to move cursor. 'x' to exit game.
 * Terminology	- Grovnick, "a square section of the Frupal map"; Whiffle, "currency"; Energy, "health".
 * Story         - Explore uncharted territory. Discover the royal diamonds in order to win.
 * Challenges	- Some actions can deplete Energy. 
@@ -31,7 +27,7 @@ $ ./frupal *AlternateMap*
 ---
 
 ## Code Structure
-* displayClass
+* Display class
 * object class
 * hero class
 * grovnic class

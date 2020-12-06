@@ -150,7 +150,7 @@ class tool: public item
     public:
         tool();
         tool(const tool &toCopy);
-        tool(string name, string desc, color itemColor, char displayChar, string eff, int mult);
+        tool(string name, string desc, color itemColor, char displayChar, string eff, int multi, int cost);
         virtual ~tool();
         char get_display_char()const;
         color get_char_color()const;
@@ -159,10 +159,12 @@ class tool: public item
         string get_item_info() const;
         string get_effect()const;
         int get_multiplier()const;
+        int get_cost()const;
 
     protected:        
       string effectiveAgainst;
       int multiplier; 
+      int cost;
 
 };
 

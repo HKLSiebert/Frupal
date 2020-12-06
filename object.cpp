@@ -235,8 +235,10 @@ bool hero::add_to_inventory(tool*& inventory_item)
 
 bool hero::interact(grovnic & check_interaction)
 {
+
     int energy_cost_to_move=1;
     if(!(check_interaction.get_name() == "water" && boat))
+
     {
         energy_cost_to_move =check_interaction.get_total_energy_cost()/check_inventory_for_useful_item(check_interaction);
     }
@@ -320,35 +322,42 @@ grovnic::grovnic(grovnic &toCopy):object(toCopy), energy_cost(toCopy.energy_cost
 
 grovnic::grovnic(string name, string content, string desc):object(name, NULL, '\0', color(), color())
 {
-    if (name == "meadow")
-    {
-        energy_cost = 1;
 
-    }
-    else if (name == "swamp")
-    {
-        energy_cost = 2;
-    }
-    else if (name == "water" || name =="wall")
-    {
-        energy_cost = 101;
-    }
+  if (name == "meadow")
+  {
+    energy_cost = 1;
 
-    if (!content.empty())
-    {
-        if (content == "axe")
-            inventory = new tool(content, desc, color(), '\0', "tree", 2);
-        else if (content == "hammer")
-            inventory = new tool(content, desc, color(), '\0', "boulder", 4);
-        else if (content == "tree")
-            inventory = new obstacle(content, desc, color(), '\0', 19);
-        else if (content == "boulder")
-            inventory = new obstacle(content, desc, color(), '\0', 27);
-        else if (content == "diamonds"|| content == "clue")
-            inventory = new item(content, desc, '\0', color());
-        else if (content == "food")
-            inventory = new food(content, desc, color(), '\0', 50, 100);
-    }
+  }
+  else if (name == "swamp")
+  {
+    energy_cost = 2;
+  }
+  else if (name == "water" || name =="wall")
+  {
+    energy_cost = 101;
+  }
+
+  if (!content.empty())
+  {
+    if (content == "axe")
+      inventory = new tool(content, desc, color(), '\0', "tree", 2, 100);
+    else if (content == "hammer")
+      inventory = new tool(content, desc, color(), '\0', "boulder", 4, 250);
+    else if (content == "diamonds")
+      inventory = new tool(content, desc, color(), '\0', "", 1, 0);
+    else if (content == "binoculars")
+      inventory = new tool(content, desc, color(), '\0', "", 1, 50);
+    else if (content == "boat")
+      inventory = new tool(content, desc, color(), '\0', "water", 100, 500);
+    else if (content == "tree")
+      inventory = new obstacle(content, desc, color(), '\0', 19);
+    else if (content == "boulder")
+      inventory = new obstacle(content, desc, color(), '\0', 27);
+    else if (content == "clue")
+      inventory = new item(content, desc, '\0', color());
+    else if (content == "food")
+      inventory = new food(content, desc, color(), '\0', 50, 100);
+  }
     else
         inventory = NULL;
 }
@@ -511,18 +520,19 @@ string item::get_description()const
 
 string item::get_item_info()const
 {
-    string test = "";
-    return test; 
-
+    stringstream oss;
+  oss << ">>Name: " << name << "\n>>Description:" << description; 
+  string ret = oss.str();
+  return ret;
 }
 
-tool::tool():effectiveAgainst(NULL), multiplier(1)
+tool::tool():effectiveAgainst(NULL), multiplier(1), cost(0)
 {}
 
-tool::tool(const tool &toCopy):item(toCopy), effectiveAgainst(toCopy.effectiveAgainst), multiplier(toCopy.multiplier)
+tool::tool(const tool &toCopy):item(toCopy), effectiveAgainst(toCopy.effectiveAgainst), multiplier(toCopy.multiplier), cost(toCopy.cost)
 {}
 
-tool::tool(string name, string desc, color itemColor, char displayChar, string eff, int mult):item(name, desc, displayChar, itemColor), effectiveAgainst(eff), multiplier(mult)
+tool::tool(string name, string desc, color itemColor, char displayChar, string eff, int mult, int cost):item(name, desc, displayChar, itemColor), effectiveAgainst(eff), multiplier(mult), cost(cost)
 {}
 
 tool::~tool()
@@ -553,14 +563,22 @@ string tool::get_effect()const
 int tool::get_multiplier()const
 {
     return multiplier;
+
 }
 
 string tool::get_item_info() const
 {
     stringstream oss;
-    oss << ">>Name: " << name << "\n>>Effective Against: " << effectiveAgainst << "\n>>Multiplier: " << multiplier; 
-    string ret = oss.str();
-    return ret;
+
+  oss << ">>Name: " << name << "\n>>Effective Against: " << effectiveAgainst << "\n>>Multiplier: " << multiplier<< "\nCost: " << cost; 
+  string ret = oss.str();
+  return ret;
+
+}
+
+int tool::get_cost()const
+{
+  return cost;
 }
 
 food::food():wiffle_cost(0), energy_restoration(0)
