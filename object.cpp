@@ -352,23 +352,23 @@ grovnic::grovnic(string name, string content, string desc):object(name, " ", '\0
     if (content != "null")
     {
         if (content == "axe")
-            inventory = new tool(content, desc, color(), '\0', "tree", 2, 100);
+            inventory = new tool(content, desc, color(), '\0', "tree", 2, 10);
         else if (content == "hammer")
-            inventory = new tool(content, desc, color(), '\0', "boulder", 4, 250);
+            inventory = new tool(content, desc, color(), '\0', "boulder", 4, 25);
         else if (content == "diamond")
             inventory = new tool(content, desc, color(), '\0', "", 1, 0);
         else if (content == "binoculars")
             inventory = new tool(content, desc, color(), '\0', "", 1, 50);
         else if (content == "ship")
-            inventory = new tool(content, desc, color(), '\0', "water", 100, 500);
+            inventory = new tool(content, desc, color(), '\0', "water", 100, 100);
         else if (content == "tree")
-            inventory = new obstacle(content, desc, color(), '\0', 19);
+            inventory = new obstacle(content, desc, color(), '\0', 9);
         else if (content == "boulder")
-            inventory = new obstacle(content, desc, color(), '\0', 27);
+            inventory = new obstacle(content, desc, color(), '\0', 19);
         else if (content == "clue")
             inventory = new item(content, desc, '\0', color());
         else if (content == "food")
-            inventory = new food(content, desc, color(), '\0', 50, 100);
+            inventory = new food(content, desc, color(), '\0', 25, 100);
     }
     else
         inventory = NULL;
