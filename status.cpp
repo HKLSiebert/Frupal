@@ -226,3 +226,7 @@ bool status::isCursorVisible(){
         return false;
 
 }
+
+string status::getHeroInv(){
+  return my_hero->get_inventory_list();
+}
