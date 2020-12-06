@@ -106,7 +106,7 @@ grovnic* status::get_grovnic(int x, int y){
 } 
 void status::read_map() {                                                                                                                                                       
   string terrain, content, desc;                                               
-  ifstream fp("map12.txt"); 
+  ifstream fp("map.txt"); 
   if (! fp) {
     printw("Failed to open map");                                        
     return;
