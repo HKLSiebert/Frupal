@@ -5,6 +5,7 @@ status::status(){
   cursorY = 64;
   read_map();    
   set_visible();
+  my_hero = new hero();
 
 }  
 
@@ -25,16 +26,16 @@ bool status::update(int userinput)
   int flag = 0;
   if(userinput == 'w'){
     if(startx - 1 >= 0){
-      if(my_hero->interact(*map[startx-1][starty])){
+      if(my_hero->interact(*map[starty][startx-1])){
         --startx;
         flag=1;
-        set_visible();
+       set_visible();
       }
     }
   }
   if(userinput == 'e'){
     if(startx + 1 <= SIZEX){
-      if(my_hero->interact(*map[startx+1][starty])){
+      if(my_hero->interact(*map[starty][startx+1])){
         ++startx;
         flag=1;
         set_visible();
@@ -42,7 +43,7 @@ bool status::update(int userinput)
     }
   }
   if(userinput == 'n'){ if(starty - 1 >= 0){
-      if(my_hero->interact(*map[startx][starty-1])){
+      if(my_hero->interact(*map[starty-1][startx])){
         --starty;
         flag=1;
         set_visible();
@@ -51,7 +52,7 @@ bool status::update(int userinput)
   }
   if(userinput == 's'){
     if(starty + 1 <= SIZEY){
-      if(my_hero->interact(*map[startx][starty + 1])){
+      if(my_hero->interact(*map[starty+1][startx])){
         ++starty;
         flag=1;
         set_visible();

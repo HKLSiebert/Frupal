@@ -1,4 +1,5 @@
 //first draft of object class
+#pragma once
 #include <string.h>
 #include <sstream>
 using namespace std;
@@ -71,7 +72,7 @@ class hero: public object
         int get_energy()const;
         int get_wiffles()const;
 
-        string* get_inventory_list()const;
+        string get_inventory_list()const;
         class tool** get_inventory_items();
     protected:
         int check_inventory_for_useful_item(class grovnic& grovnic_name);
