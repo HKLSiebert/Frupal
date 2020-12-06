@@ -151,30 +151,52 @@ void status::set_visible(){
   map[starty][startx] -> toggleSeen();
 
   if(my_hero->check_binoculars()){//if hero has binoculars
-    if(startx-1>0 && starty-1>0)
-      map[startx-2][starty-2] -> toggleSeen();
 
-    if(starty-1>0)
-      map[startx][starty-2] -> toggleSeen();
+    if(starty-2>0 && startx-2>0)
+      map[starty-2][startx-2] -> toggleSeen();
 
-    if(startx+1<128 && starty-1 >0)
-      map[startx+2][starty-2] -> toggleSeen();
+    if(startx-2>0)
+      map[starty][startx-2] -> toggleSeen();
 
-    if(startx-1>0)
-      map[startx-2][starty] -> toggleSeen();
+    if(starty+2<128 && startx-2 >0)
+      map[starty+2][startx-2] -> toggleSeen();
 
-    if(startx+1<128)
-      map[startx+2][starty] -> toggleSeen();
+    if(starty-2>0)
+      map[starty-2][startx] -> toggleSeen();
 
-    if(startx-1>0 && starty+1<128)
-      map[startx-2][starty+2] -> toggleSeen();
+    if(starty+2<128)
+      map[starty+2][startx] -> toggleSeen();
 
-    if(starty+1<128)
-      map[startx][starty+2] -> toggleSeen();
+    if(starty-2>0 && startx+2<128)
+      map[starty-2][startx+2] -> toggleSeen();
+
+    if(startx+2<128)
+      map[starty][startx+2] -> toggleSeen();
+
+    if(starty+2<128 && startx+2<128)
+      map[starty+2][startx+2] -> toggleSeen();
 
 
-    if(startx+1<128 && starty+1<128)
-      map[startx+2][starty+2] -> toggleSeen();
+    if(starty-2>0 && startx+1<128)
+      map[starty-2][startx+1] -> toggleSeen();
+    if(starty-2>0 && startx-1>0)
+      map[starty-2][startx-1] -> toggleSeen();
+
+    if(starty+2<128 && startx-1>0)
+      map[starty+2][startx-1] -> toggleSeen();
+    if(starty+2<128 && startx+1<128)
+      map[starty+2][startx+1] -> toggleSeen();
+
+    if(starty+1<128 && startx+2<128)
+      map[starty+1][startx+2] -> toggleSeen();
+    if(starty-1>0 && startx+2<128)
+      map[starty-1][startx+2] -> toggleSeen();
+
+    if(starty-1>0 && startx-2>0)
+      map[starty-1][startx-2] -> toggleSeen();
+    if(starty+1<128 && startx-2>0)
+      map[starty+1][startx-2] -> toggleSeen();
+
   }
 }
 
@@ -203,4 +225,3 @@ bool status::isCursorVisible(){
         return false;
 
 }
-
