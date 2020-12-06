@@ -178,14 +178,14 @@ bool hero::copy_object(const hero & source)
 }
 
 
-string* hero::get_inventory_list()const
+string hero::get_inventory_list()const
 {
-    string* inventory_items = new string[Inventory_size];
+    string inventory_items= "";
     for(int i =0;i<Inventory_size;++i)
     {
         if(inventory[i])
         {
-            inventory_items[i] = inventory[i]->get_name();
+            inventory_items += inventory[i]->get_name()+ "\n";
         }
 
     }
@@ -269,27 +269,33 @@ bool hero::interact(grovnic & check_interaction)
             }
 
         }
-        tool * tool_item = dynamic_cast<tool *>(grovnic_inventory_temp);
-        if (tool_item){
+        else
+        {
+            tool * tool_item = dynamic_cast<tool *>(grovnic_inventory_temp);
+            if (tool_item){
 
-            if(tool_item->get_cost()<=wiffle)
-            {
-                wiffle -= food_item->get_cost();
-                add_to_inventory(tool_item);
-                tool_item = NULL;
-                check_interaction.empty_inventory();
+                if(tool_item->get_cost()<=wiffle)
+                {
+                    wiffle -= tool_item->get_cost();
+                    add_to_inventory(tool_item);
+                    tool_item = NULL;
+                    check_interaction.empty_inventory();
+                }
+                else
+                {
+                    return false;
+                }
+
             }
             else
             {
-                return false;
+                obstacle * obst_item = dynamic_cast<obstacle *>(grovnic_inventory_temp);
+                if(obst_item && energy_cost_to_move < check_interaction.get_total_energy_cost())
+                {
+                    obst_item = NULL;
+                    check_interaction.empty_inventory();
+                }
             }
-
-        }
-        obstacle * obst_item = dynamic_cast<obstacle *>(grovnic_inventory_temp);
-        if(obst_item && energy_cost_to_move < check_interaction.get_total_energy_cost())
-        {
-            obst_item = NULL;
-            check_interaction.empty_inventory();
         }
     }
     energy -=energy_cost_to_move;
@@ -329,41 +335,41 @@ grovnic::grovnic(grovnic &toCopy):object(toCopy), energy_cost(toCopy.energy_cost
 grovnic::grovnic(string name, string content, string desc):object(name, " ", '\0', color(), color())
 {
 
-  if (name == "meadow")
-  {
-    energy_cost = 1;
+    if (name == "meadow")
+    {
+        energy_cost = 1;
 
-  }
-  else if (name == "swamp")
-  {
-    energy_cost = 2;
-  }
-  else if (name == "water" || name =="wall")
-  {
-    energy_cost = 101;
-  }
+    }
+    else if (name == "swamp")
+    {
+        energy_cost = 2;
+    }
+    else if (name == "water" || name =="wall")
+    {
+        energy_cost = 101;
+    }
 
-  if (content != "null")
-  {
-    if (content == "axe")
-      inventory = new tool(content, desc, color(), '\0', "tree", 2, 100);
-    else if (content == "hammer")
-      inventory = new tool(content, desc, color(), '\0', "boulder", 4, 250);
-    else if (content == "diamond")
-      inventory = new tool(content, desc, color(), '\0', "", 1, 0);
-    else if (content == "binoculars")
-      inventory = new tool(content, desc, color(), '\0', "", 1, 50);
-    else if (content == "ship")
-      inventory = new tool(content, desc, color(), '\0', "water", 100, 500);
-    else if (content == "tree")
-      inventory = new obstacle(content, desc, color(), '\0', 19);
-    else if (content == "boulder")
-      inventory = new obstacle(content, desc, color(), '\0', 27);
-    else if (content == "clue")
-      inventory = new item(content, desc, '\0', color());
-    else if (content == "food")
-      inventory = new food(content, desc, color(), '\0', 50, 100);
-  }
+    if (content != "null")
+    {
+        if (content == "axe")
+            inventory = new tool(content, desc, color(), '\0', "tree", 2, 100);
+        else if (content == "hammer")
+            inventory = new tool(content, desc, color(), '\0', "boulder", 4, 250);
+        else if (content == "diamond")
+            inventory = new tool(content, desc, color(), '\0', "", 1, 0);
+        else if (content == "binoculars")
+            inventory = new tool(content, desc, color(), '\0', "", 1, 50);
+        else if (content == "ship")
+            inventory = new tool(content, desc, color(), '\0', "water", 100, 500);
+        else if (content == "tree")
+            inventory = new obstacle(content, desc, color(), '\0', 19);
+        else if (content == "boulder")
+            inventory = new obstacle(content, desc, color(), '\0', 27);
+        else if (content == "clue")
+            inventory = new item(content, desc, '\0', color());
+        else if (content == "food")
+            inventory = new food(content, desc, color(), '\0', 50, 100);
+    }
     else
         inventory = NULL;
 }
@@ -528,9 +534,9 @@ string item::get_description()const
 string item::get_item_info()const
 {
     stringstream oss;
-  oss << ">>Name: " << name << "\n>>Description:" << description; 
-  string ret = oss.str();
-  return ret;
+    oss << ">>Name: " << name << "\n>>Description:" << description; 
+    string ret = oss.str();
+    return ret;
 }
 
 tool::tool():effectiveAgainst(NULL), multiplier(1), cost(0)
@@ -577,15 +583,15 @@ string tool::get_item_info() const
 {
     stringstream oss;
 
-  oss << ">>Name: " << name << "\n>>Effective Against: " << effectiveAgainst << "\n>>Multiplier: " << multiplier<< "\nCost: " << cost; 
-  string ret = oss.str();
-  return ret;
+    oss << ">>Name: " << name << "\n>>Effective Against: " << effectiveAgainst << "\n>>Multiplier: " << multiplier<< "\nCost: " << cost; 
+    string ret = oss.str();
+    return ret;
 
 }
 
 int tool::get_cost()const
 {
-  return cost;
+    return cost;
 }
 
 food::food():wiffle_cost(0), energy_restoration(0)
