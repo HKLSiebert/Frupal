@@ -225,7 +225,7 @@ bool hero::add_to_inventory(tool*& inventory_item)
         inventory[i] = new tool(*inventory_item);
     }
 
-    binoculars =inventory_item->get_name() == "binocular" && i<Inventory_size;
+    binoculars =inventory_item->get_name() == "binoculars" && i<Inventory_size;
     diamond =inventory_item->get_name() == "Black Diamond" && i<Inventory_size;
     boat = inventory_item->get_name() == "Ship" && i<Inventory_size;
 
@@ -320,7 +320,7 @@ grovnic::grovnic(grovnic &toCopy):object(toCopy), energy_cost(toCopy.energy_cost
     }
 }
 
-grovnic::grovnic(string name, string content, string desc):object(name, NULL, '\0', color(), color())
+grovnic::grovnic(string name, string content, string desc):object(name, " ", '\0', color(), color())
 {
 
   if (name == "meadow")
@@ -337,17 +337,17 @@ grovnic::grovnic(string name, string content, string desc):object(name, NULL, '\
     energy_cost = 101;
   }
 
-  if (!content.empty())
+  if (content != "null")
   {
     if (content == "axe")
       inventory = new tool(content, desc, color(), '\0', "tree", 2, 100);
     else if (content == "hammer")
       inventory = new tool(content, desc, color(), '\0', "boulder", 4, 250);
-    else if (content == "diamonds")
+    else if (content == "diamond")
       inventory = new tool(content, desc, color(), '\0', "", 1, 0);
     else if (content == "binoculars")
       inventory = new tool(content, desc, color(), '\0', "", 1, 50);
-    else if (content == "boat")
+    else if (content == "ship")
       inventory = new tool(content, desc, color(), '\0', "water", 100, 500);
     else if (content == "tree")
       inventory = new obstacle(content, desc, color(), '\0', 19);
