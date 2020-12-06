@@ -78,6 +78,8 @@ bool object::copy_object(const object & source)
 hero::hero():object("hero", "The @", '@'),energy(100), wiffle(1000)
 {
     inventory = new tool*[Inventory_size];
+    energy = 100;
+    wiffle = 1000;
 }
 
 hero::hero(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const tool* inventory_i[Inventory_size]):object(name_i, description_i, display_char_i, char_color_i, background_color_i), energy(energy_i),wiffle(wiffle_i)

@@ -25,37 +25,37 @@ bool status::update(int userinput)
   int flag = 0;
   if(userinput == 'w'){
     if(startx - 1 >= 0){
-//      if(my_hero->interact(*map[startx-1][starty])){
+      if(my_hero->interact(*map[startx-1][starty])){
         --startx;
         flag=1;
        set_visible();
-//      }
+      }
     }
   }
   if(userinput == 'e'){
     if(startx + 1 <= SIZEX){
-  //    if(my_hero->interact(*map[startx+1][starty])){
+      if(my_hero->interact(*map[startx+1][starty])){
         ++startx;
         flag=1;
         set_visible();
-   //   }
+      }
     }
   }
   if(userinput == 'n'){ if(starty - 1 >= 0){
- //     if(my_hero->interact(*map[startx][starty-1])){
+      if(my_hero->interact(*map[startx][starty-1])){
         --starty;
         flag=1;
         set_visible();
-  //    }
+      }
     }
   }
   if(userinput == 's'){
     if(starty + 1 <= SIZEY){
-   //   if(my_hero->interact(*map[startx][starty + 1])){
+      if(my_hero->interact(*map[startx][starty + 1])){
         ++starty;
         flag=1;
         set_visible();
-    //  }
+      }
     }
   }
   if(flag==1)
@@ -66,10 +66,10 @@ bool status::cursor(int userinput)
 {
   int flag = 0;
   if(userinput == 'w')
-    //if(startx - 1 >= 0){
+    if(startx - 1 >= 0){
       --cursorX;
       flag=1;
-    //}
+    }
 
   if(userinput == 'e')
     if(startx + 1 <= SIZEX){

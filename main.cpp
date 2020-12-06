@@ -81,7 +81,7 @@ int main( int argc, char ** argv ) {
 
         refresh();
         endwin();
-	return 0;
+        return 0;
 }
 
 
