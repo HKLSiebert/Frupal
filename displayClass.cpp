@@ -41,7 +41,6 @@ Display::Display(status& object) {
                 mapPosX = (mapX-1)/2;
         else mapPosX = mapX/2-1;
         curMapX = mapPosX;
-        box(map, 0, 0);
         wprintw(menu, "Menu");
         wprintw(map, "Map");
         initialMap(object);
@@ -162,9 +161,9 @@ void Display::updateCursor(status& object, int direction){
         }
 
 
-        if(direction == 'a') --curMapX;
-        else if(direction == 'd') ++curMapX;
-        else if(direction == 'w') --curMapY;
+        if(direction == 'w') --curMapX;
+        else if(direction == 'e') ++curMapX;
+        else if(direction == 'n') --curMapY;
         else if(direction == 's') ++curMapY;
 
         curPosX = x;
@@ -270,14 +269,18 @@ char Display::determineContent(string content) {
                 return SHIP;
         if(content == "tree" || content == "boulder")
                 return OBSTACLE;
+        if(content == "binoculars")
+                return BINOCULARS;
         if(content == "diamond")
                 return TREASURE;
+        if(content == "clue")
+                return CLUE;
         return ' ';
 
 }
 
 void Display::updateCursorMenu(status& object) {
-        for(int i = 1; i<4;++i){
+        for(int i = 1; i<5;++i){
                 wmove(menu, i, 0);
                 wclrtoeol(menu);
         }
@@ -299,6 +302,7 @@ void Display::updatePlayerMenu(status& object) {
 }
 
 void Display::initialMenu(){
+    welcomeMenu();
         mvwprintw(menu, 5, 0, "Cursor Options: ");
         mvwprintw(menu, 6, 0, "w) North ");
         mvwprintw(menu, 7, 0, "a) West ");
@@ -310,6 +314,14 @@ void Display::initialMenu(){
         mvwprintw(menu, 13, 0, "Left Arrow Key) West ");
         mvwprintw(menu, 14, 0, "Down Arrow Key) South ");
         mvwprintw(menu, 15, 0, "Right Arrow Key) East ");
-
 }
 
+void Display::welcomeMenu(){
+        mvwprintw(menu, 1, 0, "Welcome!\nAqcuire the diamond to win the game. ");
+}
+void Display::lossMenu(){
+        mvwprintw(menu, 1, 0, "You ran out of energy!\nRestart the game to try again!");
+}
+void Display::winMenu(){
+        mvwprintw(menu, 1, 0, "Congratulations, you won the game!\n");
+}

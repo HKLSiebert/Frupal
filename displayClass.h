@@ -22,7 +22,7 @@
 #define INV_PAIR 7
 #define CURSOR_PAIR 8
 #define MAP_SIZE 128
-#define MENU_SIZE 128
+#define MENU_SIZE 40
 #define BEGIN_AT 63
 
 class Display{
@@ -39,6 +39,9 @@ class Display{
                 void initialMenu();
                 void printGrovnick(string terrain, int y, int x, char toPrint);
                 char determineContent(string content);
+                void welcomeMenu();
+                void lossMenu();
+                void winMenu();
       
         private:
                 /*****************************************
