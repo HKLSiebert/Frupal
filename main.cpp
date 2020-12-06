@@ -8,9 +8,6 @@
 
 using namespace std;
 
-
-
-
 int main( int argc, char ** argv ) {
         status frupalStatus;
         Display frupalDisplay( frupalStatus );
@@ -82,6 +79,7 @@ int main( int argc, char ** argv ) {
         refresh();
         endwin();
         return 0;
+
 }
 
 
