@@ -78,6 +78,10 @@ bool object::copy_object(const object & source)
 hero::hero():object("hero", "The @", '@'),energy(100), wiffle(1000)
 {
     inventory = new tool*[Inventory_size];
+    for(int i =0; i<Inventory_size;++i)
+    {
+        inventory[i] = NULL;
+    }
     energy = 100;
     wiffle = 1000;
 }
@@ -302,7 +306,7 @@ int hero::check_inventory_for_useful_item(grovnic & grovnic_check)
 
         for (int i = 0; i < Inventory_size; ++i)
         {
-            if(inventory[i]->get_effect() == obst_name)
+            if(inventory[i]!=NULL && inventory[i]->get_effect() == obst_name)
             {
                 return inventory[i]->get_multiplier();
             }
@@ -414,7 +418,7 @@ color grovnic::get_background_color()const
 
 string grovnic::get_item_info() const
 {
-    if (!inventory) return NULL;
+    if (!inventory) return "";
 
     string ret = inventory->get_item_info();
     return ret;
@@ -455,6 +459,7 @@ bool grovnic::empty_inventory()
 {
     if (inventory)
     {
+        delete inventory;
         inventory = NULL;
         return true;
     }

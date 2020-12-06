@@ -5,6 +5,7 @@ status::status(){
   cursorY = 64;
   read_map();    
   set_visible();
+  my_hero = new hero();
 
 }  
 
