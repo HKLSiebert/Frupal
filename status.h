@@ -33,6 +33,7 @@ class status
     int getHeroEnergy();
     int getHeroWiffle();
     bool isCursorVisible();
+    string getHeroInv();
   protected:
     int startx;//coords of hero
     int starty;
