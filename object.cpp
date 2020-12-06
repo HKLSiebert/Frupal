@@ -63,7 +63,7 @@ bool object::copy_object(string name_i, string description_i, char display_char_
 
     return true;
 }
-
+//this function never got called as design changed.
 
 bool object::copy_object(const object & source)
 {
@@ -74,6 +74,7 @@ bool object::copy_object(const object & source)
     background_color.copy(source.background_color);
     return true;
 }
+//this function never got called as design changed.
 
 hero::hero():object("hero", "The @", '@'),energy(100), wiffle(1000)
 {
@@ -116,6 +117,7 @@ hero::~hero()
     }
     delete inventory;
 }
+
 bool hero::check_binoculars()const
 {
     return binoculars;
@@ -219,7 +221,7 @@ tool** hero::get_inventory_items()
     return inventory;
 }
 
-bool hero::add_to_inventory(tool*& inventory_item)
+bool hero::add_to_inventory(tool*& inventory_item)//the add to inventory also sets the flags for the special items (ship, diamonds, binnoculars)
 {
     int i = 0;
     while(i < Inventory_size && inventory[i])
@@ -243,8 +245,7 @@ bool hero::interact(grovnic & check_interaction)
 {
 
     int energy_cost_to_move=1;
-    if(!(check_interaction.get_name() == "water" && boat))
-
+    if(!(check_interaction.get_name() == "water" && boat))//checks if hero has the boat and sets the water cost to 0. no water grovnics have items in their inventory.
     {
         energy_cost_to_move =check_interaction.get_total_energy_cost()/check_inventory_for_useful_item(check_interaction);
     }
@@ -290,7 +291,7 @@ bool hero::interact(grovnic & check_interaction)
             else
             {
                 obstacle * obst_item = dynamic_cast<obstacle *>(grovnic_inventory_temp);
-                if(obst_item && energy_cost_to_move < check_interaction.get_total_energy_cost())
+                if(obst_item && energy_cost_to_move < check_interaction.get_total_energy_cost())//obstacles only removed if the hero has the right tool
                 {
                     obst_item = NULL;
                     check_interaction.empty_inventory();

@@ -3,7 +3,7 @@
 #include <string.h>
 #include <sstream>
 using namespace std;
-
+//color was depreciated because the draw class hard coded object colors
 struct color{
     int r = 0;
     int g = 0;
@@ -54,12 +54,12 @@ class object
 class hero: public object
 {
     public:
-        hero();
-        hero(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const class tool* inventory_i[Inventory_size]);
+        hero();//only constructor called.
+        hero(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const class tool* inventory_i[Inventory_size]);//this constructor doesn't get called because it was decided to hard code the hero's initialization
         hero(const hero& source);
         virtual ~hero();
         virtual char get_display_char()const;
-        virtual color get_char_color()const;
+        virtual color get_char_color()const;//again colors were hardcoded late so this never got used
         virtual color get_background_color()const; 
         virtual bool copy_object(const string name_i, const string description_i, const char display_char_i, const color char_color_i,const  color background_color_i,const int energy_i, const int wiffle_i, const class tool* inventory_i[Inventory_size]);
         virtual bool copy_object(const hero & source);
@@ -75,12 +75,11 @@ class hero: public object
         string get_inventory_list()const;
         class tool** get_inventory_items();
     protected:
-        int check_inventory_for_useful_item(class grovnic& grovnic_name);
-        int check_inventory(const string grov_obst_name);
+        int check_inventory_for_useful_item(class grovnic& grovnic_name);//this checks if the hero has a tool for an obstacle
         bool binoculars = false;
         bool diamond = false;
         bool boat = false;
-        bool add_to_inventory(class tool*& inventory_item);//this will null whatever pointer is passed to the function if it returns true
+        bool add_to_inventory(class tool*& inventory_item);//this function sets the flags for the binocular, diamond, and boat
         class tool** inventory;
         int energy;
         int wiffle;
