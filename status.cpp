@@ -51,7 +51,7 @@ bool status::update(int userinput)
   }
   if(userinput == 's'){
     if(starty + 1 <= SIZEY){
-      if(my_hero->interact(*map[starty+1][starty])){
+      if(my_hero->interact(*map[starty+1][startx])){
         ++starty;
         flag=1;
         set_visible();
