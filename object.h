@@ -1,4 +1,5 @@
 //first draft of object class
+#pragma once
 #include <string.h>
 #include <sstream>
 using namespace std;

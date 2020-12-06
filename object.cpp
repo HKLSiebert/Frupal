@@ -286,7 +286,7 @@ grovnic::grovnic(grovnic &toCopy):object(toCopy), energy_cost(toCopy.energy_cost
     }
 }
 
-grovnic::grovnic(string name, string content, string desc):object(name, NULL, '\0', color(), color())
+grovnic::grovnic(string name, string content, string desc):object(name, " ", '\0', color(), color())
 {
   if (name == "meadow")
   {
@@ -302,15 +302,15 @@ grovnic::grovnic(string name, string content, string desc):object(name, NULL, '\
     energy_cost = 101;
   }
 
-  if (!content.empty())
+  if (content != "null")
   {
     if (content == "axe")
       inventory = new tool(content, desc, color(), '\0', "tree", 2);
     else if (content == "hammer")
       inventory = new tool(content, desc, color(), '\0', "boulder", 4);
-    else if (content == "diamonds" || content == "binoculars")
+    else if (content == "diamond" || content == "binoculars")
       inventory = new tool(content, desc, color(), '\0', "", 1);
-    else if (content == "boat")
+    else if (content == "ship")
       inventory = new tool(content, desc, color(), '\0', "water", 100);
     else if (content == "tree")
       inventory = new obstacle(content, desc, color(), '\0', 19);
