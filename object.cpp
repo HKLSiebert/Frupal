@@ -302,7 +302,7 @@ grovnic::grovnic(string name, string content, string desc):object(name, NULL, '\
     energy_cost = 101;
   }
 
-  if (!content.empty())
+  if (content != "null")
   {
     if (content == "axe")
       inventory = new tool(content, desc, color(), '\0', "tree", 2, 100);
