@@ -298,7 +298,17 @@ void Display::updatePlayerMenu(status& object) {
         }
         mvwprintw(menu, menuY-2, 0, "Whiffles: %d", object.getHeroWiffle());
         mvwprintw(menu, menuY-1, 0, "Energy: %d", object.getHeroEnergy());
+        updateInvMenu(object);
         wrefresh(menu);
+}
+
+void Display::updateInvMenu(status& object){
+        for(int i = 20; i<menuY-2;++i){
+                wmove(menu, i, 0);
+                wclrtoeol(menu);
+        }
+        mvwprintw(menu, 19, 0, "Inventory:\n");
+        mvwprintw(menu, 20, 0, object.getHeroInv().data());
 }
 
 void Display::initialMenu(){

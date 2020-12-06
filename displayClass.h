@@ -34,6 +34,7 @@ class Display{
                 void updateCursor(status& object, int direction); //use is cursor updates
                 void updateCursorMenu(status& object);
                 void updatePlayerMenu(status& obejct);
+                void updateInvMenu(status& object);
                 void updateMap(int startedY, status& object);
                 void initialMap(status& object);
                 void initialMenu();
