@@ -178,14 +178,14 @@ bool hero::copy_object(const hero & source)
 }
 
 
-string* hero::get_inventory_list()const
+string hero::get_inventory_list()const
 {
-    string* inventory_items = new string[Inventory_size];
+    string inventory_items= "";
     for(int i =0;i<Inventory_size;++i)
     {
         if(inventory[i])
         {
-            inventory_items[i] = inventory[i]->get_name();
+            inventory_items += inventory[i]->get_name()+ "\n";
         }
 
     }
