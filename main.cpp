@@ -17,17 +17,11 @@ status frupalStatus;
 
 #if Display
 // One game uses a single instance of draw class.
-Display frupalDisplay( 0, 0, frupalStatus );
+Display frupalDisplay( frupalStatus );
 #endif
 
 
 int main( int argc, char ** argv ) {
-
-	initscr();
-	clear();
-	noecho();
-	keypad( stdscr, true );
-
 
 	bool loop_again = true;
 	do {
@@ -36,41 +30,66 @@ int main( int argc, char ** argv ) {
 			/* Arrow keys to move hero on map. */
 			case KEY_LEFT:
 				/* Move Hero Left */
-				frupalStatus.update( 'w' );
+				if ( frupalStatus.update( 'w' ) )
+				{
+					frupalDisplay.updatePlayerPosition( frupalStatus, 'w' );
+				}
 				break;
 			case KEY_RIGHT:
 				/* Move Hero Right */
-				frupalStatus.update( 'e' );
+				if ( frupalStatus.update( 'e' ) )
+				{
+					frupalDisplay.updatePlayerPosition( frupalStatus, 'e' );
+				}
 				break;
 			case KEY_UP:
 				/* Move Hero Up */
-				frupalStatus.update( 'n' );
+				if ( frupalStatus.update( 'n' ) )
+				{
+					frupalDisplay.updatePlayerPosition( frupalStatus, 'n' );
+
+				}
 				break;
 			case KEY_DOWN:
 				/* Move Hero Down */
-				frupalStatus.update( 's' );
+				if ( frupalStatus.update( 's' ) )
+				{
+					frupalDisplay.updatePlayerPosition( frupalStatus, 's' );
+				}
 				break;
 
 			/* WASD to control cursor movement */
 			case 'w':
 			case 'W':
 				/* Move Cursor Up */
-				frupalStatus.cursor( 'w' );
+				if ( frupalStatus.cursor( 'w' ) )
+				{	
+					frupalDisplay.updateCursor( frupalStatus, 'n' );
+				}
 				break;
 			case 'a':
 			case 'A':
 				break;
 				/* Move Cursor Left */
-				frupalStatus.cursor( 'a' );
+				if ( frupalStatus.cursor( 'a' ) )
+				{
+					frupalDisplay.updateCursor( frupalStatus, 'w' );
+				}
 			case 's':
 			case 'S':
 				/* Move Cursor Down */
-				frupalStatus.cursor( 's' );
+				if ( frupalStatus.cursor( 's' ) )
+				{
+					frupalDisplay.updateCursor( frupalStatus, 's' );
+				}
 				break;
 			case 'd':
 			case 'D':
 				/* Move Cursor Right */
-				frupalStatus.cursor( 'd' );
+				if ( frupalStatus.cursor( 'd' ) )
+				{
+					frupalDisplay.updateCursor( frupalStatus, 'e' );
+				}
 				break;
 
 			/* User can exit game with 'x' key */
@@ -98,9 +117,6 @@ int main( int argc, char ** argv ) {
 				break;
 		}	
 	} while( loop_again );
-
-	refresh();
-	endwin();
 
 
 	return 0;
