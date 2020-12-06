@@ -305,13 +305,15 @@ grovnic::grovnic(string name, string content, string desc):object(name, NULL, '\
   if (!content.empty())
   {
     if (content == "axe")
-      inventory = new tool(content, desc, color(), '\0', "tree", 2);
+      inventory = new tool(content, desc, color(), '\0', "tree", 2, 100);
     else if (content == "hammer")
-      inventory = new tool(content, desc, color(), '\0', "boulder", 4);
+      inventory = new tool(content, desc, color(), '\0', "boulder", 4, 250);
     else if (content == "diamonds" || content == "binoculars")
-      inventory = new tool(content, desc, color(), '\0', "", 1);
+      inventory = new tool(content, desc, color(), '\0', "", 1, 0);
+    else if (content == "binoculars")
+      inventory = new tool(content, desc, color(), '\0', "", 1, 50);
     else if (content == "boat")
-      inventory = new tool(content, desc, color(), '\0', "water", 100);
+      inventory = new tool(content, desc, color(), '\0', "water", 100, 800);
     else if (content == "tree")
       inventory = new obstacle(content, desc, color(), '\0', 19);
     else if (content == "boulder")
@@ -489,13 +491,13 @@ string item::get_item_info()const
   return ret;
 }
 
-tool::tool():effectiveAgainst(NULL), multiplier(1)
+tool::tool():effectiveAgainst(NULL), multiplier(1), cost(0)
 {}
 
-tool::tool(const tool &toCopy):item(toCopy), effectiveAgainst(toCopy.effectiveAgainst), multiplier(toCopy.multiplier)
+tool::tool(const tool &toCopy):item(toCopy), effectiveAgainst(toCopy.effectiveAgainst), multiplier(toCopy.multiplier), cost(toCopy.cost)
 {}
 
-tool::tool(string name, string desc, color itemColor, char displayChar, string eff, int mult):item(name, desc, displayChar, itemColor), effectiveAgainst(eff), multiplier(mult)
+tool::tool(string name, string desc, color itemColor, char displayChar, string eff, int mult, int cost):item(name, desc, displayChar, itemColor), effectiveAgainst(eff), multiplier(mult), cost(cost)
 {}
 
 tool::~tool()
@@ -526,14 +528,20 @@ string tool::get_effect()const
 int tool::get_multiplier()const
 {
     return multiplier;
+
 }
 
 string tool::get_item_info() const
 {
     stringstream oss;
-  oss << ">>Name: " << name << "\n>>Effective Against: " << effectiveAgainst << "\n>>Multiplier: " << multiplier; 
+  oss << ">>Name: " << name << "\n>>Effective Against: " << effectiveAgainst << "\n>>Multiplier: " << multiplier<< "\nCost: " << cost; 
   string ret = oss.str();
   return ret;
+}
+
+int tool::get_cost()const
+{
+  return cost;
 }
 
 food::food():wiffle_cost(0), energy_restoration(0)
