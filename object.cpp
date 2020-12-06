@@ -2,7 +2,7 @@
 
 //object class
 
-object::object()
+object::object()//object constructors are only be called from within objects children
 {
 
 }
@@ -232,8 +232,8 @@ bool hero::add_to_inventory(tool*& inventory_item)
     }
 
     binoculars =inventory_item->get_name() == "binoculars" && i<Inventory_size;
-    diamond =inventory_item->get_name() == "Black Diamond" && i<Inventory_size;
-    boat = inventory_item->get_name() == "Ship" && i<Inventory_size;
+    diamond =inventory_item->get_name() == "diamond" && i<Inventory_size;
+    boat = inventory_item->get_name() == "ship" && i<Inventory_size;
 
     return i<Inventory_size; 
 
