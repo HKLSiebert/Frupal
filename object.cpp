@@ -370,6 +370,8 @@ grovnic::grovnic(string name, string content, string desc):object(name, " ", '\0
             inventory = new item(content, desc, '\0', color());
         else if (content == "food")
             inventory = new food(content, desc, color(), '\0', 25, 100);
+        else if (content =="treasure")
+            inventory = new food(content, desc, color(), '\0', -100, 0);
     }
     else
         inventory = NULL;
