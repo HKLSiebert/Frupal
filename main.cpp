@@ -92,6 +92,7 @@ int main( int argc, char ** argv ) {
 				// Player has lost the game
 				// TODO Notify player of game lost.
 				loop_again = false;
+                                frupalDisplay.lossMenu();
 				break;
 			case PROGRESS_CHECK_CONTINUE:
 				// Continue
@@ -100,6 +101,7 @@ int main( int argc, char ** argv ) {
 				// Player has won the game!
 				// TODO Notify player of game won.
 				loop_again = false;
+                                frupalDisplay.winMenu(); 
 				break;
 		}
 
