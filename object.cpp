@@ -233,9 +233,18 @@ bool hero::add_to_inventory(tool*& inventory_item)//the add to inventory also se
         inventory[i] = new tool(*inventory_item);
     }
 
-    binoculars =inventory_item->get_name() == "binoculars" && i<Inventory_size;
-    diamond =inventory_item->get_name() == "diamond" && i<Inventory_size;
-    boat = inventory_item->get_name() == "ship" && i<Inventory_size;
+    if(!binoculars)
+    {
+        binoculars =inventory_item->get_name() == "binoculars" && i<Inventory_size;
+    }
+    if(!diamond)
+    {
+        diamond =inventory_item->get_name() == "diamond" && i<Inventory_size;
+    }
+    if(!boat)
+    {
+        boat = inventory_item->get_name() == "ship" && i<Inventory_size;
+    }
 
     return i<Inventory_size; 
 
