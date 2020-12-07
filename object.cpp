@@ -366,7 +366,7 @@ grovnic::grovnic(string name, string content, string desc):object(name, " ", '\0
         else if (content == "hammer")
             inventory = new tool(content, desc, color(), '\0', "boulder", 4, 25);
         else if (content == "diamond")
-            inventory = new tool(content, desc, color(), '\0', "", 1, 0);
+            inventory = new tool(content, desc, color(), '\0', "losing", 1, 0);
         else if (content == "binoculars")
             inventory = new tool(content, desc, color(), '\0', "", 1, 50);
         else if (content == "ship")
