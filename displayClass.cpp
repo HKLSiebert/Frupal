@@ -271,7 +271,7 @@ char Display::determineContent(string content) {
                 return OBSTACLE;
         if(content == "binoculars")
                 return BINOCULARS;
-        if(content == "diamond")
+        if(content == "diamond" || content == "treasure")
                 return TREASURE;
         if(content == "clue")
                 return CLUE;
