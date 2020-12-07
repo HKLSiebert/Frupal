@@ -21,6 +21,7 @@
 #define WALL_PAIR 6 
 #define INV_PAIR 7
 #define CURSOR_PAIR 8
+#define DIA_PAIR 9
 #define MAP_SIZE 128
 #define MENU_SIZE 40
 #define BEGIN_AT 63
@@ -43,6 +44,7 @@ class Display{
                 void welcomeMenu();
                 void lossMenu();
                 void winMenu();
+                void displayDiamond(int y, int x); 
       
         private:
                 /*****************************************
