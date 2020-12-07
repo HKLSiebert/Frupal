@@ -330,8 +330,20 @@ void Display::welcomeMenu(){
         mvwprintw(menu, 1, 0, "Welcome!\nAqcuire the diamond to win the game. ");
 }
 void Display::lossMenu(){
+         for(int i = 0; i<4;++i){
+                wmove(menu, i, 0);
+                wclrtoeol(menu);
+        }
         mvwprintw(menu, 1, 0, "You ran out of energy!\nRestart the game to try again!");
+        wrefresh(menu);
+        getch();
 }
 void Display::winMenu(){
+        for(int i = 0; i<4;++i){
+                wmove(menu, i, 0);
+                wclrtoeol(menu);
+        }
         mvwprintw(menu, 1, 0, "Congratulations, you won the game!\n");
+        wrefresh(menu);
+        getch();
 }
