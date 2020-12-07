@@ -331,6 +331,8 @@ void Display::initialMenu(){
         mvwprintw(menu, 13, 0, "Left Arrow Key) West ");
         mvwprintw(menu, 14, 0, "Down Arrow Key) South ");
         mvwprintw(menu, 15, 0, "Right Arrow Key) East ");
+
+        mvwprintw(menu, 17, 0, "x) Exit ");
 }
 
 void Display::welcomeMenu(){
