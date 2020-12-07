@@ -13,7 +13,8 @@ Run with default map:
 ```
 $ ./frupal
 ```
-
+## Demo Video and Discussion
+https://media.pdx.edu/media/Group+11+Frupal+Demo+%2B+Discussion/1_xomenasx
 
 ---
 
