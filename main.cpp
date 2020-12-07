@@ -5,6 +5,10 @@
 #include "status.h"
 #include "object.h"
 
+#define PROGRESS_CHECK_LOST -1
+#define PROGRESS_CHECK_CONTINUE 0
+#define PROGRESS_CHECK_WON 1
+
 using namespace std;
 
 int main( int argc, char ** argv ) {
@@ -74,23 +78,30 @@ int main( int argc, char ** argv ) {
                                 break;
                 }
 
+
+
+		// TODO Determine why:
+		// 	- Commenting out this switch statement allows the hero to,
+		// 	  walk on water and walk through walls.
+		// 	- Including this switch statement triggers in-game segmentation faults,
+		// 	  when the hero interacts with water or wall.
+
 		switch( frupalStatus.gameprogress() )
 		{
-			case -1:
+			case PROGRESS_CHECK_LOST:
 				// Player has lost the game
-				// TODO: Notify player of game lost.
+				// TODO Notify player of game lost.
 				loop_again = false;
 				break;
-			case 0:
+			case PROGRESS_CHECK_CONTINUE:
 				// Continue
 				break;
-			case 1:
+			case PROGRESS_CHECK_WON:
 				// Player has won the game!
-				// TODO: Notify player of game won.
+				// TODO Notify player of game won.
 				loop_again = false;
 				break;
 		}
-
 
  } while( loop_again );
 
