@@ -24,6 +24,7 @@ Display::Display(status& object) {
         init_pair(WALL_PAIR, COLOR_BLACK, COLOR_WHITE);
         init_pair(INV_PAIR, COLOR_BLACK, COLOR_BLACK);
         init_pair(CURSOR_PAIR, COLOR_BLACK, COLOR_YELLOW);
+        init_pair(DIA_PAIR, COLOR_WHITE, COLOR_CYAN);
 
 
         posY = posX =curPosX = BEGIN_AT;
@@ -202,6 +203,8 @@ void Display::updateMap(int startedY, status& object) {
                                 if(content)
                                         toPrint = determineContent(content->get_name());
                                 printGrovnick(location->get_name(), j, i+((mapX-MAP_SIZE)/2), toPrint);
+                                if(content && content->get_name() == "diamond")
+                                        displayDiamond(j, i+((mapX-MAP_SIZE)/2));
                         }
                         stoppedY = j+startedY;
                 }
@@ -235,7 +238,11 @@ void Display::initialMap(status& object) {
         wrefresh(map);
 }
 
-
+void Display::displayDiamond(int y, int x){
+                wattron(map, COLOR_PAIR(DIA_PAIR));
+                mvwaddch(map, y, x, TREASURE);
+                wattroff(map, COLOR_PAIR(DIA_PAIR));
+}
 void Display::printGrovnick(string terrain, int y, int x, char toPrint) {
         if(terrain == "meadow") {
                 wattron(map, COLOR_PAIR(GRASS_PAIR));
