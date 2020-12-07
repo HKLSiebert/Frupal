@@ -194,7 +194,7 @@ class obstacle: public item
     obstacle();
     obstacle(obstacle &toCopy);
     obstacle(string name, string desc, color itemColor, char displayChar, int cost);
-    ~obstacle();
+   virtual ~obstacle();
     char get_display_char()const;
     color get_char_color()const;
     color get_background_color()const;

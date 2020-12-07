@@ -12,7 +12,7 @@ status::status(){
 status::~status(){
   for(int i = 0; i < 128; i++) {
     for(int j = 0; j < 128; j++){
-      delete [] map[i][j];
+      delete map[i][j];
     }
     delete [] map[i];
   }
