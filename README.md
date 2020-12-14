@@ -1,5 +1,6 @@
 # *The Kingdom of Frupal*
 A text-based adventure game.
+
 By: Elena Kuznetsov, Haley Siebert, Isaiah Kaplan, Patrick Harry, Taishawn Fontleroy
 ---
 
